@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CBG vs CBD: how the two cannabinoids differ as compounds — Sophia’s Garden Artisan</title>
+<meta name="description" content="CBG and CBD compared as molecules: their shared precursor, the structural difference, typical plant content, and how Canada's Cannabis Regulations handle each.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cbg-vs-cbd/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="CBG vs CBD: how the two cannabinoids differ as compounds — Sophia’s Garden Artisan">
+<meta property="og:description" content="CBG and CBD compared as molecules: their shared precursor, the structural difference, typical plant content, and how Canada's Cannabis Regulations handle each.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cbg-vs-cbd/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog &middot; October 26, 2026</p>
+ <h1>CBG vs CBD, compared as compounds</h1>
+ <p class="hero-sub">Two cannabinoids from one precursor, two hydrogen atoms apart. This is what each one is, how it forms, and how Canadian law classifies and labels it.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/products/micro-zest-yuzu-a.jpg" alt="MICRO ZEST YUZU — yuzu chocolate pieces" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Most comparisons of CBG vs CBD start with what each compound is supposed to do. This one starts with what each compound is, because that is the part a manufacturer can state as fact. On paper they are nearly the same molecule. Both carry 21 carbon atoms and two oxygen atoms. They differ by two hydrogen atoms and one ring, and that ring is how the acid form of one becomes the acid form of the other.</p>
+ <h2>One precursor, three branches</h2>
+ <p>Cannabigerolic acid, or CBGA, is the first cannabinoid in the pathway. It is assembled from two smaller pieces. Olivetolic acid supplies the aromatic ring and its five-carbon pentyl tail; geranyl pyrophosphate, a ten-carbon terpene building block, supplies the rest. An enzyme joins them. When a 2019 study rebuilt the complete pathway in yeast, an enzyme with exactly that geranyltransferase activity was the previously undiscovered step it had to supply (<a href="https://doi.org/10.1038/s41586-019-0978-9">Nature, 2019</a>).</p>
+ <p>CBGA then sits at a fork. Three separate synthases act on it, and each closes the geranyl chain in its own way. THCA synthase converts it to tetrahydrocannabinolic acid (<a href="https://doi.org/10.1074/jbc.M403693200">Journal of Biological Chemistry, 2004</a>). CBDA synthase converts it to cannabidiolic acid, and the paper that cloned it calls it the enzyme that determines chemotype in fibre-type cannabis (<a href="https://doi.org/10.1016/j.febslet.2007.05.043">FEBS Letters, 2007</a>). CBCA synthase converts it to cannabichromenic acid (<a href="https://doi.org/10.1016/s0031-9422(98)00278-7">Phytochemistry, 1998</a>). All three reactions remove two hydrogen atoms and form a new ring.</p>
+ <p>Every one of those products is an acid. The neutral compounds, CBG and CBD among them, do not occur in significant concentrations in the plant. They form when heat removes the carboxyl group as carbon dioxide. A 2016 kinetics study measured that decarboxylation directly. CBDA and CBGA converted at about the same rate as each other, and neither conversion was clean: some reactant or product was lost along the way, and the study could not account for it (<a href="https://doi.org/10.1089/can.2016.0020">Cannabis and Cannabinoid Research, 2016</a>).</p>
+ <h2>CBG vs CBD, atom by atom</h2>
+ <p>Take the acid group off both and the comparison is easy to draw. CBG keeps the geranyl chain open. It is a resorcinol ring, meaning a benzene ring carrying two hydroxyl groups, with the pentyl tail on one side and a straight ten-carbon terpene chain with two double bonds on the other. Its formula is C21H32O2, with a molar mass of about 316.5 g/mol (<a href="https://pubchem.ncbi.nlm.nih.gov/compound/Cannabigerol">PubChem</a>).</p>
+ <p>CBD has the same resorcinol ring and the same pentyl tail. The terpene part, though, has been folded into a six-membered cyclohexene ring carrying a methyl group and an isopropenyl group. Its formula is C21H30O2, about 314.5 g/mol (<a href="https://pubchem.ncbi.nlm.nih.gov/compound/Cannabidiol">PubChem</a>). Two hydrogens fewer, one ring more. That is exactly the change CBDA synthase made to the acid upstream. The ring also gives CBD two stereocentres, so the molecule has a defined three-dimensional shape. CBG, with its open chain, has none.</p>
+ <p>How much of each a plant carries is a separate question, and it explains why one name is far more familiar than the other. CBGA is an intermediate. In most plant material the synthases convert nearly all of it onward, so what accumulates is THCA or CBDA, and CBDA is the dominant cannabinoid of fibre-type cannabis. Plants strongly predominant in CBG do exist. Genetic work on them traced the pattern to a minimally functional allele at the single locus that normally controls the conversion of CBG into THC or CBD (<a href="https://doi.org/10.1007/s10681-005-1164-8">Euphytica, 2005</a>). That scarcity is part of why CBG appears less often in finished products, a point our <a href="/cannabinoid-formulation-science/">formulation science</a> page makes as well.</p>
+ <h2>How Canadian law classifies and labels each</h2>
+ <p>For legal purposes the chemistry collapses into one category. Schedule 1 of the <a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/">Cannabis Act</a> covers the phytocannabinoids produced by or found in the cannabis plant, and also any substance identical to one of them, regardless of how that substance was obtained. On the CBG vs CBD question the Act draws no line: both are cannabis, whether extracted or synthesised. Health Canada states that CBD is regulated under the Cannabis Act, including CBD derived from industrial hemp, and that all phytocannabinoids are (<a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/about/cannabidiol.html">Health Canada</a>).</p>
+ <p>The <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/">Cannabis Regulations</a> then handle the two very differently. CBD is named throughout. Section 90 requires every lot or batch to be tested for THC, THCA, CBD and CBDA. Section 132.18 requires the label on edible cannabis in discrete units to state the CBD each unit could yield, preceded by "Total CBD per unit", and the CBD the whole package could yield, preceded by "Total CBD". Both figures take into account the potential to convert CBDA into CBD, which the Regulations define as the maximum amount of CBD obtainable if the CBDA converted with no further degradation. The variability limits that hold each unit within a set range of the others, in section 97, are written for THC and CBD as well.</p>
+ <p>CBG does not appear in the Regulations at all. There is no prescribed label line for it, no named test, and no variability limit. When a Canadian product states a CBG quantity, that figure exists because the licence holder chose to measure and declare it. The Cannabis Act's general prohibition on anything false, misleading or likely to create an erroneous impression about composition or concentration still applies to it. Its accuracy rests on the licence holder's own laboratory work, which is why the analytical record matters; our post on <a href="/blog/reading-a-certificate-of-analysis/">reading a certificate of analysis</a> covers what that record shows.</p>
+ <h2>Why both can appear in one formulated product</h2>
+ <p>Because they are separate molecules with separate specifications, a formulated product can contain both, each at its own declared quantity. They arrive as separate cannabinoid inputs and each is verified on its own terms. Ours are sourced from licensed suppliers and verified on receipt, and cannabinoid content is verified by laboratory analysis on every lot.</p>
+ <p>For a formulator, CBG vs CBD is a question of two inputs rather than one, and every additional cannabinoid is another set of variables. CBG and CBD are close relatives, but CBG brings its own solubility and stability characteristics, and an open chain against a closed ring is a structural difference, not a cosmetic one. A process proved for one has to be proved again for the other. The decarboxylation data is a reminder too: neither acid converts to its neutral form without some loss, so the quantity that counts is the one measured in the finished unit.</p>
+ <p>Searches for CBG vs CBD are usually looking for something else: what each one does. This post does not answer that, and the omission is deliberate. A licensed producer in Canada does not make claims about what a cannabinoid does, and a manufacturer is not in a position to characterise individual responses in any case. What we can state is what each compound is, how it forms, how it is measured and how the law classifies it. That is the information a formulator works from, and the information the company that made a product is able to give.</p>
+ <p class="post-next">Next: <a href="/blog/why-legal-packaging-looks-like-that/">Why legal cannabis packaging looks the way it does</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
