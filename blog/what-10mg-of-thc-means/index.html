@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10mg THC on a Canadian edible label, explained — Sophia’s Garden Artisan</title>
+<meta name="description" content="What 10mg THC means on a legal Canadian edible: the Cannabis Regulations limit per container, per-unit and per-package label figures, and Health Canada advice.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/what-10mg-of-thc-means/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="10mg THC on a Canadian edible label, explained — Sophia’s Garden Artisan">
+<meta property="og:description" content="What 10mg THC means on a legal Canadian edible: the Cannabis Regulations limit per container, per-unit and per-package label figures, and Health Canada advice.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/what-10mg-of-thc-means/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap narrow">
+ <p class="kicker">Blog &middot; October 16, 2026</p>
+ <h1>What 10mg THC means on a legal Canadian edible</h1>
+ <p class="hero-sub">The figure on the front of a legal edible is a legal ceiling, not a serving size. What the Cannabis Regulations set, what the label states, and what Health Canada advises about the gap between them.</p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="wrap narrow">
+ <div data-reveal="scale"><figure class="blog-img blog-cover">
+ <div class="blog-img-inner">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <figcaption>Photography to come</figcaption>
+ </div>
+ </figure></div>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>The number on the front of a legal Canadian edible is not a serving size. It is a ceiling. Under the Cannabis Regulations, edible cannabis must not contain more than 10 mg of THC per immediate container, so a package that declares 10mg THC is declaring the most the law allows that container to hold. It says nothing, on its own, about how much is in a single piece.</p>
+ <p>That gap between the legal figure and the practical one is where most misreadings of an edible label begin.</p>
+ <h2>What the Cannabis Regulations actually limit</h2>
+ <p>Section 102.7 of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-102.7.html">Cannabis Regulations</a> sets the rule in one line: edible cannabis must not contain a quantity of THC that exceeds 10 mg per immediate container. The immediate container is the package in direct contact with the product. That wording matters when several containers are sold together. Health Canada's packaging and labelling guide is explicit that in a co-pack, each immediate container is held to the 10 mg limit on its own, rather than the outer box being held to it as a whole.</p>
+ <p>The limit also applies subject to the variability limits the Regulations set out elsewhere. A declared figure is a target with a permitted tolerance around it, not an exact count of molecules, which is one reason the accuracy of the manufacturing process carries so much weight.</p>
+ <p>Two things the rule does not say are as important as what it does. It does not set a serving size. And it does not say how the 10 mg is divided. A container holding one piece and a container holding twenty can both sit exactly at the cap. That is why 10mg THC, read alone, tells you very little: it describes the package, and a package can be built in many ways.</p>
+ <h2>Per unit and per package: reading the two figures</h2>
+ <p>Health Canada's <a href="https://www.canada.ca/en/health-canada/services/cannabis-regulations-licensed-producers/packaging-labelling-guide-cannabis-products.html">packaging and labelling guide</a> sets out how THC content appears on an edible label. Where the product is in discrete units, meaning pieces that are separately formed and portioned, the label carries two figures: THC per unit, in milligrams, and THC for the whole container. Where the product is not in discrete units, a beverage for example, only the container figure appears.</p>
+ <p>So a label stating 10mg THC for the container and 1 mg per unit describes ten pieces. A label stating 10 mg for the container and 5 mg per unit describes two. A label with a container figure and no per-unit line describes a product that is not divided at all. Three entirely different structures, one legal maximum.</p>
+ <p>The per-unit figure describes a single piece. The container figure is the sum of all of them. Reading only the larger number is an easy mistake, because it is the one that matches the regulation and the one most often repeated, but it is the smaller number that describes what a single piece contains.</p>
+ <h2>Why the format divides the limit</h2>
+ <p>The regulation fixes the total. The manufacturer decides the increment. That is a format decision, made long before a batch is produced, and it determines how small a step the structure of the product allows.</p>
+ <p>A product divided into ten 1 mg pieces offers ten small, equal steps up to the same 10mg THC ceiling. A product divided into two 5 mg pieces offers two. Neither is more or less legal, and neither changes the cap. What changes is the size of the smallest step available, and that is entirely a manufacturing choice.</p>
+ <p>The finer the division, the harder the problem. Manufacturing tolerance is proportional, so a 1 mg piece demands a far tighter process than a 5 mg one to reach the same accuracy. We have written about that separately in <a href="/blog/the-engineering-of-a-one-milligram-dose/">the engineering behind a one-milligram dose</a>, and our <a href="/responsible-consumption/">responsible consumption philosophy</a> sets out why we chose to build at the small end. The short version is that a per-unit figure is only worth printing if every unit matches it. That is why cannabinoid content is verified by laboratory analysis on every lot, and why product does not ship on commercial judgement alone.</p>
+ <h2>What Health Canada advises about the cap</h2>
+ <p>Health Canada does not present 10mg THC as a recommended amount. In its <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/resources/lower-your-risks.html">guidance on lowering the risks of cannabis use</a>, it advises adults to look for edible products that contain 2.5 mg of THC or less, and to start low and go slow to minimize health risks and the risk of overconsumption. Its own reminder is direct: the total amount of THC in a package of edible cannabis can be up to 10 mg.</p>
+ <p>The Council of Chief Medical Officers of Health made the same point in its 2020 statement on edibles, describing up to 10 mg in a single package as a large amount for someone consuming cannabis for the first time or infrequently.</p>
+ <p>The second half of the guidance concerns time. Health Canada advises waiting to feel the effects before taking more, and states that with edible cannabis, effects can take from 30 minutes to 2 hours to be felt, and up to 4 hours to be felt fully. We repeat those figures as Health Canada publishes them and add nothing to them. Individual responses vary, and a manufacturer is not in a position to characterise them. Why the timing differs from inhaled products is covered in <a href="/blog/how-edibles-are-different/">how edibles are different</a>.</p>
+ <p>Read together, the regulation and the guidance describe a package whose legal ceiling sits well above the starting amount Health Canada suggests. A label that states the per-unit figure clearly is what makes that guidance possible to follow from the package alone.</p>
+ <p>What a manufacturer can say about 10mg THC on a package is narrow and exact: how much THC the container holds, how finely it is divided, and how that was verified. We make precision low-dose chocolate formats in Thunder Bay, Ontario, and those three facts are the ones we can stand behind. How any of it is experienced is not ours to describe.</p>
+ <p class="post-next">Next: <a href="/blog/how-edibles-are-different/">How edibles are different: format, timing and why precision matters</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
