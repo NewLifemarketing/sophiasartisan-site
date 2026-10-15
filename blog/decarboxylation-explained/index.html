@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decarboxylation explained: acid to neutral cannabinoid — Sophia’s Garden Artisan</title>
+<meta name="description" content="Decarboxylation explained: how heat and time convert THCA and CBDA into THC and CBD, how edible labels account for it, and why it is done before manufacturing.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/decarboxylation-explained/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Decarboxylation explained: acid to neutral cannabinoid — Sophia’s Garden Artisan">
+<meta property="og:description" content="Decarboxylation explained: how heat and time convert THCA and CBDA into THC and CBD, how edible labels account for it, and why it is done before manufacturing.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/decarboxylation-explained/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap narrow">
+ <p class="kicker">Blog &middot; October 19, 2026</p>
+ <h1>Decarboxylation explained: what the reaction is and why it happens upstream</h1>
+ <p class="hero-sub">The cannabis plant makes its cannabinoids as acids. Decarboxylation is the reaction that changes them into the forms an edible label counts, and in a licensed product it is settled long before anything reaches a mould.</p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="wrap narrow">
+ <div data-reveal="scale"><figure class="blog-img blog-cover">
+ <div class="blog-img-inner">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <figcaption>Photography to come</figcaption>
+ </div>
+ </figure></div>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Almost none of the THC in a cannabis edible was made by the plant as THC. The plant makes an acid, and that acid has to be changed into the neutral compound before an edible can carry what its label declares. The change is called decarboxylation, and it sits underneath every cannabinoid figure printed on an edible package.</p>
+ <h2>What decarboxylation actually does</h2>
+ <p>Cannabis synthesises its main cannabinoids in carboxylic acid form: tetrahydrocannabinolic acid (THCA), cannabidiolic acid (CBDA) and cannabigerolic acid (CBGA). A 2016 study in <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5549281/">Cannabis and Cannabinoid Research</a> opens on exactly that point: the plant produces primarily the acid forms of THC, CBD and CBG, not the neutral compounds themselves.</p>
+ <p>Each acid carries a carboxyl group, a carbon atom bonded to two oxygens, attached to the side of the molecule. Decarboxylation removes it. Heat breaks the bond, the group leaves as a molecule of carbon dioxide, and what remains is the neutral cannabinoid. THCA becomes THC. CBDA becomes CBD. CBGA becomes CBG. Nothing is added. The reaction is a subtraction.</p>
+ <p>The subtraction has a weight. According to <a href="https://pubchem.ncbi.nlm.nih.gov/compound/16078">PubChem</a>, THC has the formula C21H30O2 and a molecular weight of about 314.5, while THCA is C22H30O4 at about 358.5. The difference is one CO2, roughly 44. A gram of THCA, fully converted, yields about 0.88 g of THC, and about 12% of the starting mass leaves as gas. CBDA and CBD share the same pair of formulas, so the same arithmetic holds for them.</p>
+ <p>That is why a gram of acid and a gram of neutral cannabinoid are not interchangeable quantities. A manufacturer that confused the two would misstate every unit by the same proportion, consistently, and nothing in the finished chocolate would reveal it.</p>
+ <h2>Heat, time, and the problem of going too far</h2>
+ <p>Decarboxylation is governed by two variables: temperature and time. The 2016 study heated cannabis extracts in a vacuum oven across a range of temperatures for up to an hour, and found the acids disappeared in a pattern consistent with first-order kinetics. In plain terms, the rate at any moment depends on how much acid is left. The reaction moves quickly at first and slows as it approaches completion, so the last part of the conversion takes disproportionately long.</p>
+ <p>The acids do not convert at the same speed, either. The same work measured rate constants for THCA at approximately twice those of CBDA or CBGA. Conditions that complete decarboxylation of THCA can leave CBDA only partly converted, which matters for any formulation that carries more than one cannabinoid.</p>
+ <p>Pushing harder does not simply finish the job. The researchers saw THC reach a maximum and then decline with longer heating at the top of their range, possibly through evaporation. They also note that THC readily oxidises to cannabinol (CBN) in the presence of oxygen and light, which is why they heated under vacuum and in the dark. Too little decarboxylation leaves acid behind. Too much destroys some of what it made. The useful window sits between those two failures, and it shifts with the material being heated.</p>
+ <h2>Why the acid form matters on an edible label</h2>
+ <p>For an edible, the figure that counts is not only the THC already present. Under section 132.18 of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-132.18.html">Cannabis Regulations</a>, the label on edible cannabis sold in discrete units states, under the heading "Total THC per unit", the quantity of THC each unit could yield, "taking into account the potential to convert THCA into THC". The package as a whole is stated the same way. CBD is treated identically, with CBDA in place of THCA, and the same section caps the package figure for THC at 10 mg.</p>
+ <p>That wording closes a gap. A product cannot sit under the cap by leaving its THC in acid form, because the law counts what the acid could become as well as what is already there. The <a href="/education/">education</a> page covers how that cap reads on a shelf. For a manufacturer, the consequence is simpler: the figure on the package has to be right whichever form the cannabinoid is in, and the cleanest way to make that true is for the input to arrive already converted and already measured.</p>
+ <h2>Why decarboxylation happens upstream, under control</h2>
+ <p>In licensed edible manufacturing, decarboxylation is not a step performed on the chocolate line. By the time a cannabinoid becomes an input to an edible formulation, it is expected to be in the form the label will count, at a concentration that has been measured. The reasons follow directly from the chemistry above.</p>
+ <ul>
+ <li>The reaction is sensitive to temperature, time, oxygen and light, and each has to be held to a specification to get the same result twice.</li>
+ <li>Different acids convert at different rates, so an input carrying more than one cannabinoid needs conditions set for that input, not a general rule.</li>
+ <li>Overshooting loses material and creates degradation products such as CBN, which then have to be accounted for.</li>
+ <li>Conversion cannot be confirmed by looking at it. Only analysis shows how much acid remains and how much neutral cannabinoid formed.</li>
+ </ul>
+ <p>A kitchen controls almost none of these. An oven dial is an approximation, the air inside contains oxygen, and there is no instrument at the end to say how far the reaction went. That is the real difference between an improvised preparation and a licensed product: one is an estimate of a chemical reaction, the other is a measured result. This article is not a guide to performing decarboxylation, and it gives no conditions for doing so on purpose.</p>
+ <p>Chocolate adds a second reason. As our <a href="/cannabinoid-formulation-science/">formulation science</a> page sets out, the cannabinoid is built into the cocoa butter before it becomes chocolate, and once the chocolate sets, its distribution is fixed. Tempering is already a controlled heating and cooling cycle with its own narrow tolerances. Asking it to complete decarboxylation as well would tie dose accuracy to a reaction the chocolate process was never designed to manage. Keeping decarboxylation upstream means the extract work described in <a href="/blog/cocoa-butter-cannabinoid-extracts/">cocoa butter cannabinoid extracts, explained</a> starts from an input whose form is already settled.</p>
+ <h2>What we can say about our own inputs</h2>
+ <p>We do not describe the processing behind our inputs. What we can state is this: cannabinoid inputs are sourced from licensed suppliers and verified on receipt. Every lot is laboratory tested, and cannabinoid content is verified by laboratory analysis on every lot, so the figure on a package reflects what was measured in that lot rather than what a process was expected to produce.</p>
+ <p>Decarboxylation is the reason that sequence exists. The plant makes acids, the label counts what those acids can become, and the work of making the two agree is done, and checked, before a single piece is moulded.</p>
+ <p class="post-next">Next: <a href="/blog/reading-a-certificate-of-analysis/">Reading a certificate of analysis for an edible product</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
