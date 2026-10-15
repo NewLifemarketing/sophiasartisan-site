@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tempering milk chocolate: milk fat and cocoa butter crystals — Sophia’s Garden Artisan</title>
+<meta name="description" content="How milk fat changes cocoa butter crystallisation, why milk chocolate tempers at lower temperatures than dark, and what bloom and soft set indicate.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/tempering-milk-chocolate/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Tempering milk chocolate: milk fat and cocoa butter crystals — Sophia’s Garden Artisan">
+<meta property="og:description" content="How milk fat changes cocoa butter crystallisation, why milk chocolate tempers at lower temperatures than dark, and what bloom and soft set indicate.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/tempering-milk-chocolate/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog &middot; October 20, 2026</p>
+ <h1>Tempering milk chocolate: why milk fat changes the process</h1>
+ <p class="hero-sub">Milk chocolate carries two fats that do not crystallise the same way. That one fact moves the temperatures, the timing and the failure modes of the whole process.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/products/micro-zen-milk-a.jpg" alt="MICRO ZEN MILK — milk chocolate pieces" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Most of what is written about tempering describes chocolate as one material. It is not. Dark chocolate has essentially one fat in it. Milk chocolate has two, cocoa butter and milk fat, and they do not crystallise the same way. Nearly every difference in tempering milk chocolate follows from that.</p>
+ <p>The general case is covered in <a href="/blog/why-chocolate-is-a-delivery-system/">why chocolate is a delivery system</a>: cannabinoids follow fat, and cocoa butter has to be steered into the right crystal form. This post goes one level down, into what milk fat does to that crystal system and why it matters for a dosed product.</p>
+ <h2>Six crystal forms, one target</h2>
+ <p>Cocoa butter is polymorphic. The same fat can solidify into several different crystal structures, each with its own melting point and stability. The standard classification comes from a 1966 study in the Journal of the American Oil Chemists' Society, which identified six forms and numbered them I to VI in order of increasing melting point. The same study concluded that Form V is the usual state of cocoa butter in chocolate.</p>
+ <p>Form V is the target for a reason. A 2011 review of industrial tempering from the University of Ghana gives its melting temperature as 32 to 34 °C, and describes it as the form that gives a stable, glossy, well-contracted solid with a longer shelf life. The lower forms melt at lower temperatures and are unstable: given time they convert towards more stable forms, and the conversion shows up on the product.</p>
+ <p>Tempering is the method for getting Form V and only Form V. The chocolate is fully melted to erase every existing crystal, cooled under shear until crystals begin to form, then warmed slightly so that the unstable lower forms melt out while Form V seed crystals survive. Those seeds then template the rest of the fat as it sets. Every step is a temperature decision, and the right temperatures depend on what is in the fat phase.</p>
+ <h2>What milk fat does to the fat phase</h2>
+ <p>Milk fat is a different material. It is liquid at room temperature, around 21 °C, where cocoa butter is solid. When the two are blended, the milk fat does not join the cocoa butter crystal lattice cleanly. It dilutes it.</p>
+ <p>A 1996 paper in the same journal describes the softening this causes as coming from two sources: simple dilution, and a slight eutectic interaction between the two fats. A eutectic blend is one that is softer, and melts lower, than either fat alone would suggest from its proportion. The practical result is a fat phase that crystallises less readily.</p>
+ <p>That has measurable consequences for tempering milk chocolate. A technical paper presented at the 52nd PMCA Production Conference in 1998 reported cooling-curve data for cocoa butter and milk fat blends: as the milk fat share rises, the temperature at which crystals start to form falls, and the crystallisation rate slows. The same paper set out what follows in production:</p>
+ <ul>
+ <li>The higher the milk fat content, the longer tempering takes.</li>
+ <li>The blend needs lower tempering temperatures.</li>
+ <li>Product needs a longer dwell in the cooling tunnel, because the fat sets more slowly.</li>
+ <li>Tempered dark chocolate can be held at about 32 °C (90 °F); milk chocolate should be held at about 31 °C (88 °F), because of the milk fat.</li>
+ </ul>
+ <p>A degree sounds small. Against a Form V melting range only two degrees wide, it is the difference between keeping the seed crystals and losing them. Run a milk chocolate at dark chocolate temperatures and the seed melts out; the batch is no longer tempered, even though nothing about it looks different in the kettle.</p>
+ <h2>What goes wrong, and what it looks like</h2>
+ <p>Two failures account for most problems in tempering milk chocolate, and both are crystal problems rather than recipe problems.</p>
+ <h3>Bloom</h3>
+ <p>Fat bloom is a pale, dull film on the surface. It forms when fat that did not crystallise in Form V migrates and recrystallises at the surface, or when the crystal structure shifts to a more stable form during storage. The University of Ghana review states plainly that under-tempering induces fat bloom. Temperature cycling in storage makes it worse.</p>
+ <p>Milk fat cuts both ways here. The PMCA paper notes that small amounts of milk fat inhibit bloom, and the 1996 paper found that higher-melting fractions of milk fat sharply reduced bloom while softening the chocolate less than whole anhydrous milk fat. At higher proportions, though, the softening and slow crystallisation take over and the fat phase becomes harder to hold in Form V at all.</p>
+ <h3>Soft set</h3>
+ <p>The second failure is a product that never sets properly. If too little Form V seed survives, or the chocolate leaves the cooling stage before the slower milk fat blend has finished crystallising, the result is soft, releases poorly from the mould and does not hold its dimensions. Over-tempering is a failure too: the same review links it to increased hardness and reduced gloss. The window is narrow on both sides.</p>
+ <h2>Why the dose cannot be solved separately</h2>
+ <p>A cannabinoid extract is itself an oil. Added to milk chocolate, it joins a fat phase that is already diluted by a fat that will not crystallise with the cocoa butter. The mechanism the 1996 paper describes for milk fat, softening by dilution, is the same mechanism an extract brings with it. Tempering milk chocolate that carries an extract is therefore a third-fat problem, not a two-fat one, and the temperatures and dwell times that suit the plain chocolate are a starting point rather than an answer.</p>
+ <p>This is where tempering and dose distribution meet. The extract has to be evenly dispersed through the fat phase before the batch is moulded, because once the chocolate sets, the distribution is fixed. But the fat phase it is dispersed into also has to crystallise correctly, in the time the line allows, or the units bloom or set soft. A method that disperses the extract well and disturbs the temper fails. So does a temper that holds and a dispersion that does not. Each has to be developed against the other, so we handle them as one piece of work. The reasoning behind building the extract into the cocoa butter first is set out on our <a href="/cannabinoid-formulation-science/">formulation science</a> page.</p>
+ <p>What can be verified is the outcome. Cannabinoid content is verified by laboratory analysis on every lot, and formulation, production and quality sit in the same building in Thunder Bay, Ontario. Tempering milk chocolate well is what makes the declared figure on each unit something the lot result can confirm.</p>
+ <p class="post-next">Next: <a href="/blog/the-engineering-of-a-one-milligram-dose/">The engineering behind a one-milligram dose</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
