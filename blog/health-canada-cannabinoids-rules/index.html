@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Health Canada cannabinoids rules for edible cannabis — Sophia’s Garden Artisan</title>
+<meta name="description" content="How the Cannabis Regulations govern THC and CBD in edible cannabis in Canada: the 10 mg package limit, label declarations, variability limits and ingredients.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/health-canada-cannabinoids-rules/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Health Canada cannabinoids rules for edible cannabis — Sophia’s Garden Artisan">
+<meta property="og:description" content="How the Cannabis Regulations govern THC and CBD in edible cannabis in Canada: the 10 mg package limit, label declarations, variability limits and ingredients.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/health-canada-cannabinoids-rules/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap narrow">
+ <p class="kicker">Blog &middot; October 29, 2026</p>
+ <h1>The Health Canada cannabinoids rules for edible cannabis</h1>
+ <p class="hero-sub">What the Cannabis Regulations require of THC and CBD in an edible product, how close the real content must sit to the label, and who checks.</p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="wrap narrow">
+ <div data-reveal="scale"><figure class="blog-img blog-cover">
+ <div class="blog-img-inner">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <figcaption>Photography to come</figcaption>
+ </div>
+ </figure></div>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Most people assume the hard part of regulating an edible is the cap on THC. The cap is the easy part. It is one number, the same for every product. The harder part is everything that has to be true for the number on the label to mean something: what the label must say, how far the product may drift from it, what else may go into the product alongside it, and who is entitled to come and check.</p>
+ <p>Those questions are answered in two federal instruments. The Cannabis Act sets the framework and the offences. The Cannabis Regulations (SOR/2018-144) set the detail, and the detail is where the Health Canada cannabinoids rules for edible cannabis actually live. What follows is the consolidated text on the federal Justice Laws website, section by section.</p>
+ <h2>The package limit and what the label must declare</h2>
+ <p>The first of the Health Canada cannabinoids rules is the ceiling. Section 102.7 of the Cannabis Regulations says edible cannabis that is a cannabis product must not contain more than 10 mg of THC per immediate container. The immediate container is the package that holds the product itself, so the limit applies to the whole package, not to each piece. How finely that 10 mg is divided is a format decision for the processor; the Regulations only fix the total.</p>
+ <p>The label is where the cap becomes visible. For edible cannabis in discrete units, section 132.18 requires the net weight, the number of units, and four cannabinoid figures, each preceded by wording the Regulations specify:</p>
+ <ul>
+ <li>"Total THC per unit", in milligrams</li>
+ <li>"Total THC", in milligrams, for the whole container</li>
+ <li>"Total CBD per unit", in milligrams</li>
+ <li>"Total CBD", in milligrams, for the whole container</li>
+ </ul>
+ <p>The word "total" is doing specific work. The Regulations define each figure as the quantity the product could yield, which takes account of compounds that convert into THC or CBD, rather than only what is present in its final form at the moment of testing. Section 132.18(2) then closes the loop: the "Total THC" declared for the container must not exceed 10 mg. Edible cannabis that is not in discrete units is covered by section 132.19, which requires the container figures without the per-unit lines and applies the same 10 mg ceiling.</p>
+ <p>Two further sections stop the per-unit figure from becoming an average that hides variation. Section 134 requires the number of units in the container to equal the number on the label. Section 98.1 prohibits selling a package of multiple units unless the properties of each unit, including size, are consistent. Plain packaging, the cannabis symbol and the warning box are covered in <a href="/blog/why-legal-packaging-looks-like-that/">why legal cannabis packaging looks the way it does</a>.</p>
+ <h2>How close the real content must be to the label</h2>
+ <p>No manufacturing process lands exactly on a declared figure. Section 97(2) sets a permitted range around every THC or CBD quantity displayed on an edible label, and the range widens as the declared quantity gets smaller:</p>
+ <ul>
+ <li>above 5 mg: no less than 85% and no more than 115% of the declared quantity</li>
+ <li>above 2 mg, up to 5 mg: no less than 80% and no more than 120%</li>
+ <li>2 mg or less: no less than 75% and no more than 125%</li>
+ </ul>
+ <p>Put in milligrams, a unit declared at 1 mg must contain between 0.75 mg and 1.25 mg. That sounds generous until you consider that a quarter of a milligram, spread through a piece of chocolate, is a very small mass of material, and the band applies to each labelled figure rather than to a batch average. Because cannabinoids dissolve into fat, the dispersion problem starts in the cocoa butter, which is why our <a href="/cannabinoid-formulation-science/">formulation science</a> handles it as the first design decision rather than the last.</p>
+ <p>Under these Health Canada cannabinoids limits, a product that falls outside its band is not a labelling error to be corrected later. It is a product that does not meet the Regulations. That is the practical reason cannabinoid content is verified by laboratory analysis on every lot we make, and why product does not ship on commercial judgement alone.</p>
+ <h2>What may go into the product with the cannabinoids</h2>
+ <p>The cannabinoid rules sit inside a set of ingredient rules that are stricter than ordinary food law. Section 102(1) says edible cannabis must not contain any ingredients other than food and food additives. The sections that follow narrow it further:</p>
+ <ul>
+ <li>Supplemented foods and foods sold under a Temporary Marketing Authorization may not be used as ingredients (s.102(2)).</li>
+ <li>Food additives may be used only as the Lists of Permitted Food Additives allow for the equivalent food, and never caffeine or caffeine citrate (s.102(5)).</li>
+ <li>Vitamins and mineral nutrients may not be used as ingredients unless that use is permitted as a food additive (s.102(6)).</li>
+ <li>Caffeine may be present only where it comes from ingredients that naturally contain it, such as cocoa, and only up to 30 mg per immediate container (s.102.2).</li>
+ <li>Ethyl alcohol may not exceed 0.5% w/w of the edible cannabis (s.102.3).</li>
+ </ul>
+ <p>For a chocolate product the caffeine line is the one that matters in practice. Cocoa solids naturally contain caffeine, so a dark formulation has to be checked against that 30 mg ceiling as well as against the THC cap. The Health Canada cannabinoids rules and the ingredient rules are two separate tests, and a product has to pass both.</p>
+ <h2>What may be said, and who enforces it</h2>
+ <p>The limits on what a product may claim are as firm as the limits on what it may contain. Section 18 of the Cannabis Act prohibits promoting cannabis in a way that is false, misleading or likely to create an erroneous impression about its characteristics, composition, strength, concentration, potency, purity or quality, among other things. Section 132.28 of the Regulations goes further on the package itself: no representation, express or implied, including through a brand element, that could create the impression that health or cosmetic benefits may be derived from using the product. A declared milligram figure is information. A sentence about what it is for would be a claim.</p>
+ <p>Enforcement of the Health Canada cannabinoids rules is federal and direct. Health Canada administers the Act, and section 84 lets the Minister designate inspectors, who may order a licence holder to provide documents, information or samples to verify compliance (s.85). Section 76 allows the Minister to order a recall where it is needed to protect public safety. Section 111(1) allows an administrative monetary penalty for each violation, without going to court. The obligations a licence carries day to day, including the quality assurance role that signs off each lot, are set out in <a href="/blog/what-a-licence-requires-of-a-processor/">what a Health Canada licence requires of a processor</a>.</p>
+ <p>The figures on a legal edible label are regulated numbers, each with a defined meaning, ceiling and tolerance, and a licence holder can be required to show the evidence behind them. What we can say about our own work is limited to that evidence: every lot is laboratory tested, cannabinoid inputs are sourced from licensed suppliers and verified on receipt, and formulation, production and quality sit in the same building in Thunder Bay, Ontario.</p>
+ <p class="post-next">Next: <a href="/blog/reading-a-certificate-of-analysis/">Reading a certificate of analysis for an edible product</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
