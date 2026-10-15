@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canadian cannabis: what the phrase means for a legal product — Sophia’s Garden Artisan</title>
+<meta name="description" content="What Canadian cannabis means for a legal product: federal licensing under the Cannabis Act, provincial distribution, lot testing and provincial excise stamps.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/canadian-cannabis-made-in-northwestern-ontario/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Canadian cannabis: what the phrase means for a legal product — Sophia’s Garden Artisan">
+<meta property="og:description" content="What Canadian cannabis means for a legal product: federal licensing under the Cannabis Act, provincial distribution, lot testing and provincial excise stamps.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/canadian-cannabis-made-in-northwestern-ontario/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog &middot; October 23, 2026</p>
+ <h1>What Canadian cannabis means, made in Northwestern Ontario</h1>
+ <p class="hero-sub">On a legal product, the phrase describes a regulatory status more than a place. Here is what the Cannabis Act requires from input to shelf, and how that looks inside one licensed facility.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/facility/production-room.jpg" alt="Production room at the Thunder Bay facility: a stainless steel processing line on a sealed epoxy floor, with ducted air handling overhead." width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Most products that call themselves Canadian are making a claim about where something was made. On a legal cannabis product the word does more work than that. It says the product sits inside one federal regulatory system from the first input to the retail shelf, and that every step in between was licensed, recorded and checked by someone who answers to that system.</p>
+ <p>That is a narrower and more useful meaning of Canadian cannabis than a flag on a package. It is also the meaning we work to every day, because a processor does not get to choose which parts of it apply.</p>
+ <h2>One federal framework, provincial shelves</h2>
+ <p>Canadian cannabis became a legal product category on 17 October 2018, when the Cannabis Act came into force. Edible cannabis, extracts and topicals followed a year later, under regulations in force from 17 October 2019. The Act states its own purpose in section 7: to protect public health and public safety. Among the objectives listed beneath that are enabling legal production so that illegal activity is reduced, and ensuring a quality-controlled supply.</p>
+ <p>The work is split between two levels of government, and the split explains a great deal. Health Canada licenses production, sets the industry-wide rules on which products may be sold, and, in its own words, maintains a system for tracking and monitoring the high-level movements of cannabis through the supply chain. The provinces and territories license and oversee distribution and retail sale. Health Canada is explicit that legal products are sold only by retailers authorized by a province or territory.</p>
+ <p>So a legal product carries two sets of fingerprints: federal ones on how it was made, and provincial ones on how it reached a shelf. The provincial path in Ontario is set out in <a href="/blog/how-product-reaches-an-ontario-shelf/">how our product reaches an Ontario shelf</a>, and it is not repeated here.</p>
+ <h2>What Canadian cannabis asks of a processor, in practice</h2>
+ <p>A phrase like Canadian cannabis is easy to print. What it stands for is a sequence, and each link in it is regulated rather than optional.</p>
+ <h3>Inputs come from licence holders</h3>
+ <p>A processor does not source cannabinoids on the open market. Health Canada's description of the supply chain has licensed cultivators selling to other licensed cultivators or to processors, which closes the loop at the very start. Our cannabinoid inputs are sourced from licensed suppliers and verified on receipt, and they are received under the record-keeping the licence requires. If the origin of an input cannot be shown, the input cannot be used.</p>
+ <h3>Formulation and production at a licensed site</h3>
+ <p>Manufacturing happens at the site the licence covers. For chocolate, that means the cannabinoid is built into the cocoa butter phase as a controlled step of its own, and the batch is then tempered and moulded into individual units under controlled temperature and humidity. Cannabis regulation is layered on top of food-manufacturing discipline, not instead of it, and both apply at every step.</p>
+ <h3>Testing and release</h3>
+ <p>Health Canada describes legal products as tested for harmful levels of contaminants and for the accuracy of their THC and CBD levels. For an edible, the federal cap is 10 mg of THC per container, however many units the container holds. Every lot we make is laboratory tested, and cannabinoid content is verified by laboratory analysis on every lot. A lot then has to be released by quality assurance before it leaves. Product does not ship on commercial judgement alone. The detail of that path, from incoming material to released lot, is on our <a href="/canadian-craft-manufacturing/">Canadian craft manufacturing</a> page.</p>
+ <h3>Packaging that can be checked</h3>
+ <p>The last regulated step is the one the public sees. A legal package carries a lot number and a packaging date, and an excise stamp. Health Canada says the stamp tells you the product came from a Health Canada licence holder, and that its colours indicate the province or territory the product is intended to be sold in. Plain packaging and the required label elements are covered in an earlier post; what matters here is that each one ties a package of Canadian cannabis back to a licensed origin.</p>
+ <h2>Where one Northwestern Ontario facility fits</h2>
+ <p>We are a federally licensed cannabis processor, not a cultivator. The company operates from Thunder Bay, Ontario, and has been manufacturing in Northwestern Ontario since 2022.</p>
+ <p>The company was built as a contract manufacturer, and that work is still a working part of the business. Since 2022 this facility has produced more than thirty cannabis SKUs for other licence holders and delivered over a million units. Through <a href="/co-manufacturing/">co-manufacturing</a>, other licence holders bring a specification, or a format and a dose target, and the facility handles formulation development, production, packaging and quality release in whatever combination the programme needs.</p>
+ <p>Two facts are worth keeping apart. Products we have manufactured under contract have been sold in Ontario and four other provinces. Our own brands are listed with the Ontario Cannabis Store, in Ontario only. The first is a manufacturing record; the second is where our own products are listed today.</p>
+ <p>Formulation, production and quality sit in the same building. We make our own brands in the same facility where we manufacture for other licence holders, and the release process is the same for both. That is what Canadian cannabis means at the scale of one site: the same regulated sequence, run the same way, whoever's name is on the package.</p>
+ <h2>What the phrase can and cannot tell you</h2>
+ <p>Canadian cannabis, in the legal sense, tells you about provenance and process. It tells you the product came from a licence holder, that its lot was tested, that a defined quality function released it, and that it reached a shelf through a provincially authorized retailer. Health Canada also publishes the list of licence holders, so the licence behind a product can be checked independently rather than taken on trust.</p>
+ <p>It says nothing about what a product does once consumed, and neither does this post. Health Canada also notes that illegal products can be difficult to spot and are sometimes made to look like legal ones, which is why the stamp, the lot number and the authorized retailer matter more than any word on the front of a package.</p>
+ <p>What a manufacturer can tell you is what is in the product, how much of it, how that was verified, and where it was made. For us, that last answer is Northwestern Ontario, under a federal licence, in one building where formulation, production and quality are done side by side.</p>
+ <p class="post-next">Next: <a href="/blog/what-a-licence-requires-of-a-processor/">What a Health Canada licence requires of a processor</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
