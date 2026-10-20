@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Distillation THC: how crude oil becomes distillate — Sophia’s Garden Artisan</title>
+<meta name="description" content="How THC distillation works: extraction yields a crude oil, vacuum distillation separates it by boiling point, and the result is called distillate.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/thc-distillation-explained/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Distillation THC: how crude oil becomes distillate — Sophia’s Garden Artisan">
+<meta property="og:description" content="How THC distillation works: extraction yields a crude oil, vacuum distillation separates it by boiling point, and the result is called distillate.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/thc-distillation-explained/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog<time data-publish-date="kicker"></time></p>
+ <h1>Distillation THC: how a crude oil becomes distillate</h1>
+ <p class="hero-sub">Distillate is a word used every day in cannabis manufacturing and rarely explained outside it. Here is what the process does, what it cannot do, and why a measured input matters.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/short-path-distillation.jpg" alt="Diagram of short-path distillation: a heated flask of crude oil, a condenser under vacuum, and a receiving flask of distillate" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Much of what decides a finished product is settled before formulation begins, in the question of what form the cannabinoid takes when it arrives. For a large part of the industry the answer is distillate, a word used daily on production floors and almost never explained outside them.</p>
+ <p>This is an account of what that word means: where the material starts, what the distillation THC passes through actually does to it, and why a manufacturer working at low doses cares so much about the result. It describes industrial processing carried out under licence. It is not a method, and nothing in it translates to a home setting.</p>
+ <h2>Extraction comes first</h2>
+ <p>The Cannabis Regulations define a <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/page-1.html">cannabis extract</a> as a substance produced by subjecting cannabis to extraction processing. Extraction pulls the oil-soluble compounds away from the bulk of the starting material. Cannabinoids are lipophilic, so they come with it, but so does a good deal else: waxes, fats, pigments and lighter aromatic compounds.</p>
+ <p>What leaves the extraction step is a crude oil. It is dark, it is variable, and its cannabinoid content shifts from one run to the next with the starting material and the conditions. That variability is the problem. A crude oil is a mixture whose composition has to be measured every time before it can be used for anything that carries a number on a label.</p>
+ <h2>Short-path distillation</h2>
+ <p>THC and the other major cannabinoids boil, at normal atmospheric pressure, at temperatures elevated enough that holding them there for long risks degrading the compounds you are trying to keep. Distillation works around that with vacuum. Lowering the pressure lowers the temperature at which a compound evaporates, so the separation can run hotter than room temperature but well short of what open air would demand.</p>
+ <p>In short-path distillation THC and the cannabinoids that travel with it are separated from the rest of the crude by volatility. The oil is heated under deep vacuum, the compounds that evaporate at a given temperature and pressure rise a very short distance to a cooled surface, condense, and are collected. The short path is the point of the design: less distance means less time spent hot, which means less opportunity for heat damage.</p>
+ <p>Industrial systems usually run this in stages. A peer-reviewed study of a <a href="https://doi.org/10.1021/acs.iecr.2c00290">two-stage wiped-film molecular distillation</a> system, operated at 40 pascals, found that the first stage removed most of the terpenes and other lighter material, and the second stage refined the cannabinoid fraction itself. Wiped-film and short-path designs differ in their hardware, but they rely on the same principle: thin films, deep vacuum, short distances.</p>
+ <h3>What it cannot do</h3>
+ <p>Distillation sorts compounds by how readily they evaporate. Cannabinoids that evaporate at similar temperatures tend to come over together. The same study reported that low-pressure operation did not remove THC from a fraction rich in another cannabinoid, and its authors concluded the method was not suited to that task. The distillation THC goes through concentrates it. It does not, on its own, isolate it.</p>
+ <p>That limit is worth stating plainly because it explains why measurement never stops. A distillate is a refined mixture, not a single compound. However carefully the distillation THC went through was run, the only way to know what is in a given lot is to test that lot.</p>
+ <h2>What distillate is</h2>
+ <p>Distillate is the trade name for what comes out of the collection side: a thick, translucent, concentrated cannabinoid oil with most of the waxes, pigments and volatile compounds of the crude left behind. Legally it is still a cannabis extract. In manufacturing terms it is a raw material, valued less for any single property than for being predictable.</p>
+ <p>Predictable matters more than concentrated. A formulator does not need the strongest possible input. A formulator needs an input whose content is known, that behaves the same way in the next lot as in the last, and that can be weighed into a batch with confidence that the arithmetic on the label will hold. After distillation THC content can be measured against a far more stable baseline than a crude oil allows, and that is the property the whole downstream process depends on.</p>
+ <h2>Why a measured input matters at low doses</h2>
+ <p>A finished product's declared dose sets the ceiling. How finely it is divided is a format decision, and the finer the division, the less room there is for error. A small deviation in a small total becomes a large one when the same quantity is split into ten pieces.</p>
+ <p>The Cannabis Regulations also require testing. Under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/page-9.html">section 90</a>, THC, THCA, CBD and CBDA must be tested on each lot or batch. <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/page-10.html">Section 91</a> covers microbial and chemical contaminants, and for edible cannabis that testing applies to the cannabis used to produce it, not the finished lot. Section 92 requires validated methods, a representative sample of each lot or batch, and a retained portion of that sample. Those requirements confirm what a lot contains. They do not remove the need to know the input, because a product built on an input of uncertain content would be measured, found wrong and rejected, rather than made right.</p>
+ <p>That is why licensed manufacturers want a measured, tested input in the first place. A dependable label starts with a known quantity going into the batch and ends with laboratory confirmation coming out of it. Without distillation THC would reach the formulator inside a crude oil whose content moves with every extraction, and every number after that would inherit the uncertainty.</p>
+ <h2>What we can say about our own process</h2>
+ <p>We do not describe our suppliers, our inputs or our methods in detail, and this article is not an account of them. What we can say is what our pages already state: cannabinoid inputs are sourced from licensed suppliers and verified on receipt, and cannabinoid content is verified by laboratory analysis on every lot. Formulation, production and quality sit in the same building in Thunder Bay, Ontario, and product does not ship on commercial judgement alone.</p>
+ <p>The wider science of how a cannabinoid becomes a dosed format is set out on our <a href="/cannabinoid-formulation-science/">cannabinoid formulation science</a> page.</p>
+ <p class="post-next">Next: <a href="/blog/what-a-licence-requires-of-a-processor/">What a Health Canada licence requires of a processor</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
