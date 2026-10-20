@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How long does an edible last? Health Canada's figures — Sophia’s Garden Artisan</title>
+<meta name="description" content="What Health Canada publishes on how long edible cannabis takes to act and how long it can last, with its guidance on dose, waiting, storage and emergencies.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/how-long-does-an-edible-last/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="How long does an edible last? Health Canada's figures — Sophia’s Garden Artisan">
+<meta property="og:description" content="What Health Canada publishes on how long edible cannabis takes to act and how long it can last, with its guidance on dose, waiting, storage and emergencies.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/how-long-does-an-edible-last/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog<time data-publish-date="kicker"></time></p>
+ <h1>How long does an edible last? What Health Canada publishes</h1>
+ <p class="hero-sub">The only timing figures worth repeating are the ones Health Canada publishes. Here they are, attributed, alongside the safety guidance that comes with them.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/products/micro-zen-dark-hero.jpg" alt="The ten dark chocolate pieces in a pack of MICRO ZEN DARK" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Most answers to this question online come from people describing their own experience. A manufacturer cannot do that, and should not. What a manufacturer can do is point to the figures the federal regulator publishes, quote them exactly, and explain why the waiting they describe is the part that matters most.</p>
+ <p>So this article answers how long does an edible last using only what Health Canada says, attributed in every sentence where a number appears. Why the digestive route is slower than inhalation is covered in <a href="/blog/how-edibles-are-different/">how edibles are different</a>, and is not repeated here.</p>
+ <h2>The figures Health Canada publishes</h2>
+ <p>Health Canada gives three timing figures for cannabis that is eaten or swallowed, in its guidance <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/resources/what-you-need-to-know-if-you-choose-to-consume-cannabis.html">What you need to know if you choose to consume cannabis</a>:</p>
+ <ul>
+ <li>Health Canada advises that it can take 30 minutes to 2 hours after consumption for effects to begin.</li>
+ <li>Health Canada advises that it can take up to 4 hours for the full effects.</li>
+ <li>Health Canada advises that effects can last up to 12 hours, and that some residual effects could last up to 24 hours after use.</li>
+ </ul>
+ <p>Those are ranges, not a schedule. Health Canada does not say an edible takes 30 minutes, or that it lasts 12 hours. It says the onset falls somewhere in a two-hour window, the full effect may not arrive for four, and the tail can run to a full day. Where any one person falls inside those ranges is not something a regulator, a retailer or a manufacturer can predict.</p>
+ <p>That is the honest answer, and it is a less tidy one than a single number. We would rather give the range with its source than a figure that sounds precise and is not.</p>
+ <h2>Why the wait matters more than the number</h2>
+ <p>The figure that carries the most practical weight is the four hours. Health Canada states plainly that consuming more within this time period can increase the risk of adverse effects. The delay is the hazard: a person who has had no response at the one-hour mark may conclude the first piece did nothing, when Health Canada's own range says it may simply not have arrived yet.</p>
+ <p>Health Canada's guidance on responsible use follows from that:</p>
+ <ul>
+ <li>Start low. Health Canada advises that new consumers, or anyone wanting to minimize risk, look for a product containing 2.5 mg of THC or less.</li>
+ <li>Wait before taking more. In a 2023 <a href="https://recalls-rappels.canada.ca/en/alert-recall/cannabis-edibles-incorrectly-sold-cannabis-extracts-may-lead-overconsumption-delta-9">public advisory</a>, Health Canada advises consumers to start with a low amount of THC and wait for the effects before taking more.</li>
+ <li>Read the label. The same advisory tells consumers to read and understand the label, which shows the THC in each unit and in the whole package.</li>
+ <li>Do not combine. Health Canada advises avoiding consuming cannabis with nicotine, alcohol, other drugs or health products.</li>
+ </ul>
+ <p>None of that is ours to improve on. The useful thing a producer can add is a reliable label. A declared figure only supports the start-low advice if the piece actually carries what the package says, and if the next piece matches the last one. That is a manufacturing obligation, and it is the reason dose consistency sits at the centre of our <a href="/responsible-consumption/">responsible consumption</a> approach rather than at its edge.</p>
+ <h2>Storage, children and emergencies</h2>
+ <p>The long tail Health Canada describes has a second consequence. An edible package does not stop being a risk once the adult who bought it is finished with it. Edible cannabis looks like food, and some of the harm Health Canada has documented involves people who never chose to consume it at all.</p>
+ <p>In a 2020 <a href="https://recalls-rappels.canada.ca/en/alert-recall/accidental-ingestion-edible-cannabis-products-causing-serious-harm-children">advisory on accidental ingestion</a>, Health Canada reported children being hospitalized after eating illegal edibles that resembled ordinary food products and had been kept in places like the fridge, without child-resistant packaging. Its storage guidance is specific:</p>
+ <ul>
+ <li>Store all cannabis securely and out of reach of children, youth and pets, as Health Canada's consumer guidance puts it.</li>
+ <li>Keep cannabis in its original child-resistant packaging.</li>
+ </ul>
+ <p>For an emergency, Health Canada is equally direct. If someone is having a serious medical emergency related to a cannabis product, Health Canada advises calling 911 or contacting your regional poison centre. For adverse effects, its advisory says to stop using the product and seek help from a poison centre or call 911. Health Canada also asks consumers to report suspected adverse reactions to it, and notes that the licence holder can be contacted as well.</p>
+ <p>Health Canada also publishes a number to call. On its page on <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/health-effects/poisonings-children.html">cannabis poisonings in children</a>, it advises: "If you think a child in your care has consumed cannabis, call 1-844-POISON-X (1-800-463-5060 in Quebec) for help." The same page adds: "If your child loses consciousness or has difficulty breathing, call 9-1-1."</p>
+ <h2>What a manufacturer can tell you</h2>
+ <p>We do not describe how anything feels, and we do not suggest when anything should be consumed. A licensed producer in Canada may not characterise effects, and individual responses vary in ways no producer can account for. The question of how long does an edible last belongs to Health Canada, and its answer is the one above.</p>
+ <p>What we can speak to is the half of the question that sits on the package. Every lot we produce is laboratory tested, and cannabinoid content is verified by laboratory analysis on every lot. Health Canada caps a package of edible cannabis at 10 mg of THC; how finely that is divided is a format decision, and each format tells you two figures: the total in the package and the amount in each piece. Those two figures are what Health Canada's start-low advice depends on, and making them accurate is the work we do in Thunder Bay, Ontario.</p>
+ <p class="post-next">Next: <a href="/blog/the-engineering-of-a-one-milligram-dose/">The engineering behind a one-milligram dose</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
