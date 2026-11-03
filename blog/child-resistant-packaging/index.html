@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Child resistant packaging under the Cannabis Regulations — Sophia’s Garden Artisan</title>
+<meta name="description" content="What the Cannabis Regulations require of child resistant packaging, the Food and Drug Regulations test it refers to, and which layer of a package must meet it.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/child-resistant-packaging/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Child resistant packaging under the Cannabis Regulations — Sophia’s Garden Artisan">
+<meta property="og:description" content="What the Cannabis Regulations require of child resistant packaging, the Food and Drug Regulations test it refers to, and which layer of a package must meet it.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/child-resistant-packaging/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=59395616">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Child resistant packaging</h1>
+ <p class="sga-title">What child resistant packaging must do under the Cannabis Regulations</p>
+ <p class="sga-standfirst">On a cannabis package, child resistant is a defined term with a test behind it, borrowed from drug packaging law. This is what the test measures, which standards satisfy it, and which part of a cannabis package it applies to.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/child-resistant-packaging.jpg" alt="Outline of an immediate container with a child resistant closure, beside bars for the 85%, 80% and 90% panel test pass marks" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>"Child resistant" on a cannabis package is not a description. It is a defined term with a pass mark, and the definition does not come from cannabis law at all. Section 108(1)(e) of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> requires the immediate container of a cannabis product to meet the requirements of a child resistant package under subsections C.01.001(2) to (4) of the Food and Drug Regulations. Cannabis borrows its standard from the rules that govern drug packaging.</p>
+ <p>The same subsection sets the container's other duties. It must be opaque or translucent, prevent contamination of the cannabis, and carry a security feature that gives reasonable assurance it has not been opened before it was received. Why legal packaging looks so plain is a separate set of rules, covered in <a href="/blog/why-legal-packaging-looks-like-that/">why legal cannabis packaging looks the way it does</a>. This post is about the mechanism, and the test behind it.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#the-test-child-resistant-packaging-has-to-pass">The test child resistant packaging has to pass</a></li>
+ <li><a href="#which-layer-of-a-package-it-applies-to">Which layer of a package it applies to</a></li>
+ <li><a href="#what-a-package-can-do-and-what-it-cannot">What a package can do, and what it cannot</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="the-test-child-resistant-packaging-has-to-pass">The test child resistant packaging has to pass</h2>
+ <p>The <a href="https://laws-lois.justice.gc.ca/eng/regulations/C.R.C.,_c._870/FullText.html">Food and Drug Regulations</a> define child resistant packaging by performance, not by design. Subsection C.01.001(2) gives two routes. The first is a panel test, run in accordance with an acceptable method:</p>
+ <ul>
+ <li>Of a panel of children, at least 85% must be unable to open the package before being shown how.</li>
+ <li>At least 80% must still be unable to open it after a demonstration.</li>
+ <li>Of a panel of adults, at least 90% must be able to open it.</li>
+ <li>If the package is designed to keep working once reclosed, at least 90% of the adults must be able to reclose it properly.</li>
+ </ul>
+ <p>Subsection (3) fixes who is on the panels. The children's group must have at least 200 healthy children between 42 and 51 months of age, spread evenly across each month of that range. The adult group must have at least 100 healthy adults between 18 and 45, spread evenly across each year.</p>
+ <p>The second route is compliance with one of three named standards: CSA Standard CAN/CSA-Z76.1-M90, Recloseable Child-Resistant Packages; European Standard EN 28317:1992, which reiterates the international standard ISO 8317:1989; or Title 16, section 1700.15 of the United States Code of Federal Regulations, the poison prevention packaging standards. Subsection (4) adds a detail that matters to anyone specifying a closure. When one of those standards is amended, the amendment applies for this purpose only 18 months after the date its own authority designates.</p>
+ <h3>What the numbers do and do not say</h3>
+ <p>The pass marks are worth reading closely, because they define the limit of the promise. A package can meet the standard while up to 15% of the children in the panel open it before a demonstration, and up to 20% after one. Child resistant packaging is designed to slow a young child down and to defeat most attempts. It is not designed to be impossible to open, and the regulation never claims it is.</p>
+ <p>The adult side of the test is a constraint in the other direction. A closure that no child could open but that many adults could not open either would fail. The standard asks for a design that most young children cannot work out and nearly every adult can.</p>
+ <h2 id="which-layer-of-a-package-it-applies-to">Which layer of a package it applies to</h2>
+ <p>A legal cannabis package can involve three kinds of layer, and the requirement does not fall on all of them. Health Canada's <a href="https://www.canada.ca/en/health-canada/services/cannabis-regulations-licensed-producers/packaging-labelling-guide-cannabis-products.html">packaging and labelling guide</a> sets them out:</p>
+ <ul>
+ <li>The immediate container, the one in direct contact with the product, must be child resistant. The only classes exempted are cannabis plants and cannabis plant seeds.</li>
+ <li>A wrapper, used only where needed to keep the product's quality or stability, is not required to be child resistant, but it must sit inside an immediate container.</li>
+ <li>The outermost container does not need to be child resistant. In a co-pack, each immediate container inside it must meet the immediate container requirements on its own.</li>
+ </ul>
+ <p>The protection, in other words, sits on the layer the product lives in for its whole life.</p>
+ <p>For edible cannabis there is one further requirement on the same layer. Section 122.2 of the Cannabis Regulations requires the immediate container and any wrapper in direct contact with edible cannabis to meet the food packaging requirements of Division 23 of Part B of the Food and Drug Regulations, and certain requirements of the Safe Food for Canadians Regulations, as if the cannabis were a food. An edible's immediate container therefore answers to drug-style child resistant packaging rules and food-grade material rules at once.</p>
+ <h2 id="what-a-package-can-do-and-what-it-cannot">What a package can do, and what it cannot</h2>
+ <p>A child resistant closure is one of several overlapping protections, and the Regulations place it beside the others rather than relying on it alone. Every label must carry the warning "KEEP OUT OF REACH OF CHILDREN / TENIR HORS DE LA PORTÉE DES ENFANTS" under section 123(1)(d). The security feature shows whether the package has been opened. The closure slows access while it is shut.</p>
+ <p>Each of those depends on the package staying intact and closed. A closure that is left loose provides nothing, and pieces moved to another container lose the closure, the warning and the label together. Health Canada's guidance on keeping cannabis locked away and in its original package is set out in <a href="/blog/safe-storage-for-cannabis-edibles/">safe storage for cannabis at home</a>. The standard measures a design under test. What it protects in a home is decided by whether that design is used as intended every time.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/why-legal-packaging-looks-like-that/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 21, 2026</span><span class="sga-rel-title">Why legal cannabis packaging looks the way it does</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/safe-storage-for-cannabis-edibles/"><span class="sga-rel-thumb"><img src="/static/img/blog/child-resistant-container.jpg" alt="A closed black child-resistant container with a plain label reading Child-Resistant Container" loading="lazy"></span><span class="sga-rel-meta">October 29, 2026</span><span class="sga-rel-title">Storage for cannabis at home: Health Canada's guidance</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-prevnext">
+ <a class="sga-pn sga-pn-prev" href="/blog/safe-storage-for-cannabis-edibles/"><span>&larr; Previous</span>Storage for cannabis at home: Health Canada's guidance</a>
+ <a class="sga-pn sga-pn-next" href="/blog/why-legal-packaging-looks-like-that/"><span>Next &rarr;</span>Why legal cannabis packaging looks the way it does</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Does child resistant mean a child cannot open the package?</summary>
+ <div class="sga-faq-a"><p>No. A package can meet the standard while up to 15% of the children in the test panel open it before a demonstration and up to 20% after one. It is designed to slow a young child down, not to be impossible to open.</p></div>
+ </details>
+ <details>
+ <summary>How is a child resistant package tested?</summary>
+ <div class="sga-faq-a"><p>The Food and Drug Regulations set a panel test. At least 85% of children must be unable to open it before being shown how and 80% after, while at least 90% of adults must be able to open it, and reclose it if it is reclosable.</p></div>
+ </details>
+ <details>
+ <summary>Which part of a cannabis package has to be child resistant?</summary>
+ <div class="sga-faq-a"><p>The immediate container, the one in direct contact with the product. A wrapper inside it and the outermost container do not need to be child resistant.</p></div>
+ </details>
+ <details>
+ <summary>Why does the label also say to keep the package out of reach of children?</summary>
+ <div class="sga-faq-a"><p>The closure is one of several overlapping protections. Section 123(1)(d) requires that warning on every label, the security feature shows whether the package has been opened, and the closure slows access while it is shut.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does child resistant mean a child cannot open the package?","acceptedAnswer":{"@type":"Answer","text":"No. A package can meet the standard while up to 15% of the children in the test panel open it before a demonstration and up to 20% after one. It is designed to slow a young child down, not to be impossible to open."}},{"@type":"Question","name":"How is a child resistant package tested?","acceptedAnswer":{"@type":"Answer","text":"The Food and Drug Regulations set a panel test. At least 85% of children must be unable to open it before being shown how and 80% after, while at least 90% of adults must be able to open it, and reclose it if it is reclosable."}},{"@type":"Question","name":"Which part of a cannabis package has to be child resistant?","acceptedAnswer":{"@type":"Answer","text":"The immediate container, the one in direct contact with the product. A wrapper inside it and the outermost container do not need to be child resistant."}},{"@type":"Question","name":"Why does the label also say to keep the package out of reach of children?","acceptedAnswer":{"@type":"Answer","text":"The closure is one of several overlapping protections. Section 123(1)(d) requires that warning on every label, the security feature shows whether the package has been opened, and the closure slows access while it is shut."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
