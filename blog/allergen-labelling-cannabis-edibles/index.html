@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allergen labelling cannabis edibles must carry in Canada — Sophia’s Garden Artisan</title>
+<meta name="description" content="How the Cannabis Regulations borrow food allergen rules for edible cannabis labels: which allergens count, where they are declared, and how &quot;may contain&quot; works.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/allergen-labelling-cannabis-edibles/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Allergen labelling cannabis edibles must carry in Canada — Sophia’s Garden Artisan">
+<meta property="og:description" content="How the Cannabis Regulations borrow food allergen rules for edible cannabis labels: which allergens count, where they are declared, and how &quot;may contain&quot; works.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/allergen-labelling-cannabis-edibles/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=59395616">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Allergen labelling cannabis edibles</h1>
+ <p class="sga-title">The allergen labelling cannabis edibles must carry</p>
+ <p class="sga-standfirst">Edible cannabis is exempt from the Food and Drugs Act, yet its label declares allergens almost exactly as a packaged food does. This is how the Cannabis Regulations rebuilt the food rules inside themselves.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/allergen-labelling-cannabis-edibles.jpg" alt="Schematic of a blank label panel showing the ingredient list, the Contains statement and an optional cross-contamination line" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>Edible cannabis is not food in the eyes of the law that governs food. The <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2016-231/FullText.html">Cannabis Exemption (Food and Drugs Act) Regulations</a> take cannabis handled under the Cannabis Act outside the Food and Drugs Act altogether. And yet the allergen labelling cannabis edibles carry reads almost word for word like the declaration on a packaged food. That is not coincidence. When the Regulations were amended for edibles in 2019, the Cannabis Regulations rebuilt the food allergen rules inside themselves, borrowing the food definitions by reference.</p>
+ <p>The <a href="https://gazette.gc.ca/rp-pr/p2/2019/2019-06-26/html/sor-dors206-eng.html">Regulatory Impact Analysis Statement</a> published with those amendments says so directly. Because edible cannabis made by licence holders is exempt from the Food and Drug Regulations, the new edible label requirements were written into the Cannabis Regulations, "consistent with requirements that apply to food", and an allergen, gluten and sulphite declaration is one of them.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#which-allergens-count">Which allergens count</a></li>
+ <li><a href="#where-the-declaration-sits-on-the-label">Where the declaration sits on the label</a></li>
+ <li><a href="#cross-contamination-and-may-contain">Cross-contamination and "may contain"</a></li>
+ <li><a href="#what-the-declaration-depends-on">What the declaration depends on</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="which-allergens-count">Which allergens count</h2>
+ <p>The Cannabis Regulations do not write their own list. <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-132.23.html">Section 132.23</a> points to the definition of food allergen in <a href="https://laws-lois.justice.gc.ca/eng/regulations/C.R.C.,_c._870/section-B.01.010.1.html">section B.01.010.1 of the Food and Drug Regulations</a>, which covers any protein, or modified protein, from these foods:</p>
+ <ul>
+ <li>almonds, Brazil nuts, cashews, hazelnuts, macadamia nuts, pecans, pine nuts, pistachios or walnuts</li>
+ <li>peanuts</li>
+ <li>sesame seeds</li>
+ <li>wheat or triticale</li>
+ <li>eggs</li>
+ <li>milk</li>
+ <li>soybeans</li>
+ <li>crustaceans, molluscs and fish</li>
+ <li>mustard seeds</li>
+ </ul>
+ <p>Gluten is defined in the same section as gluten protein from barley, oats, rye, triticale or wheat, or from a hybrid created from them. Sulphites are handled by a threshold rather than a definition: under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-132.18.html">section 132.18</a> they must be declared when present at 10 p.p.m. or more.</p>
+ <p>Section 132.23 also fixes the words. A soybean source is named "soy", "soya", "soybean" or "soybeans". Sesame is "sesame", "sesame seed" or "sesame seeds", and mustard is named the same way. Milk, wheat, eggs, peanuts and the tree nuts are named as the definition names them, and fish, crustaceans and molluscs by their common names from a government reference document. The vocabulary is closed so that a label cannot describe a milk ingredient in terms that hide the milk.</p>
+ <h2 id="where-the-declaration-sits-on-the-label">Where the declaration sits on the label</h2>
+ <p>The allergen labelling cannabis edibles must carry has two possible homes, and the Regulations say which one applies. Section 132.18(1)(l) requires the source of any food allergen or gluten present to be shown either in the list of ingredients or in a separate statement. That statement is mandatory when the allergen sits inside an ingredient or constituent the list does not show.</p>
+ <p>In the list of ingredients, <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-132.21.html">section 132.21</a> puts the source in parentheses immediately after the ingredient or constituent it belongs to. An ingredient derived from soybeans is followed by "(soy)", unless the ingredient's own name already says soy or the source appears in the separate statement.</p>
+ <p>The separate statement is governed by <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-132.25.html">section 132.25</a>. It begins with "Contains" in English and "Contient" in French, with nothing printed between that word and the rest. It must sit on the same continuous surface as the list of ingredients. If a statement is used, it must name the source of every food allergen and gluten present, even ones the list already shows, plus sulphites at 10 p.p.m. or more. Each source needs to appear only once.</p>
+ <p>Small packages do not escape any of this. Under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-132.27.html">section 132.27</a>, a peel-back or accordion panel may carry information the main label has no room for, and for edible cannabis that explicitly includes the source of any food allergen or gluten and the sulphites. The panel is held to the same presentation rules as the label itself.</p>
+ <p>For a chocolate formulation the practical consequence is easy to see. A milk chocolate is made with milk ingredients, so milk must be declared by that name. Any ingredient derived from soybeans brings soy with it. Neither can be left to the reader to infer from an ingredient name.</p>
+ <h2 id="cross-contamination-and-may-contain">Cross-contamination and "may contain"</h2>
+ <p>There is one deliberate gap. Section 132.18(1)(l) excludes allergens present only as a result of cross-contamination from the mandatory declaration. The Regulations do not require a "may contain" line.</p>
+ <p>They do control one if it appears. Under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-132.24.html">section 132.24</a>, a declaration that an edible may contain an allergen or gluten source because of cross-contamination must come immediately after the "Contains" statement, or after the list of ingredients if there is no statement, on the same continuous surface, with nothing in between. Section 132.18(4) adds that the source itself must then be named. Precautionary wording is the one part of allergen labelling cannabis edibles may add voluntarily, and it is still regulated in form.</p>
+ <p>The label is not where cross-contamination is meant to be handled, though. The production rules address it first. <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-86.html">Section 86</a> requires the equipment used to produce, package, label, store, sample and test cannabis and its ingredients to be designed, maintained and operated so that it protects them against allergen cross-contamination. The definition of a sanitary condition in section 78.1 includes the absence of any risk of allergen cross-contamination. The Regulations handle the production floor and the label as two separate obligations, and a line of small type does not discharge the first.</p>
+ <h2 id="what-the-declaration-depends-on">What the declaration depends on</h2>
+ <p>An allergen declaration is only as accurate as the ingredient records behind it. Every constituent of every ingredient has to be known, because an allergen inside a constituent is still an allergen on the label. That is a formulation and supply question long before it is a packaging one, and it is one reason formulation, production and quality sit in the same building at our facility in Thunder Bay, Ontario. How the rest of the label is constrained, from the brand element to the health warning, is covered in <a href="/blog/why-legal-packaging-looks-like-that/">why legal cannabis packaging looks the way it does</a>.</p>
+ <p>The result is a declaration a reader can rely on without knowing anything about cannabis law. The words are fixed, the position is fixed, and the list behind it is the same one that governs food in Canada.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/why-legal-packaging-looks-like-that/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 21, 2026</span><span class="sga-rel-title">Why legal cannabis packaging looks the way it does</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/thc-distillation-explained/"><span class="sga-rel-thumb"><img src="/static/img/blog/short-path-distillation.jpg" alt="Diagram of short-path distillation: a heated flask of crude oil, a condenser under vacuum, and a receiving flask of distillate" loading="lazy"></span><span class="sga-rel-meta">November 2, 2026</span><span class="sga-rel-title">Distillation THC: how crude oil becomes distillate</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-prevnext">
+ <a class="sga-pn sga-pn-prev" href="/blog/health-canada-cannabinoids-rules/"><span>&larr; Previous</span>Health Canada cannabinoids rules for edible cannabis</a>
+ <a class="sga-pn sga-pn-next" href="/blog/why-legal-packaging-looks-like-that/"><span>Next &rarr;</span>Why legal cannabis packaging looks the way it does</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Which allergens must a cannabis edible label declare?</summary>
+ <div class="sga-faq-a"><p>The Cannabis Regulations use the food allergen definition from the Food and Drug Regulations, covering proteins from tree nuts, peanuts, sesame, wheat or triticale, eggs, milk, soybeans, crustaceans, molluscs, fish and mustard. Gluten must be declared too, and sulphites at 10 p.p.m. or more.</p></div>
+ </details>
+ <details>
+ <summary>Where does the allergen information appear on the label?</summary>
+ <div class="sga-faq-a"><p>Either in the list of ingredients, in parentheses after the ingredient it belongs to, or in a separate statement beginning with the word Contains. That statement is mandatory when the allergen sits inside an ingredient the list does not show.</p></div>
+ </details>
+ <details>
+ <summary>Does an edible have to carry a may contain warning?</summary>
+ <div class="sga-faq-a"><p>No. Allergens present only through cross-contamination are excluded from the mandatory declaration. If a precautionary line is used, it must follow the Contains statement or the ingredient list on the same surface and name the source.</p></div>
+ </details>
+ <details>
+ <summary>What if the package is too small for all of this?</summary>
+ <div class="sga-faq-a"><p>A peel-back or accordion panel may carry the information, and for edible cannabis that explicitly includes the source of any food allergen or gluten and the sulphites. The panel is held to the same presentation rules as the label.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which allergens must a cannabis edible label declare?","acceptedAnswer":{"@type":"Answer","text":"The Cannabis Regulations use the food allergen definition from the Food and Drug Regulations, covering proteins from tree nuts, peanuts, sesame, wheat or triticale, eggs, milk, soybeans, crustaceans, molluscs, fish and mustard. Gluten must be declared too, and sulphites at 10 p.p.m. or more."}},{"@type":"Question","name":"Where does the allergen information appear on the label?","acceptedAnswer":{"@type":"Answer","text":"Either in the list of ingredients, in parentheses after the ingredient it belongs to, or in a separate statement beginning with the word Contains. That statement is mandatory when the allergen sits inside an ingredient the list does not show."}},{"@type":"Question","name":"Does an edible have to carry a may contain warning?","acceptedAnswer":{"@type":"Answer","text":"No. Allergens present only through cross-contamination are excluded from the mandatory declaration. If a precautionary line is used, it must follow the Contains statement or the ingredient list on the same surface and name the source."}},{"@type":"Question","name":"What if the package is too small for all of this?","acceptedAnswer":{"@type":"Answer","text":"A peel-back or accordion panel may carry the information, and for edible cannabis that explicitly includes the source of any food allergen or gluten and the sulphites. The panel is held to the same presentation rules as the label."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
