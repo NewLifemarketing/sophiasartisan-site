@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do edibles expire? Shelf life and the label dates — Sophia’s Garden Artisan</title>
+<meta name="description" content="Why a legal Canadian edible carries no expiry date, what the packaging date and a best-before date mean, and what can change in a stored chocolate product.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/do-edibles-expire/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Do edibles expire? Shelf life and the label dates — Sophia’s Garden Artisan">
+<meta property="og:description" content="Why a legal Canadian edible carries no expiry date, what the packaging date and a best-before date mean, and what can change in a stored chocolate product.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/do-edibles-expire/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog<time data-publish-date="kicker"></time></p>
+ <h1>Do edibles expire? What the label dates on a legal edible mean</h1>
+ <p class="hero-sub">A legal Canadian edible is not allowed to carry an expiry date. What it carries instead is a packaging date, storage conditions and, sometimes, a best-before date, and each one means something specific.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/do-edibles-expire.jpg" alt="Diagram of a generic edible label marking packaging date, storage conditions and best before, with expiry date struck out as not permitted" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>A legal Canadian edible will never carry an expiry date. That is not an oversight by the manufacturer. Section 123.02(2) of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-123.02.html">Cannabis Regulations</a> says it in one line: the label of a container in which edible cannabis is packaged must not include an expiry date. So the honest reply to do edibles expire is that the law does not frame the question that way. It gives an edible three other things instead: a packaging date, recommended storage conditions and, in some cases, a best-before date.</p>
+ <h2>The dates a legal edible label carries</h2>
+ <p>Every cannabis product label must show the packaging date, under section 123(1)(c)(iv). It is close to exact rather than exact: section 123(2) allows the printed date to differ from the real one by up to seven days either way. It records when the product was sealed, not how long it will last. The outer box of a pack holding several containers is exempt from it, because each container inside carries its own.</p>
+ <p>The expiry date is a different idea. The Regulations define it as the end of the stability period of a cannabis product, shown at minimum as a year and month. For dried cannabis, extracts and topicals, section 123.02(1) permits one only when the processor has data showing that, stored as recommended, the product keeps its THC and CBD content within set limits and its contaminants within tolerance for the whole period. For edibles the option does not exist at all.</p>
+ <p>What edibles have instead is a food concept: durable life. The Regulations define it as the period, starting on the day the product is packaged, during which it will retain, when stored under conditions appropriate to it, without any appreciable deterioration, its normal palatability and any other qualities the processor claims for it. Section 132.2(1) makes the date that ends that period mandatory on the label when the durable life is 90 days or less. Health Canada's <a href="https://www.canada.ca/en/health-canada/services/cannabis-regulations-licensed-producers/packaging-labelling-guide-cannabis-products.html">packaging and labelling guide</a> adds that it may also appear when the period is longer, and that it is shown with the words "Best before".</p>
+ <p>The last field is easy to skip and it matters most. Section 123(1)(c)(iii) requires the label to state the recommended storage conditions, which Health Canada's guide says may refer to temperature, light or humidity. Durable life is defined against appropriate storage, so the two fields belong together. A best-before date assumes the product was kept as the label says.</p>
+ <h2>Why a legal edible is built to sit on a shelf</h2>
+ <p>The Regulations also decide, before any date is printed, what kind of product can be sold. Section 102.4 prohibits selling an edible whose unopened container has to be kept at or below 4 °C to stop it becoming contaminated before its durable life date. Section 102.5 prohibits a hermetically sealed container where any component has both a pH above 4.6 and a water activity above 0.85. Together they rule out products that depend on refrigeration or on a sealed can to stay sound. A legal edible cannot depend on cold storage to stay free of contamination in its unopened container.</p>
+ <p>That is the regulatory answer to do edibles expire: a legal edible is designed from the start to keep in its sealed container at ordinary conditions, and its label tells you when it was packed and how it should be stored.</p>
+ <h2>What can change in a stored chocolate product</h2>
+ <p>A shelf-stable product is not an unchanging one. In chocolate the change most likely to show is in the fat. The crystal form cocoa butter is tempered into is metastable, and a 2025 perspective on tempering from the University of Guelph describes temperature cycling in storage as causing repeated partial melting and recrystallisation, which appears as bloom on the surface (<a href="https://doi.org/10.1021/acs.cgd.5c00269">Crystal Growth &amp; Design, 2025</a>). Bloom is a change in how the fat is arranged. The causes on the production side are covered in <a href="/blog/tempering-milk-chocolate/">tempering milk chocolate</a>.</p>
+ <p>The cannabinoid figures are a separate question, and the Regulations tie them to a specific moment. Section 90(2) requires cannabinoid testing on the final form of each lot, and the declared per-unit and per-package figures come from that analysis. For other product classes the Regulations ask for stability data before an expiry date may be printed. For edibles they ask for a durable life and the storage conditions that go with it. We do not publish figures for how cannabinoid content moves during storage, and we will not state one here that we have not measured.</p>
+ <p>So, do edibles expire? Not in the sense the label could tell you. A legal edible carries a packaging date, storage conditions and, where the durable life is short, a best-before date, and those are the dates the law permits. How to keep a product at home, sealed and away from children, is covered in <a href="/blog/safe-storage-for-cannabis-edibles/">safe storage for cannabis at home</a>. Our own part is the half that sits on the package: every lot is laboratory tested before release, and product does not ship on commercial judgement alone.</p>
+ <p class="post-next">Next: <a href="/blog/safe-storage-for-cannabis-edibles/">Safe storage for cannabis at home, and why edibles need the most care</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
