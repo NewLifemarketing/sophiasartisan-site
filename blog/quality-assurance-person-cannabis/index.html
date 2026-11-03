@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The quality assurance person cannabis law requires — Sophia’s Garden Artisan</title>
+<meta name="description" content="What the Cannabis Regulations require of a processor's quality assurance person: the qualifications test, three duties, and what is approved before a lot sells.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/quality-assurance-person-cannabis/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="The quality assurance person cannabis law requires — Sophia’s Garden Artisan">
+<meta property="og:description" content="What the Cannabis Regulations require of a processor's quality assurance person: the qualifications test, three duties, and what is approved before a lot sells.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/quality-assurance-person-cannabis/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=59395616">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Quality assurance person cannabis</h1>
+ <p class="sga-title">The quality assurance person cannabis processors must retain</p>
+ <p class="sga-standfirst">One individual at every licensed processor decides which methods may be used, investigates every quality complaint and approves each lot before it is sold. This is what the Cannabis Regulations say about the role.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/quality-assurance-person-cannabis.jpg" alt="Flow diagram of the s.88 approval order: methods approved, preventive control plan approved, lot tested, lot approved, sale" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>Every licensed cannabis processor in Canada has to retain one individual whose job includes saying no. The Cannabis Regulations call that individual the quality assurance person, and the role is defined less by a title than by decisions nobody else at the facility is allowed to make: which methods may be used, whether a complaint points to a real problem, and whether a finished lot may be sold.</p>
+ <p>The requirement sits in <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-19.html">section 19 of the Cannabis Regulations</a>. What follows is that section and the ones that depend on it, read from the consolidated text on the Justice Laws website. It describes the quality assurance person cannabis processors are required to retain as a role, not any particular holder of it. The Regulations make the role an obligation of the licence, and that is how it is treated here.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#what-the-regulations-ask-of-the-individual">What the Regulations ask of the individual</a></li>
+ <li><a href="#three-responsibilities-in-the-regulations-own-order">Three responsibilities, in the Regulations' own order</a></li>
+ <li><a href="#what-must-be-approved-before-a-lot-leaves">What must be approved before a lot leaves</a></li>
+ <li><a href="#why-the-role-is-built-this-way">Why the role is built this way</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="what-the-regulations-ask-of-the-individual">What the Regulations ask of the individual</h2>
+ <p>Section 19(1) says a holder of a licence for processing must retain the services of one individual as a quality assurance person who has the training, experience and technical knowledge related to the requirements of Parts 5 and 6 that apply to the class of cannabis the licence covers. Part 5 is good production practices: sanitation, equipment, premises, hazard controls, sampling and testing. Part 6 covers cannabis products themselves, including what an edible may contain and how much THC it may carry.</p>
+ <p>Notice what the section does not say. It names no degree, no professional designation and no minimum number of years. The test is relevance. Training, experience and knowledge are measured against the specific requirements that apply to the class of product being made, so the quality assurance person cannabis processors retain for one class is held to a different body of rules than one responsible for chocolate.</p>
+ <p>For edibles the Regulations make that explicit. Under section 19(1.1), if the quality assurance person does not have the training, experience and technical knowledge that apply to edible cannabis, a processor working with that class must retain the services of another individual who does. Edible cannabis is the one class section 19 singles out in this way, which says something about how far food manufacturing sits from the rest of a processing licence.</p>
+ <p>The qualifications are not a private arrangement. <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-20.html">Section 20</a> requires the Minister's approval before a processor designates or replaces an alternate, or replaces the quality assurance person with anyone other than the approved alternate, and the application must describe the proposed individual's qualifications against section 19(1). <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-50.html">Section 50</a> requires the quality assurance person to hold a security clearance. And <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-231.html">section 231</a> requires the processor to keep a document describing those qualifications for as long as the individual acts in the role and for at least two years after.</p>
+ <h2 id="three-responsibilities-in-the-regulations-own-order">Three responsibilities, in the Regulations' own order</h2>
+ <p>Section 19(2) gives the quality assurance person three responsibilities:</p>
+ <ul>
+ <li>assuring the quality of the cannabis before it is made available for sale;</li>
+ <li>investigating every complaint received about the quality of the cannabis and, if necessary, immediately taking measures to mitigate any risk;</li>
+ <li>where they suspect, on reasonable grounds, that the cannabis or anything that will be used as an ingredient presents a risk of injury, or that the requirements of Part 5 or 6 are otherwise not being met, immediately investigating and, if necessary, immediately taking measures to mitigate the risk.</li>
+ </ul>
+ <p>The second and third are worth reading slowly. "Every complaint" is not "every serious complaint". The trigger for the third is suspicion on reasonable grounds, not proof. The role is built to act before a problem is confirmed, which is the point at which acting costs least.</p>
+ <p>Those investigations leave a record. Section 231 requires the processor that retains the quality assurance person cannabis rules describe to keep a document on every investigation carried out under paragraphs 19(2)(b) and (c), and on any measures taken, for at least two years after it is prepared.</p>
+ <h2 id="what-must-be-approved-before-a-lot-leaves">What must be approved before a lot leaves</h2>
+ <p><a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-88.html">Section 88</a> turns those responsibilities into approvals that have to exist before anything happens. A processor must ensure that:</p>
+ <ul>
+ <li>every investigation under paragraphs 19(2)(b) and (c) is conducted under the quality assurance person's responsibility, and any measures they find necessary are taken immediately;</li>
+ <li>cannabis, and anything used as an ingredient, is produced, packaged, labelled, distributed, stored, sampled and tested using methods and procedures the quality assurance person approved before they were put into use;</li>
+ <li>for a cannabis extract or edible cannabis, the quality assurance person approves the preventive control plan before it is implemented;</li>
+ <li>every lot or batch of cannabis is approved by the quality assurance person before it is made available for sale.</li>
+ </ul>
+ <p>The order is the point. A method is approved before it is used. The preventive control plan is approved before it runs. The lot is approved last. The quality assurance person cannabis law describes is not someone who signs a release form at the end of a run. By the time a lot reaches that final approval, everything that produced it has already crossed the same desk once.</p>
+ <p>The preventive control plan needs a line of its own, because it applies only to extracts and edibles. Under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-88.94.html">section 88.94</a> it is a written plan for every activity involving the cannabis and its ingredients. It sets out the biological, chemical and physical hazards identified, the control measures and the evidence that they work, the critical control points and their limits, how those points are monitored, what corrective action follows a deviation, and how the processor verifies that the plan produces compliance. It must also describe the measures that keep an edible inside the ingredient rules, including the limits on caffeine and ethyl alcohol. For a chocolate manufacturer, that plan is where food-production discipline and the cannabis licence meet.</p>
+ <p>Lot approval is the step most people have heard of. The testing behind it, from laboratory analysis to the retained sample, is set out in <a href="/blog/how-legal-cannabis-testing-works/">how cannabis testing works before a legal product reaches a shelf</a>.</p>
+ <h2 id="why-the-role-is-built-this-way">Why the role is built this way</h2>
+ <p>Read together, these sections separate two questions a manufacturer could otherwise blur: whether a lot can be sold, and whether it should be. Schedules and orders press on the first. The Regulations hand the second to one qualified individual, cleared for security, whose replacement needs the Minister's approval, and who leaves a documented record of qualifications and of every investigation.</p>
+ <p>That is the arrangement we work to. Formulation, production and quality sit in the same building in Thunder Bay, Ontario. Every lot is laboratory tested, and every lot is released by a quality assurance person before it ships. Product does not ship on commercial judgement alone. The path from formulation to released lot is set out on our <a href="/canadian-craft-manufacturing/">craft manufacturing</a> page.</p>
+ <p>None of this appears on a package. The closest visible trace is the lot number, which identifies the run that one accountable individual approved, made under methods that individual had approved first.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/how-legal-cannabis-testing-works/"><span class="sga-rel-thumb"><img src="/static/img/blog/thc-structure.jpg" alt="Chemical structure of delta-9-tetrahydrocannabinol (THC), molecular formula C21H30O2" loading="lazy"></span><span class="sga-rel-meta">October 23, 2026</span><span class="sga-rel-title">Cannabis testing: how a legal product is checked</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/thc-distillation-explained/"><span class="sga-rel-thumb"><img src="/static/img/blog/short-path-distillation.jpg" alt="Diagram of short-path distillation: a heated flask of crude oil, a condenser under vacuum, and a receiving flask of distillate" loading="lazy"></span><span class="sga-rel-meta">November 2, 2026</span><span class="sga-rel-title">Distillation THC: how crude oil becomes distillate</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-prevnext">
+ <a class="sga-pn sga-pn-prev" href="/blog/health-canada-cannabinoids-rules/"><span>&larr; Previous</span>Health Canada cannabinoids rules for edible cannabis</a>
+ <a class="sga-pn sga-pn-next" href="/blog/how-legal-cannabis-testing-works/"><span>Next &rarr;</span>How cannabis testing works before a legal product reaches a shelf</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>What qualifications does a quality assurance person need?</summary>
+ <div class="sga-faq-a"><p>Section 19 names no degree, designation or minimum number of years. The individual needs training, experience and technical knowledge related to the requirements that apply to the class of cannabis the licence covers.</p></div>
+ </details>
+ <details>
+ <summary>What if that person has no edibles background?</summary>
+ <div class="sga-faq-a"><p>A processor working with edible cannabis must then retain another individual who has the training, experience and technical knowledge that apply to that class. Edibles are the one class section 19 singles out this way.</p></div>
+ </details>
+ <details>
+ <summary>What does the quality assurance person approve?</summary>
+ <div class="sga-faq-a"><p>The methods and procedures before they are used, the preventive control plan for extracts and edibles before it is implemented, and every lot or batch before it is made available for sale. They are also responsible for investigating every quality complaint.</p></div>
+ </details>
+ <details>
+ <summary>Can a processor replace its quality assurance person freely?</summary>
+ <div class="sga-faq-a"><p>No. Section 20 requires the Minister's approval before a processor replaces the quality assurance person with anyone other than the approved alternate. The person must also hold a security clearance.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What qualifications does a quality assurance person need?","acceptedAnswer":{"@type":"Answer","text":"Section 19 names no degree, designation or minimum number of years. The individual needs training, experience and technical knowledge related to the requirements that apply to the class of cannabis the licence covers."}},{"@type":"Question","name":"What if that person has no edibles background?","acceptedAnswer":{"@type":"Answer","text":"A processor working with edible cannabis must then retain another individual who has the training, experience and technical knowledge that apply to that class. Edibles are the one class section 19 singles out this way."}},{"@type":"Question","name":"What does the quality assurance person approve?","acceptedAnswer":{"@type":"Answer","text":"The methods and procedures before they are used, the preventive control plan for extracts and edibles before it is implemented, and every lot or batch before it is made available for sale. They are also responsible for investigating every quality complaint."}},{"@type":"Question","name":"Can a processor replace its quality assurance person freely?","acceptedAnswer":{"@type":"Answer","text":"No. Section 20 requires the Minister's approval before a processor replaces the quality assurance person with anyone other than the approved alternate. The person must also hold a security clearance."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
