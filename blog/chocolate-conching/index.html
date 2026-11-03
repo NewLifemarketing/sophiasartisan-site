@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chocolate conching: particles, viscosity and volatiles — Sophia’s Garden Artisan</title>
+<meta name="description" content="What chocolate conching does as a process step: how it coats particles with fat, removes moisture and volatile acids, and sets the viscosity of the mass.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/chocolate-conching/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Chocolate conching: particles, viscosity and volatiles — Sophia’s Garden Artisan">
+<meta property="og:description" content="What chocolate conching does as a process step: how it coats particles with fat, removes moisture and volatile acids, and sets the viscosity of the mass.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/chocolate-conching/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Chocolate conching</h1>
+ <p class="sga-title">What chocolate conching does to particles, viscosity and volatile compounds</p>
+ <p class="sga-standfirst">Conching is the long, heated mixing step between refining and tempering. This is what it changes in the material: how the solid particles meet the fat, how much water remains, which volatile compounds leave, and how the mass flows.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/chocolate-conching.jpg" alt="Diagram of conching: flake or powder to paste to free-flowing liquid, with moisture and acetic acid leaving and cocoa butter and lecithin added" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>By the time chocolate reaches the conche, its particles are already about as small as they will get. Refining has done that work. What chocolate conching changes is everything around the particles: how completely the fat covers them, how much water is left between them, which volatile compounds remain in the mass, and how the whole suspension flows. It is the step where flake or powder becomes a liquid that can be tempered and moulded.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#where-conching-sits-in-the-process">Where conching sits in the process</a></li>
+ <li><a href="#what-chocolate-conching-does-to-particles-and-viscosity">What chocolate conching does to particles and viscosity</a></li>
+ <li><a href="#what-leaves-the-mass-volatile-compounds">What leaves the mass: volatile compounds</a></li>
+ <li><a href="#why-the-step-matters-downstream">Why the step matters downstream</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="where-conching-sits-in-the-process">Where conching sits in the process</h2>
+ <p>A 2004 review in the <a href="https://doi.org/10.1002/ejlt.200400938">European Journal of Lipid Science and Technology</a> lists five basic steps shared by every chocolate process: mixing, refining, conching, tempering and cooling. Refining reduces sugar and cocoa solids to a particle size below about 30 µm, normally on two- and five-roll refiners, according to a 2007 review in <a href="https://doi.org/10.1016/j.tifs.2007.02.002">Trends in Food Science &amp; Technology</a>. The same review notes that refiners also break up agglomerates and coat each freshly fractured surface with lipid.</p>
+ <p>Chocolate conching follows. The 2007 review describes it as agitating the chocolate above 50 °C for some hours. A 2008 review in <a href="https://doi.org/10.1080/10408390701719272">Critical Reviews in Food Science and Nutrition</a> describes it as generally a two-stage process. In the first stage, mechanical work and heat turn flake or powder into a paste, removing moisture and unwanted volatile compounds and distributing the lipids through a continuous fat phase. In the second, added cocoa butter and lecithin turn the thick paste into a free-flowing liquid.</p>
+ <p>Time and temperature trade against each other, and higher temperatures shorten the process. The published conditions are 10 to 16 hours at 49 to 52 °C for milk crumb chocolate, 16 to 24 hours at up to 60 °C for chocolate made with milk powder, and 70 °C and up to 82 °C for dark chocolate.</p>
+ <h2 id="what-chocolate-conching-does-to-particles-and-viscosity">What chocolate conching does to particles and viscosity</h2>
+ <p>Chocolate is a suspension: solid particles of sugar and cocoa, and of milk solids where present, held in a continuous fat phase. The 2007 review puts the solids at 65 to 75% of the mass. With that much solid matter, how the chocolate flows depends heavily on the particles' surfaces. Smaller particles raise both the plastic viscosity and the yield value, because more surface area is in contact with cocoa butter. Refining creates that surface. Chocolate conching has to cover it.</p>
+ <p>A 2019 review in <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6749277/">Molecules</a> lists coating the solid particles with fat among the purposes of conching, alongside evaporating volatile acids, removing excess moisture and reaching the proper viscosity. The 2008 review adds that angular sugar crystals are modified in the process.</p>
+ <p>Chocolate flow is usually described with two numbers, and conching moves both. The yield value is the force needed to start the mass flowing; the 2007 review relates it to the forces between solid particles. The plastic viscosity is the resistance once it flows, and it depends mostly on the free fat available to lubricate the particles. That review reports that adding 1% fat to a chocolate at 28% fat almost halves its plastic viscosity, while above 32% further fat changes very little.</p>
+ <h3>Water</h3>
+ <p>Water is the clearest case. Molten chocolate typically holds 0.5 to 1.5% moisture, mostly inside the cocoa solids, and at that level flow is unaffected. More water aggregates sugar particles and adds friction at their surfaces. At 3 to 4% water, viscosity and yield value rise markedly. The 2007 review gives the commercial arithmetic: for every 0.3% of extra moisture left at the end of chocolate conching, about 1% more fat has to be added to bring the viscosity back.</p>
+ <h3>Viscosity modifiers</h3>
+ <p>The last stage is also where viscosity is adjusted deliberately. The 2007 review reports that lecithin changes both flow values sharply, but above about 0.5% the yield value starts to rise again while the plastic viscosity keeps falling. Another surface-active ingredient, PGPR, can cut the yield value by half at 0.2%. The literature describes combining the two to balance one value against the other.</p>
+ <h2 id="what-leaves-the-mass-volatile-compounds">What leaves the mass: volatile compounds</h2>
+ <p>The food science literature describes this part of conching mostly in terms of flavour. As a process step it is mass transfer and chemistry, and it can be measured. The 2008 review notes that the air around a working conche carries acetic acid, a fermentation product, and that quantitative studies have confirmed an early loss of short-chain volatile fatty acids. Volatile phenols fall by about 80% in headspace concentration within a few hours of conching, a figure the 2019 review also reports for volatile polyphenols.</p>
+ <p>Not everything leaves, and not everything that remains was there at the start. The 2008 review describes Strecker aldehydes being partly lost through evaporation or reaction, while at least one compound, 2-phenyl-5-methyl-2-hexenal, increases through an aldol condensation of two smaller aldehydes followed by dehydration. Chocolate conching is a reactor as well as an evaporator.</p>
+ <h2 id="why-the-step-matters-downstream">Why the step matters downstream</h2>
+ <p>Conching sets the state of the fat phase that every later step has to work with. Tempering, explained in <a href="/blog/tempering-milk-chocolate/">tempering milk chocolate</a>, depends on that fat phase crystallising correctly. In a cannabis chocolate, the extract has to be evenly dispersed through the same fat phase before the batch is moulded, because once chocolate sets, whatever distribution existed in the liquid is locked in. The reasoning behind building the extract into the cocoa butter is set out on our <a href="/cannabinoid-formulation-science/">formulation science</a> page.</p>
+ <p>What can be confirmed afterwards is the result in the set piece, not the conditions in the conche. Every lot we make is laboratory tested.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/tempering-milk-chocolate/"><span class="sga-rel-thumb"><img src="/static/img/products/micro-zen-milk-a.jpg" alt="MICRO ZEN MILK — milk chocolate pieces" loading="lazy"></span><span class="sga-rel-meta">October 22, 2026</span><span class="sga-rel-title">Tempering milk chocolate: milk fat and cocoa butter crystals</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/the-engineering-of-a-one-milligram-dose/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 26, 2026</span><span class="sga-rel-title">The engineering behind a one-milligram dose</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>What does conching actually do to chocolate?</summary>
+ <div class="sga-faq-a"><p>It agitates the chocolate above 50 °C for some hours, turning flake or powder into a liquid that can be tempered and moulded. Along the way it coats the particles with fat, removes moisture and volatile acids, and brings the mass to the proper viscosity.</p></div>
+ </details>
+ <details>
+ <summary>How long does conching take?</summary>
+ <div class="sga-faq-a"><p>Time and temperature trade against each other. The published conditions are 10 to 16 hours at 49 to 52 °C for milk crumb chocolate, 16 to 24 hours at up to 60 °C for milk powder chocolate, and 70 °C up to 82 °C for dark chocolate.</p></div>
+ </details>
+ <details>
+ <summary>Why does leftover moisture matter after conching?</summary>
+ <div class="sga-faq-a"><p>Extra water aggregates sugar particles and adds friction at their surfaces, raising viscosity and yield value. The 2007 review reports that every 0.3% of extra moisture left at the end needs about 1% more fat to bring the viscosity back.</p></div>
+ </details>
+ <details>
+ <summary>Is conching the same as refining?</summary>
+ <div class="sga-faq-a"><p>No. Refining reduces sugar and cocoa solids to below about 30 µm, so the particles are already about as small as they will get. Conching changes everything around them, from fat coverage and water to volatile compounds and flow.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does conching actually do to chocolate?","acceptedAnswer":{"@type":"Answer","text":"It agitates the chocolate above 50 °C for some hours, turning flake or powder into a liquid that can be tempered and moulded. Along the way it coats the particles with fat, removes moisture and volatile acids, and brings the mass to the proper viscosity."}},{"@type":"Question","name":"How long does conching take?","acceptedAnswer":{"@type":"Answer","text":"Time and temperature trade against each other. The published conditions are 10 to 16 hours at 49 to 52 °C for milk crumb chocolate, 16 to 24 hours at up to 60 °C for milk powder chocolate, and 70 °C up to 82 °C for dark chocolate."}},{"@type":"Question","name":"Why does leftover moisture matter after conching?","acceptedAnswer":{"@type":"Answer","text":"Extra water aggregates sugar particles and adds friction at their surfaces, raising viscosity and yield value. The 2007 review reports that every 0.3% of extra moisture left at the end needs about 1% more fat to bring the viscosity back."}},{"@type":"Question","name":"Is conching the same as refining?","acceptedAnswer":{"@type":"Answer","text":"No. Refining reduces sugar and cocoa solids to below about 30 µm, so the particles are already about as small as they will get. Conching changes everything around them, from fat coverage and water to volatile compounds and flow."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
