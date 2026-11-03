@@ -1,0 +1,57 @@
+/* Blog post layout v2 (2026-11-03): structured like the NewLife Marketing blog at the
+   owner's request — light masthead with the photo beside the headline, an intro with an
+   "In this article" list and a related sidebar, then the article with real spacing.
+   Only posts built on the v2 template link this file; earlier posts are untouched.
+   Colours and type are the site's own tokens from style.css; nothing new is introduced. */
+.sga-post { background: var(--paper); padding: 44px 0 88px; }
+.sga-masthead {
+  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 52px; align-items: center;
+  padding-bottom: 44px; margin-bottom: 44px; border-bottom: 1px solid var(--line);
+}
+.sga-backlink { display: inline-block; color: var(--teal); font-weight: 600; font-size: .92rem; text-decoration: none; margin-bottom: 16px; }
+.sga-backlink:hover { text-decoration: underline; }
+.sga-date-line { color: var(--ink-soft); font-size: .92rem; margin: 0 0 10px; }
+.sga-kicker {
+  font-family: var(--body); font-size: .8rem; font-weight: 700; line-height: 1.4;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--teal); margin: 0 0 .9rem;
+}
+.sga-title {
+  font-family: var(--display); font-weight: 700; color: var(--navy);
+  font-size: clamp(1.9rem, 3.8vw, 2.9rem); line-height: 1.12; letter-spacing: -.01em; margin: 0 0 1.1rem;
+}
+.sga-standfirst { color: var(--ink-soft); font-size: 1.08rem; line-height: 1.65; margin: 0; }
+.sga-masthead .post-masthead-media {
+  margin: 0; border-radius: 14px; overflow: hidden; aspect-ratio: 3 / 2;
+  background: var(--mist); border: 1px solid var(--line);
+}
+.sga-masthead .post-masthead-media img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+.sga-introrow { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 56px; align-items: start; }
+.sga-body { max-width: calc(100% - 336px); }
+.sga-toc-label { font-weight: 700; color: var(--navy); margin: 30px 0 12px; }
+.sga-toc { list-style: none; padding: 0; margin: 0 0 8px; }
+.sga-toc li { position: relative; padding-left: 26px; margin: 0 0 11px; line-height: 1.45; }
+.sga-toc li::before { content: "\2192"; position: absolute; left: 0; color: var(--teal); }
+.sga-post .prose .sga-toc a { color: var(--navy); font-weight: 600; text-decoration: none; }
+.sga-post .prose .sga-toc a:hover { text-decoration: underline; }
+.sga-sidebar { border: 1px solid var(--line); border-radius: 14px; padding: 22px 22px 8px; position: sticky; top: 110px; }
+.sga-sidebar h4 { font-size: .74rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 16px; }
+.sga-sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sga-sidebar li { margin: 0 0 16px; }
+.sga-sidebar a { display: block; color: var(--navy); font-weight: 600; text-decoration: none; line-height: 1.35; }
+.sga-sidebar a:hover { text-decoration: underline; }
+.sga-sidebar .sb-meta { display: block; margin-top: 3px; font-weight: 400; font-size: .82rem; color: var(--ink-soft); }
+
+.sga-post .prose p { margin: 0 0 20px; line-height: 1.8; }
+.sga-post .prose h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 56px 0 18px; scroll-margin-top: 110px; }
+.sga-post .prose h3 { font-size: 1.2rem; margin: 34px 0 12px; }
+.sga-post .prose ul, .sga-post .prose ol { margin: 4px 0 24px; padding-left: 1.4em; }
+.sga-post .prose li { margin: 0 0 9px; line-height: 1.7; }
+.sga-post .prose a { color: var(--navy); text-decoration: underline; text-decoration-color: var(--teal); text-underline-offset: 3px; }
+.sga-post .post-next { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
+
+@media (max-width: 900px) {
+  .sga-masthead, .sga-introrow { grid-template-columns: 1fr; gap: 28px; }
+  .sga-body { max-width: none; }
+  .sga-sidebar { position: static; }
+}
