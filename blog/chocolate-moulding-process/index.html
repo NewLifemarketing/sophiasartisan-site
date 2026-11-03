@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The chocolate moulding process, step by step — Sophia’s Garden Artisan</title>
+<meta name="description" content="The chocolate moulding process as a sequence: filling cavities, vibrating out air, cooling to fix the crystal structure, and demoulding the set units.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/chocolate-moulding-process/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="The chocolate moulding process, step by step — Sophia’s Garden Artisan">
+<meta property="og:description" content="The chocolate moulding process as a sequence: filling cavities, vibrating out air, cooling to fix the crystal structure, and demoulding the set units.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/chocolate-moulding-process/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Chocolate moulding process</h1>
+ <p class="sga-title">The chocolate moulding process: fill, vibrate, cool, demould</p>
+ <p class="sga-standfirst">Tempering gets the fat into the right crystal form. Moulding turns that liquid into a fixed number of solid units of a fixed size. Four stages, each with its own failure.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/chocolate-moulding-process.jpg" alt="Line diagram of the four moulding stages: a depositor filling a mould tray, a vibrating tray, a cooling tunnel and an inverted tray releasing pieces" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>A moulded piece of chocolate is decided in the minutes between the depositor and the end of the cooling tunnel. Tempering, covered in <a href="/blog/tempering-milk-chocolate/">tempering milk chocolate</a>, gets the fat into the right crystal form. The chocolate moulding process is what turns that tempered liquid into a fixed number of solid units, each of a fixed size, each of which then carries its own declared figure.</p>
+ <p>The chocolate moulding process runs in four stages: filling, vibrating, cooling and demoulding. Each has a characteristic way of going wrong, and every one of those failures ends up inside the piece.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#filling-a-measured-amount-into-every-cavity">Filling: a measured amount into every cavity</a></li>
+ <li><a href="#vibrating-getting-the-air-out">Vibrating: getting the air out</a></li>
+ <li><a href="#cooling-where-the-structure-is-fixed">Cooling: where the structure is fixed</a></li>
+ <li><a href="#demoulding-why-tempered-chocolate-lets-go">Demoulding: why tempered chocolate lets go</a></li>
+ <li><a href="#what-the-chocolate-moulding-process-delivers">What the chocolate moulding process delivers</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="filling-a-measured-amount-into-every-cavity">Filling: a measured amount into every cavity</h2>
+ <p>A mould is a tray of identical cavities. On an industrial line, tempered chocolate is deposited into the individual cavities of a mould tray, which is how the background of a 2010 United States patent on moulding methods describes conventional practice (<a href="https://patents.google.com/patent/US7819053">US 7,819,053</a>).</p>
+ <p>Two things have to be right at the moment the chocolate reaches the mould. The first is the amount. Each cavity has to receive the same quantity, because the piece will contain exactly what went into it and nothing else. For a product carrying a cannabinoid, that makes filling part of the dose rather than only part of the shape.</p>
+ <p>The second is the state of the chocolate. It has to arrive still in temper, with its seed crystals intact, and fluid enough to reach every corner of the cavity. The room matters as much as the machine. Section 88.2 of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> requires a processor to keep temperature and humidity at levels appropriate for the activity being conducted, and on our line the batch is tempered and moulded into individual units under controlled temperature and humidity.</p>
+ <h2 id="vibrating-getting-the-air-out">Vibrating: getting the air out</h2>
+ <p>Deposited chocolate can carry trapped air. Left in, it becomes a defect. The same patent lists macrobubbles, microbubbles and craters as defects attributed to air in the chocolate, and notes that any one of them on a piece may be reason enough to reject it in quality control.</p>
+ <p>The conventional answer is vibration. The mould trays are vibrated so that the chocolate settles into and fills the cavity, and the movement works trapped air toward the surface. It is not a free fix. The patent records the trade-off plainly: macrobubbles may themselves be caused by air being forced upward toward the exposed surface as the tray is vibrated. How long and how hard a tray is vibrated is a setting that has to be developed, not assumed.</p>
+ <p>In a dosed product, air is more than a surface problem. A void inside a piece is chocolate that is not there. Two pieces with identical outer dimensions can differ in mass if one of them holds an air pocket, and the cannabinoid follows the mass, not the outline. Vibration is the step that makes a piece's volume and its mass describe the same thing.</p>
+ <h2 id="cooling-where-the-structure-is-fixed">Cooling: where the structure is fixed</h2>
+ <p>Once filled and levelled, the trays pass through a cooling tunnel, where, as the patent puts it, the pieces set and harden. Cooling is not a separate step from tempering so much as its conclusion. The seed crystals formed during tempering template the rest of the fat as it solidifies, and the tunnel has to give the fat enough time to finish doing that before the piece is handled. A blend that crystallises more slowly needs a longer dwell; the milk fat case is set out in the tempering post linked above.</p>
+ <p>Cooling is also the point at which the dose stops being adjustable. Whatever distribution of cannabinoid existed in the liquid when it was deposited is locked in when the piece sets. There is no mixing a piece after the fact. That is why the distribution problem has to be solved upstream, in the cocoa butter phase, before the chocolate ever reaches a mould. Our <a href="/cannabinoid-formulation-science/">formulation science</a> page explains why the extract goes in there and not later.</p>
+ <h2 id="demoulding-why-tempered-chocolate-lets-go">Demoulding: why tempered chocolate lets go</h2>
+ <p>Well-tempered chocolate comes out of its mould because it contracts as it solidifies. A <a href="https://ugspace.ug.edu.gh/items/f03f006e-66e2-4dc2-bedc-a32d35abfb77">2011 review of industrial tempering</a> lists contraction among the characteristics of Form V, the crystal form tempering aims for. Work presented at a 2000 food engineering conference of the <a href="https://iifiir.org/en/fridoc/topographical-measurement-of-the-contraction-of-solidifying-chocolate-20245">International Institute of Refrigeration</a> measured the height of chocolate as it solidified and found the method could clearly distinguish tempered from untempered material, noting that untempered chocolate does not separate easily from the mould.</p>
+ <p>That makes demoulding a test of every stage before it. At the end of the line the set pieces are removed from the tray. A tray that releases cleanly is evidence that the chocolate set in temper. A tray that holds on is evidence that it did not, and a piece that leaves part of itself behind in the cavity is a piece that has lost mass along with everything that mass contained.</p>
+ <h2 id="what-the-chocolate-moulding-process-delivers">What the chocolate moulding process delivers</h2>
+ <p>Read as a whole, the chocolate moulding process is a sequence of controls on one variable: how much material ends up in each unit, and in what state. Filling sets the quantity. Vibration removes the air that would make quantity and size disagree. Cooling fixes the crystal structure and, with it, the distribution of everything in the fat. Demoulding shows whether all of that worked, before any laboratory does.</p>
+ <p>The laboratory still has the last word. Formulation, tempering and moulding sit in the same building in Thunder Bay, Ontario, and a sample from each lot goes to a licensed analytical laboratory before a quality assurance person releases it. The mould decides what each piece is. The analysis confirms it.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/tempering-milk-chocolate/"><span class="sga-rel-thumb"><img src="/static/img/products/micro-zen-milk-a.jpg" alt="MICRO ZEN MILK — milk chocolate pieces" loading="lazy"></span><span class="sga-rel-meta">October 22, 2026</span><span class="sga-rel-title">Tempering milk chocolate: milk fat and cocoa butter crystals</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/thc-distillation-explained/"><span class="sga-rel-thumb"><img src="/static/img/blog/short-path-distillation.jpg" alt="Diagram of short-path distillation: a heated flask of crude oil, a condenser under vacuum, and a receiving flask of distillate" loading="lazy"></span><span class="sga-rel-meta">November 2, 2026</span><span class="sga-rel-title">Distillation THC: how crude oil becomes distillate</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>What are the main stages of moulding chocolate?</summary>
+ <div class="sga-faq-a"><p>There are four. Filling puts a measured amount into every cavity, vibrating works out trapped air, cooling sets the structure, and demoulding removes the set pieces from the tray.</p></div>
+ </details>
+ <details>
+ <summary>Why are chocolate moulds vibrated?</summary>
+ <div class="sga-faq-a"><p>Vibration settles the chocolate into the cavity and works trapped air toward the surface. Left in, air becomes macrobubbles, microbubbles or craters, and inside a piece a void is chocolate that is not there.</p></div>
+ </details>
+ <details>
+ <summary>Why does tempered chocolate come out of the mould easily?</summary>
+ <div class="sga-faq-a"><p>Well-tempered chocolate contracts as it solidifies, and contraction is a characteristic of Form V. Untempered chocolate does not separate easily, so a tray that releases cleanly is evidence the chocolate set in temper.</p></div>
+ </details>
+ <details>
+ <summary>Why does filling matter so much in a cannabis chocolate?</summary>
+ <div class="sga-faq-a"><p>A piece contains exactly what went into its cavity and nothing else. For a product carrying a cannabinoid, that makes filling part of the dose rather than only part of the shape.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What are the main stages of moulding chocolate?","acceptedAnswer":{"@type":"Answer","text":"There are four. Filling puts a measured amount into every cavity, vibrating works out trapped air, cooling sets the structure, and demoulding removes the set pieces from the tray."}},{"@type":"Question","name":"Why are chocolate moulds vibrated?","acceptedAnswer":{"@type":"Answer","text":"Vibration settles the chocolate into the cavity and works trapped air toward the surface. Left in, air becomes macrobubbles, microbubbles or craters, and inside a piece a void is chocolate that is not there."}},{"@type":"Question","name":"Why does tempered chocolate come out of the mould easily?","acceptedAnswer":{"@type":"Answer","text":"Well-tempered chocolate contracts as it solidifies, and contraction is a characteristic of Form V. Untempered chocolate does not separate easily, so a tray that releases cleanly is evidence the chocolate set in temper."}},{"@type":"Question","name":"Why does filling matter so much in a cannabis chocolate?","acceptedAnswer":{"@type":"Answer","text":"A piece contains exactly what went into its cavity and nothing else. For a product carrying a cannabinoid, that makes filling part of the dose rather than only part of the shape."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
