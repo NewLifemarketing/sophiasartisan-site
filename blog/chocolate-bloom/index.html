@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chocolate bloom: what fat bloom and sugar bloom are — Sophia’s Garden Artisan</title>
+<meta name="description" content="What the white film on chocolate is: fat bloom and sugar bloom, the crystal and moisture processes that cause each, and how production conditions prevent them.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/chocolate-bloom/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Chocolate bloom: what fat bloom and sugar bloom are — Sophia’s Garden Artisan">
+<meta property="og:description" content="What the white film on chocolate is: fat bloom and sugar bloom, the crystal and moisture processes that cause each, and how production conditions prevent them.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/chocolate-bloom/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog<time data-publish-date="kicker"></time></p>
+ <h1>Chocolate bloom: fat bloom, sugar bloom and how production prevents both</h1>
+ <p class="hero-sub">A pale film on chocolate is the chocolate's own fat or sugar, recrystallised in the wrong place. This is what each kind is, what causes it, and which production conditions hold it back.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/chocolate-bloom.jpg" alt="Diagram of fat bloom, with liquid fat moving to the surface as Form V to Form VI crystals, beside sugar bloom forming in a condensed water film" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>A white or grey film on chocolate is not something that has landed on it. It is the chocolate's own material, recrystallised in the wrong place. Chocolate bloom comes in two kinds, and they are different problems. Fat bloom is a crystal problem in the cocoa butter. Sugar bloom is a water problem at the surface. Each has its own cause, and each is held back by different conditions in production.</p>
+ <p>The science of the first is less settled than its familiarity suggests. A 2004 review in the <a href="https://doi.org/10.1002/ejlt.200400938">European Journal of Lipid Science and Technology</a> opens by noting that, despite decades of study, the specific mechanisms of fat bloom remain largely unknown. What is known is enough to manufacture against.</p>
+ <h2>What the white film is</h2>
+ <p>The same 2004 review defines a bloomed surface by what it has lost: its initial gloss. The result ranges from a uniform dull grey to a marbled pattern, and from small white points to large white spots. In most cases what you are seeing is light. Fat crystals that have formed at the surface, in an orientation that scatters incident light instead of reflecting it evenly, make the surface read as pale.</p>
+ <p>The second kind of chocolate bloom has a different origin. A 2019 review in <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6749277/">Molecules</a> describes sugar bloom forming under humid conditions, when moisture condenses on the surface. Sucrose at the surface dissolves into that film of water, and when the water is removed the sugar recrystallises as a fine, dry layer. No fat is involved. The 2004 review sets sugar bloom aside for exactly that reason: it is a humidity problem, not a fat one.</p>
+ <h2>What causes fat bloom</h2>
+ <p>The 2004 review sorts fat bloom into four categories. All four are, in its words, a stability problem of fat crystals, at different scales.</p>
+ <h3>Under-tempering, or melting after tempering</h3>
+ <p>Cocoa butter can solidify in six crystal forms, and tempering exists to produce Form V. Our post on <a href="/blog/tempering-milk-chocolate/">tempering milk chocolate</a> explains the method. If too few Form V seed crystals survive, or a tempered piece is warmed enough to melt them, the fat crystallises uncontrolled into a less stable form. Within days it converts towards Form V or Form VI, and the crystals contract as they do. The review describes the white spots that follow as mainly sugar crystals and cocoa solids, nearly devoid of fat. This kind of chocolate bloom is the surface left behind when the fat pulls back.</p>
+ <h3>Over-tempering</h3>
+ <p>Too much seed, or seed crystals that are too large, produce a dull grey surface as the chocolate sets. Large cocoa butter crystals use up the liquid fat around them and leave a rough surface that diffracts light. This form appears at solidification and does not change with time.</p>
+ <h3>Incompatible fats and fat migration</h3>
+ <p>Some fat blends do not crystallise together, and the separate fats migrate to the surface on their own. Liquid fat can also move in from any adjoining fat phase, by diffusion and by capillary forces through the chocolate's pores. Once it arrives it dilutes the cocoa butter crystals, softens the structure and gives the fat room to recrystallise.</p>
+ <h3>Storage bloom</h3>
+ <p>The slow kind of chocolate bloom forms in chocolate that was tempered correctly. The review's account turns on two steps. First, temperature fluctuations, even very small ones, change how much of the fat is liquid. Liquid fat takes up more volume, so each warming pushes some of it outward, and on cooling not all of it is reabsorbed. Second, that liquid fat recrystallises at the surface in a more stable form. The 2019 review states the transition directly: in well-tempered chocolate, fat bloom can come from the change from Form V to the more stable Form VI.</p>
+ <h2>How production prevents chocolate bloom</h2>
+ <p>Because every type of fat bloom is a crystal problem, prevention is mostly crystal control, and most of it happens before the chocolate is ever packaged.</p>
+ <ul>
+ <li>Seed concentration. The 2004 review gives the seed crystal concentration at which chocolate is ready for moulding as 0.5 to 2% of total mass. Below that range the batch is under-tempered; above it, over-tempered.</li>
+ <li>Seed crystal size. Smaller and more regular seed crystals give a chocolate with greater bloom resistance. Crystals that are too large tend to recrystallise in storage.</li>
+ <li>Cooling rate. Cooling too fast can form unstable crystal forms and leave hair cracks and pores in the surface. Both open a route for liquid fat. Even heat release, from the inside as well as the outer layer, avoids that tension.</li>
+ <li>Surface integrity. As long as the surface stays smooth, compact and free of cracks, liquid fat does not cross it, and bloom is delayed.</li>
+ <li>Fat composition. Incompatible fat blends bloom readily. Milk fat works the other way: the 2019 review notes that it delays the Form V to Form VI transition.</li>
+ </ul>
+ <p>Sugar bloom is controlled through moisture rather than crystals. The 2004 review notes that improper temperatures during cooling can deposit moisture on the product, which leads to sugar bloom.</p>
+ <p>A cannabis chocolate adds one consideration. A cannabinoid extract is itself an oil, and the 2004 review identifies liquid fat content as one of the factors that activates recrystallisation. That is part of why formulation and tempering are developed together rather than one after the other, as our <a href="/cannabinoid-formulation-science/">formulation science</a> page sets out.</p>
+ <h2>What storage temperature does</h2>
+ <p>Production sets the starting structure. Storage decides how long it holds. The 2004 review reports three ranges for chocolate. Storage below 18 °C inhibited storage bloom for over a year in one study. Between about 18 and 30 °C, below the melting point of Form V, bloom forms faster as the temperature rises. Above about 32 to 34 °C the cocoa butter partly melts and recrystallises uncontrolled on cooling, which is under-tempered bloom in a finished piece. Fluctuation matters too: temperature swings shorten the time before bloom appears and speed its spread.</p>
+ <p>How a sealed package should be kept at home is covered in <a href="/blog/safe-storage-for-cannabis-edibles/">safe storage for cannabis</a>, and is not repeated here. From the manufacturing side, chocolate bloom is a record of a piece's thermal history, written in its crystals. Every lot we make is laboratory tested, and what the crystals record after that depends on the conditions the package meets.</p>
+ <p class="post-next">Next: <a href="/blog/tempering-milk-chocolate/">Tempering milk chocolate: why milk fat changes the process</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
