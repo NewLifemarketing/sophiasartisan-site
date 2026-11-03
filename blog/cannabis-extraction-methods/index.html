@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cannabis extraction methods: CO2, hydrocarbon, ethanol — Sophia’s Garden Artisan</title>
+<meta name="description" content="Carbon dioxide, hydrocarbon and ethanol extraction compared as licensed industrial processes: how each solvent works, what it co-extracts, what is tested.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cannabis-extraction-methods/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Cannabis extraction methods: CO2, hydrocarbon, ethanol — Sophia’s Garden Artisan">
+<meta property="og:description" content="Carbon dioxide, hydrocarbon and ethanol extraction compared as licensed industrial processes: how each solvent works, what it co-extracts, what is tested.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cannabis-extraction-methods/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Cannabis extraction methods</h1>
+ <p class="sga-title">Cannabis extraction methods compared: CO2, hydrocarbon and ethanol</p>
+ <p class="sga-standfirst">Three solvents dominate industrial cannabis extraction. Each one dissolves a different set of compounds, carries a different hazard, and leaves a different question for the laboratory.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cannabis-extraction-methods.jpg" alt="Phase diagram of carbon dioxide showing solid, liquid, gas and supercritical fluid regions, with the critical point at 31.1 °C and 73.7 bar" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>Every cannabis extract starts with a solvent choice, and that choice decides more about the result than any later step can undo. The Cannabis Regulations define a cannabis extract, in section 1(1), as a substance produced by subjecting cannabis to extraction processing. What the definition leaves open is what does the extracting. In industrial practice, three cannabis extraction methods account for most of the answer: carbon dioxide, liquefied hydrocarbons such as butane and propane, and ethanol.</p>
+ <p>This is an account of those processes as they run under licence. It is not a method, and nothing in it transfers to a home setting. The law is explicit on that point. Section 12(1)(b) of the <a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/FullText.html">Cannabis Act</a> prohibits altering the chemical or physical properties of cannabis by the use of an organic solvent unless authorized, and section 12(3) defines an organic solvent as any organic compound that is explosive or highly or extremely flammable, naming butane, isobutane, propane and propylene among them. Under section 17(4) of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a>, the holder of a processing licence is authorized to use an organic solvent when producing cannabis.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#what-every-method-is-trying-to-do">What every method is trying to do</a></li>
+ <li><a href="#the-three-cannabis-extraction-methods-solvent-by-solvent">The three cannabis extraction methods, solvent by solvent</a></li>
+ <li><a href="#what-follows-extraction-and-what-the-law-checks">What follows extraction, and what the law checks</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="what-every-method-is-trying-to-do">What every method is trying to do</h2>
+ <p>Extraction separates the compounds a solvent can dissolve from the bulk of the starting material. Cannabinoids are oil-soluble, so any of the three solvents will take them. The real differences lie in what else comes along. A 2022 comparison of industrial cannabis extraction methods in <a href="https://doi.org/10.3389/fntpr.2022.1043147">Frontiers in Natural Products</a>, built from patents and pilot-scale studies, identifies the solubility and diffusivity of the cannabinoids in the solvent as the parameters that govern both efficiency and selectivity. Its authors also note that unwanted compounds are often co-extracted because the methods lack selectivity.</p>
+ <p>Those unwanted compounds are the same short list in every case: plant waxes and other lipids, chlorophyll, and material that dissolves in water. Each solvent takes a different share of them. That share decides how much refining the crude oil needs afterwards, and which contaminants the laboratory has to look for.</p>
+ <h2 id="the-three-cannabis-extraction-methods-solvent-by-solvent">The three cannabis extraction methods, solvent by solvent</h2>
+ <h3>Ethanol</h3>
+ <p>Ethanol is a polar solvent with strong solvent power, and that is both its use and its limit. The 2022 review notes that it dissolves cannabinoids readily, but also pulls in molecules that dissolve in water, such as chlorophyll, glycosides and sugars, which then have to be removed. It dissolves lipids less than the non-polar solvents do, though a winterization step to remove waxes may still be needed. Running the extraction with chilled solvent reduces the co-extraction of chlorophyll, triglycerides and waxes, at the cost of energy for cooling and a slightly lower yield. The solvent is then evaporated off. The review cites a residual limit for ethanol of 5,000 parts per million under the international ICH guideline.</p>
+ <h3>Hydrocarbons: butane and propane</h3>
+ <p>Butane and propane are non-polar. The review notes that butane does not dissolve chlorophyll and is selective for the neutral cannabinoids and lighter aromatic compounds, but co-extracts waxes more readily, so further purification follows. Because both gases boil at low temperatures, they can be purged from the extract by warming it, and the extract may then contain practically no solvent residue.</p>
+ <p>The cost is the hazard. Both are highly flammable and require safety facilities against the risk of explosion, and the process runs in closed vessels with systems that capture the solvent for reuse. It is a batch process, so the review notes that scale comes from adding units. Its yields fell in the same range as ethanol's. These are the solvents the Cannabis Act names when it defines an organic solvent, which is why they sit at the centre of the prohibition above.</p>
+ <h3>Carbon dioxide</h3>
+ <p>Carbon dioxide works differently. Above its critical point, which the review gives as 31.1 °C and 73.7 bar, it becomes a supercritical fluid. Its solvent power follows its density, and density can be changed by adjusting pressure and temperature. That gives an operator a way to tune what dissolves.</p>
+ <p>The review lists its advantages as non-toxic, non-flammable, recyclable and residue-free. Against that, polar compounds dissolve poorly in it, it co-extracts large amounts of waxes that require winterization, and it needs elevated pressures and expensive equipment. The comparison data cut against a common assumption. Carbon dioxide did not exceed the yields of ethanol or hexane, its solvent-to-material ratios reached 192 litres per kilogram against 5 to 44 for ethanol, and runs took three to six hours where butane takes minutes.</p>
+ <h2 id="what-follows-extraction-and-what-the-law-checks">What follows extraction, and what the law checks</h2>
+ <p>None of these cannabis extraction methods produces a finished material. Each produces a crude oil that still carries waxes, pigments and other co-extracted compounds in proportions that depend on the solvent and the conditions. Refining follows. One common route is described in our post on <a href="/blog/thc-distillation-explained/">distillation THC</a>.</p>
+ <p>The law then tests the result, whatever solvent made it. Health Canada's <a href="https://www.canada.ca/en/health-canada/services/cannabis-regulations-licensed-producers/good-production-practices-guide/guidance-document/october-2019.html">good production practices guide</a> lists residual solvents among the chemical contaminants that section 91 of the Regulations requires to be tested for. Section 101.1 then says a cannabis extract must not contain chemical contaminants beyond generally accepted tolerance limits established in a publication referred to in Schedule B to the Food and Drugs Act. Section 92 requires that testing to use validated methods on a representative sample of each lot or batch. Health Canada's own <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/laws-regulations/regulations-support-cannabis-act/limits-residual-solvents.html">table of residual solvent limits</a> has not been incorporated by reference in the Regulations since October 17, 2019.</p>
+ <p>The practical consequence is that the choice of solvent changes which residues matter, not whether the extract is tested. The wider set of obligations a licence carries is covered in <a href="/blog/what-a-licence-requires-of-a-processor/">what a Health Canada licence requires of a processor</a>. We do not describe our suppliers or their methods. What our pages state is that cannabinoid inputs are sourced from licensed suppliers and verified on receipt.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/thc-distillation-explained/"><span class="sga-rel-thumb"><img src="/static/img/blog/short-path-distillation.jpg" alt="Diagram of short-path distillation: a heated flask of crude oil, a condenser under vacuum, and a receiving flask of distillate" loading="lazy"></span><span class="sga-rel-meta">November 2, 2026</span><span class="sga-rel-title">Distillation THC: how crude oil becomes distillate</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/what-a-licence-requires-of-a-processor/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 22, 2026</span><span class="sga-rel-title">What a Health Canada licence requires of a processor</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Which solvents are used to make cannabis extracts?</summary>
+ <div class="sga-faq-a"><p>In industrial practice, three methods account for most extraction. They use carbon dioxide, liquefied hydrocarbons such as butane and propane, or ethanol.</p></div>
+ </details>
+ <details>
+ <summary>Who is allowed to use solvents like butane on cannabis?</summary>
+ <div class="sga-faq-a"><p>Section 12(1)(b) of the Cannabis Act prohibits altering cannabis with an organic solvent unless authorized, and butane and propane are named organic solvents. Under section 17(4) of the Cannabis Regulations, a processing licence holder is authorized to use one.</p></div>
+ </details>
+ <details>
+ <summary>Why does CO2 extraction work differently from ethanol or butane?</summary>
+ <div class="sga-faq-a"><p>Above its critical point of 31.1 °C and 73.7 bar, carbon dioxide becomes a supercritical fluid whose solvent power follows its density. Adjusting pressure and temperature changes that density, which lets an operator tune what dissolves.</p></div>
+ </details>
+ <details>
+ <summary>Are cannabis extracts tested for leftover solvent?</summary>
+ <div class="sga-faq-a"><p>Yes. Health Canada's good production practices guide lists residual solvents among the chemical contaminants section 91 of the Regulations requires testing for. The choice of solvent changes which residues matter, not whether the extract is tested.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which solvents are used to make cannabis extracts?","acceptedAnswer":{"@type":"Answer","text":"In industrial practice, three methods account for most extraction. They use carbon dioxide, liquefied hydrocarbons such as butane and propane, or ethanol."}},{"@type":"Question","name":"Who is allowed to use solvents like butane on cannabis?","acceptedAnswer":{"@type":"Answer","text":"Section 12(1)(b) of the Cannabis Act prohibits altering cannabis with an organic solvent unless authorized, and butane and propane are named organic solvents. Under section 17(4) of the Cannabis Regulations, a processing licence holder is authorized to use one."}},{"@type":"Question","name":"Why does CO2 extraction work differently from ethanol or butane?","acceptedAnswer":{"@type":"Answer","text":"Above its critical point of 31.1 °C and 73.7 bar, carbon dioxide becomes a supercritical fluid whose solvent power follows its density. Adjusting pressure and temperature changes that density, which lets an operator tune what dissolves."}},{"@type":"Question","name":"Are cannabis extracts tested for leftover solvent?","acceptedAnswer":{"@type":"Answer","text":"Yes. Health Canada's good production practices guide lists residual solvents among the chemical contaminants section 91 of the Regulations requires testing for. The choice of solvent changes which residues matter, not whether the extract is tested."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
