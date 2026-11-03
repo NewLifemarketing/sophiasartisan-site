@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cocoa butter crystals: the six forms and why Form V — Sophia’s Garden Artisan</title>
+<meta name="description" content="The six crystal forms of cocoa butter, how they differ in structure and melting point, how a laboratory identifies them, and why production targets Form V.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cocoa-butter-crystals/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Cocoa butter crystals: the six forms and why Form V — Sophia’s Garden Artisan">
+<meta property="og:description" content="The six crystal forms of cocoa butter, how they differ in structure and melting point, how a laboratory identifies them, and why production targets Form V.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cocoa-butter-crystals/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog<time data-publish-date="kicker"></time></p>
+ <h1>Cocoa butter crystals: six forms, and why production targets Form V</h1>
+ <p class="hero-sub">The same fat can solidify six different ways. This is what distinguishes the forms at the molecular level, how a laboratory tells them apart, and why one of them is the target.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cocoa-butter-crystals.jpg" alt="Schematic of 2L and 3L triglyceride layer stacking above a melting-point axis placing cocoa butter Forms I to VI" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>Cocoa butter is one fat, but it does not have one solid form. Cool it under different conditions and it sets into different crystal structures, each with its own molecular packing, its own melting point and its own stability. Six are recognised. Chocolate production aims for one of them, Form V, and regards the other five as faults to be avoided or undone.</p>
+ <p>Two of the six cocoa butter crystals sit within a few degrees of each other in melting point, and one of them is the form the industry wants while the other is the form a finished product drifts towards in storage.</p>
+ <h2>What cocoa butter is made of</h2>
+ <p>Cocoa butter is close to 30% of chocolate by weight, according to a 2021 study in <a href="https://doi.org/10.1038/s41467-021-25206-1">Nature Communications</a>. Like any fat it is mostly triglycerides: three fatty-acid chains joined to a glycerol backbone. Its fatty acids are unusually concentrated. The cocoa butter in that study was 37.3% stearic acid, 25.4% palmitic acid and 33.5% oleic acid, which the authors note closely matches typical literature values.</p>
+ <p>Those three acids combine into a small number of dominant triglycerides. Work at the <a href="https://www.esrf.fr/UsersAndScience/Publications/Highlights/2004/SCM/SCM8">European Synchrotron Radiation Facility</a> names the main three as POP, POS and SOS, where P is palmitic, S is stearic and O is oleic, and in each case the oleic chain sits in the middle position. A fat made largely of a few very similar molecules can pack into a crystal very regularly. It can also pack in several slightly different regular ways, and that is where the six forms of cocoa butter crystals come from.</p>
+ <h2>The six cocoa butter crystals, I to VI</h2>
+ <p>The standard numbering comes from a 1966 study in the <a href="https://doi.org/10.1007/BF02641273">Journal of the American Oil Chemists' Society</a> by Wille and Lutton. Working largely by x-ray diffraction, they identified six crystalline states and numbered them I to VI in order of increasing melting point. The melting temperatures they reported, as cited in the 2021 paper, are:</p>
+ <ul>
+ <li>Form I: 17.3 °C</li>
+ <li>Form II: 23.3 °C</li>
+ <li>Form III: 25.5 °C</li>
+ <li>Form IV: 27.5 °C</li>
+ <li>Form V: 33.9 °C</li>
+ <li>Form VI: 36.3 °C</li>
+ </ul>
+ <p>The figures are not universal. The same 2021 paper notes that Lovegren and colleagues reported lower melting temperatures for the same six forms: 13, 20, 23, 25, 30 and 33.5 °C. The absolute values depend on the sample and the method, which is why a production specification is written against a measured material rather than a number from a table.</p>
+ <p>The forms are not equally well defined. Wille and Lutton described Form I as a definite but fleeting sub-alpha state that may be a mixture of phases, and Form III possibly a mixture as well. Forms II, IV, V and VI they matched to known crystal forms of POS: an alpha form, a beta-prime form, and two closely related beta forms.</p>
+ <h3>Two ways of stacking</h3>
+ <p>The clearest structural divide runs between Form IV and Form V. In a fat crystal, triglycerides stack in layers. In most of the cocoa butter forms each layer is two fatty-acid chains thick, a structure written 2L. Forms V and VI stack in layers three chains thick, written 3L, according to the 2021 paper. The synchrotron work describes that triple-chain-length packing in Form V as alternating layers of saturated chains.</p>
+ <p>The two 3L forms are also the two highest melting forms. Everything below Form V is a 2L structure, and everything below Form V melts below 28 °C on the Wille and Lutton figures.</p>
+ <h2>Why production targets Form V</h2>
+ <p>The 2021 paper sets out the case directly: chocolate structured by Form V cocoa butter has the proper texture, gloss, snap and melting profile, and good thermal and bloom stability. Wille and Lutton reached the same conclusion from the other direction in 1966, finding that the normal state of cocoa butter in chocolate is apparently Form V. The synchrotron study puts most consumer chocolate in Form V, the second highest melting form.</p>
+ <p>The forms below it fail for specific reasons. Form IV, a 2L structure, has a low melting point and excessive softness. Below it, stability falls away: Wille and Lutton could report melting and dilatometric data for the lower states only to the extent that their stability permitted, and Form I barely persisted long enough to characterise.</p>
+ <h3>Why not Form VI</h3>
+ <p>If stability were the only goal, the target would be Form VI, which the synchrotron study describes as the most stable form. It is not the target, because of where it comes from and what accompanies it. The synchrotron work reports that storing Form V chocolate too warm induces the transition to Form VI, and suggests that transition can run either in the solid state or through partial melting and recrystallisation. The 2021 paper attributes fat bloom, the greyish-white surface film, to an uncontrolled transformation from Form V to Form VI, with large surface crystals scattering light.</p>
+ <p>Wille and Lutton were more careful on the last point. They noted that bloom had not been observed in pure Form V, nor in the absence of Form VI, but judged it premature to say Form VI is the bloom phase itself. Form V is the stable state a manufacturer can deliberately produce; Form VI is the state a product moves into afterwards, and the move is what has to be prevented.</p>
+ <h2>How the forms are told apart</h2>
+ <p>No one can see which form cocoa butter crystals have taken. It has to be measured. The 2021 paper calls powder x-ray diffraction the most unambiguous method. Wide-angle reflections reveal how the chains pack side by side, and small-angle reflections reveal the layer thickness, so a 2L and a 3L structure produce visibly different patterns. Differential scanning calorimetry adds the thermal picture: a sample is heated and the temperature at which it absorbs heat to melt points to the form it was in.</p>
+ <p>The same paper adds a caution that matters in production. Its chocolate samples were all in Form V by both methods, yet they differed in mechanical properties. The authors concluded that polymorphism does not wholly determine those properties, and that the size and arrangement of the crystals, the microstructure, matters as well. Getting cocoa butter crystals into the right form is necessary. It is not the whole specification.</p>
+ <p>Tempering is the process built to deliver that form: melt every existing crystal, cool to start crystallisation, then warm slightly so the unstable forms melt out and Form V seed crystals remain to template the rest of the cocoa butter crystals as the product sets. What milk fat does to that process is covered in <a href="/blog/tempering-milk-chocolate/">tempering milk chocolate</a>. For a cannabinoid product there is one more variable. An extract is itself an oil and joins the same fat phase whose crystals are being steered, which is why our <a href="/cannabinoid-formulation-science/">formulation science</a> page handles formulation and tempering as one piece of work. The crystal form decides whether the product holds its structure. The lot analysis decides whether it holds its declared content, and cannabinoid content is verified by laboratory analysis on every lot.</p>
+ <p class="post-next">Next: <a href="/blog/tempering-milk-chocolate/">Tempering milk chocolate: why milk fat changes the process</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
