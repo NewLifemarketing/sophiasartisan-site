@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The cannabis advertising rules Canada sets, ss.16 to 24 — Sophia’s Garden Artisan</title>
+<meta name="description" content="What sections 16 to 24 of the Cannabis Act let a licensed company say publicly, what they prohibit, and why a licence holder's website reads as it does.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cannabis-advertising-rules-canada/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="The cannabis advertising rules Canada sets, ss.16 to 24 — Sophia’s Garden Artisan">
+<meta property="og:description" content="What sections 16 to 24 of the Cannabis Act let a licensed company say publicly, what they prohibit, and why a licence holder's website reads as it does.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cannabis-advertising-rules-canada/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Cannabis advertising rules canada</h1>
+ <p class="sga-title">Cannabis advertising rules Canada sets in the Cannabis Act</p>
+ <p class="sga-standfirst">Canadian law starts from a prohibition and then opens a few narrow doors. This is what sections 16 to 24 of the Cannabis Act say, in order, and how they shape what a licensed company publishes.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cannabis-advertising-rules-canada.jpg" alt="Flow diagram of Cannabis Act sections 16 to 24: the s.17(1) prohibition, s.16, the s.17(2) exceptions and ss.18 to 24" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>Most consumer products can be advertised unless a law says otherwise. Cannabis works the other way round. Section 17(1) of the <a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/FullText.html">Cannabis Act</a> prohibits promoting cannabis, a cannabis accessory or a cannabis-related service unless the Act authorizes it. Everything a licensed company says publicly has to fit through one of a few doors the Act opens, and the doors are narrow.</p>
+ <p>The cannabis advertising rules Canada applies sit in sections 16 to 24 of the Act, with further detail in the Cannabis Regulations. Read in order, they explain how a licence holder's public material looks.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#what-counts-as-promotion">What counts as promotion</a></li>
+ <li><a href="#the-prohibitions-in-section-17-1">The prohibitions in section 17(1)</a></li>
+ <li><a href="#the-exceptions-informational-and-brand-preference-promotion">The exceptions: informational and brand-preference promotion</a></li>
+ <li><a href="#the-other-prohibitions-sections-18-to-24">The other prohibitions, sections 18 to 24</a></li>
+ <li><a href="#why-a-licensed-company-s-website-reads-the-way-it-does">Why a licensed company's website reads the way it does</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="what-counts-as-promotion">What counts as promotion</h2>
+ <p>The Act defines "promote" broadly: making a representation about a thing or service, for the purpose of selling it, by any means, directly or indirectly, that is likely to influence and shape attitudes, beliefs and behaviours about it. A representation on a package or label is carved out; packaging and labelling have their own rules.</p>
+ <p>Section 16 then lists what the promotion rules do not apply to. A scientific, educational, literary or artistic work that depicts cannabis is outside them, as is a report, commentary or opinion, in both cases only if nothing of value is given for the reference. So is promotion by a person authorized to produce, sell or distribute cannabis that is directed at other authorized persons and not, directly or indirectly, at consumers. That last exception turns on who can actually see the material. Calling it trade material does not create the exception; a closed audience does.</p>
+ <h2 id="the-prohibitions-in-section-17-1">The prohibitions in section 17(1)</h2>
+ <p>Section 17(1) prohibits promotion in general and then names five ways of promoting that are prohibited in particular:</p>
+ <ul>
+ <li>communicating information about price or distribution;</li>
+ <li>promoting in a manner that there are reasonable grounds to believe could appeal to young persons, meaning anyone under 18 for these provisions;</li>
+ <li>using an endorsement, however it is displayed or communicated;</li>
+ <li>depicting a person, character or animal, real or fictional; and</li>
+ <li>presenting cannabis or a brand element in a way that associates it with a way of life, or evokes an emotion about one, positive or negative.</li>
+ </ul>
+ <p>The word "including" matters. The five are examples of prohibited promotion, not the full list. Material that avoids all five can still be prohibited.</p>
+ <h2 id="the-exceptions-informational-and-brand-preference-promotion">The exceptions: informational and brand-preference promotion</h2>
+ <p>Section 17(2) opens the main door. A person authorized to produce, sell or distribute cannabis may promote it by two kinds of promotion only. Informational promotion provides factual information to the consumer about cannabis or its characteristics, or about availability or price. Brand-preference promotion promotes cannabis by means of its brand characteristics.</p>
+ <p>Even those two are allowed only in particular settings: a communication addressed and sent to a named individual who is 18 or older; a place where young persons are not permitted by law; a telecommunication where the person responsible has taken reasonable steps to ensure a young person cannot access it; or a place or manner the regulations prescribe. Section 17(4) adds a point-of-sale exception for authorized sellers, limited to availability and price.</p>
+ <p>The telecommunication route covers websites, and its key phrase, reasonable steps, is not defined in the Act. Health Canada's guidance, <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/laws-regulations/promotion-prohibitions.html">Promotion of cannabis: prohibitions and permissions</a>, says that steps which may be easily circumvented by youth may require additional steps, and that websites reached through a QR code are subject to the same restrictions. An exception under section 17(2) also does not lift the prohibitions in section 17(1). Informational material behind an access restriction still may not use people, endorsements or lifestyle.</p>
+ <p>The Regulations narrow the door further. Section 104.12 prohibits promotion that could create the impression that health or cosmetic benefits may be derived from cannabis. Section 104.13 prohibits promoting edible cannabis by its energy value or nutrient amounts, except by reproducing the nutrition facts table from its label. Section 104.14 rules out presenting an edible as meeting particular dietary requirements.</p>
+ <h2 id="the-other-prohibitions-sections-18-to-24">The other prohibitions, sections 18 to 24</h2>
+ <p>The remaining cannabis advertising rules Canada places in the Act are specific.</p>
+ <ul>
+ <li>Section 18 prohibits promotion that is false, misleading or deceptive, or likely to create an erroneous impression about characteristics, composition, strength, concentration, potency, purity, quality, merit, safety or risks. "Likely to create an erroneous impression" is a lower bar than false.</li>
+ <li>Section 19 prohibits terms, expressions, logos, symbols or illustrations that the regulations specify.</li>
+ <li>Section 20 prohibits prohibited promotion in a publication, broadcast or other communication that originates outside Canada.</li>
+ <li>Section 21 prohibits using a brand element, or the name of a person that produces, sells or distributes cannabis, in promotion used to sponsor a person, entity, activity or facility. The company name alone is enough.</li>
+ <li>Section 22 prohibits displaying a brand element or such a name on a facility used for sports or cultural activities, as part of its name or otherwise.</li>
+ <li>Section 24 prohibits a seller from offering cannabis, any other thing or a service as an inducement to purchase. Section 24(2) exempts things provided to other persons authorized to produce, sell or distribute cannabis.</li>
+ </ul>
+ <p>Section 23 is the one that reaches past the licence holder. It prohibits publishing, broadcasting or otherwise disseminating a prohibited promotion on behalf of another person, with or without payment. The publisher commits its own offence. The only defence relevant to most publishers, in section 23(2)(c), is not knowing at the time that the material contained a prohibited promotion. Under section 44 the maximum penalty on indictment is a fine of up to five million dollars, three years' imprisonment, or both.</p>
+ <h2 id="why-a-licensed-company-s-website-reads-the-way-it-does">Why a licensed company's website reads the way it does</h2>
+ <p>Put the cannabis advertising rules Canada has written into the Act side by side with a licence holder's website and the design choices stop looking like style. There are no people in the photographs because section 17(1)(d) is about depiction, and a photograph is one. There are no reviews or quotations from customers because section 17(1)(c) covers endorsements however they are displayed. Products are shown as objects, not in settings, because section 17(1)(e) is about association with a way of life. Page titles and descriptions are written as plain description, because they can be seen by anyone before any restriction on access applies.</p>
+ <p>The copy reads as explanation for the same reason. Informational promotion is factual information about cannabis and its characteristics, and section 18 holds every such fact to the standard of not creating an erroneous impression. That is why our material describes what is in a product and how it was verified, and stops there. The Regulations add a record of it: under section 236(c), a licence holder must keep a sample or copy of all promotional material for at least two years after the promotion ends.</p>
+ <p>Packaging follows its own parallel set of rules, outside the promotion definition, which are set out in <a href="/blog/why-legal-packaging-looks-like-that/">why legal cannabis packaging looks the way it does</a>. The wider obligations that come with holding a licence are covered in <a href="/blog/what-a-licence-requires-of-a-processor/">what a Health Canada licence requires of a processor</a>. Taken together, the cannabis advertising rules Canada maintains leave a licensed company one reliable thing to publish: accurate information, presented plainly, about what it makes and how.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/why-legal-packaging-looks-like-that/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 21, 2026</span><span class="sga-rel-title">Why legal cannabis packaging looks the way it does</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/what-a-licence-requires-of-a-processor/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 22, 2026</span><span class="sga-rel-title">What a Health Canada licence requires of a processor</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Can cannabis be advertised in Canada at all?</summary>
+ <div class="sga-faq-a"><p>Only where the Cannabis Act authorizes it. Section 17(1) prohibits promoting cannabis unless the Act allows it, which reverses the usual position for consumer products.</p></div>
+ </details>
+ <details>
+ <summary>What kinds of promotion does the Act allow?</summary>
+ <div class="sga-faq-a"><p>A person authorized to produce, sell or distribute cannabis may use informational promotion, which gives factual information, and brand-preference promotion, which uses brand characteristics. Both are allowed only in limited settings, such as a place young persons may not enter or a telecommunication with reasonable steps to keep them out.</p></div>
+ </details>
+ <details>
+ <summary>Why are there no people in photographs on a licensed company's website?</summary>
+ <div class="sga-faq-a"><p>Section 17(1)(d) prohibits depicting a person, character or animal, real or fictional, and a photograph is a depiction. Endorsements are prohibited too, however they are displayed, which is why there are no reviews or customer quotations.</p></div>
+ </details>
+ <details>
+ <summary>Can a publisher be liable for someone else's cannabis promotion?</summary>
+ <div class="sga-faq-a"><p>Yes. Section 23 prohibits publishing or disseminating a prohibited promotion on behalf of another person, with or without payment, so the publisher commits its own offence. The defence relevant to most publishers is not knowing at the time that the material contained a prohibited promotion.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can cannabis be advertised in Canada at all?","acceptedAnswer":{"@type":"Answer","text":"Only where the Cannabis Act authorizes it. Section 17(1) prohibits promoting cannabis unless the Act allows it, which reverses the usual position for consumer products."}},{"@type":"Question","name":"What kinds of promotion does the Act allow?","acceptedAnswer":{"@type":"Answer","text":"A person authorized to produce, sell or distribute cannabis may use informational promotion, which gives factual information, and brand-preference promotion, which uses brand characteristics. Both are allowed only in limited settings, such as a place young persons may not enter or a telecommunication with reasonable steps to keep them out."}},{"@type":"Question","name":"Why are there no people in photographs on a licensed company's website?","acceptedAnswer":{"@type":"Answer","text":"Section 17(1)(d) prohibits depicting a person, character or animal, real or fictional, and a photograph is a depiction. Endorsements are prohibited too, however they are displayed, which is why there are no reviews or customer quotations."}},{"@type":"Question","name":"Can a publisher be liable for someone else's cannabis promotion?","acceptedAnswer":{"@type":"Answer","text":"Yes. Section 23 prohibits publishing or disseminating a prohibited promotion on behalf of another person, with or without payment, so the publisher commits its own offence. The defence relevant to most publishers is not knowing at the time that the material contained a prohibited promotion."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
