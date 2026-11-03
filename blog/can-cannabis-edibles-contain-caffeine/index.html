@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Can cannabis edibles contain caffeine? What the law says — Sophia’s Garden Artisan</title>
+<meta name="description" content="Why Canadian law bars added caffeine and alcohol from edible cannabis, what naturally occurring caffeine from cocoa means, and the 30 mg ceiling per package.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/can-cannabis-edibles-contain-caffeine/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Can cannabis edibles contain caffeine? What the law says — Sophia’s Garden Artisan">
+<meta property="og:description" content="Why Canadian law bars added caffeine and alcohol from edible cannabis, what naturally occurring caffeine from cocoa means, and the 30 mg ceiling per package.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/can-cannabis-edibles-contain-caffeine/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Can cannabis edibles contain caffeine</h1>
+ <p class="sga-title">Can cannabis edibles contain caffeine? What the Regulations allow</p>
+ <p class="sga-standfirst">Caffeine and ethyl alcohol are named in the Cannabis Act itself as substances that may not be mixed with cannabis. The Regulations then allow a small, defined amount of each, and only when it arrives inside another ingredient.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/can-cannabis-edibles-contain-caffeine.jpg" alt="Line drawing of the chemical structure of caffeine" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>Can cannabis edibles contain caffeine? Under Canadian law, only when the caffeine arrives inside another ingredient, and only a little. A processor may not add caffeine to an edible as an ingredient in its own right. It may use ingredients that contain caffeine naturally, cocoa among them, provided the whole package stays at or under 30 mg. Ethyl alcohol is handled the same way, with its own ceiling.</p>
+ <p>That arrangement is stricter than it looks, and the reason starts in the Act rather than the Regulations.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#where-the-prohibition-starts">Where the prohibition starts</a></li>
+ <li><a href="#why-caffeine-and-alcohol-were-barred">Why caffeine and alcohol were barred</a></li>
+ <li><a href="#what-naturally-occurring-means-for-cocoa">What "naturally occurring" means for cocoa</a></li>
+ <li><a href="#how-a-processor-shows-the-limits-are-met">How a processor shows the limits are met</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="where-the-prohibition-starts">Where the prohibition starts</h2>
+ <p><a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/section-34.html">Section 34 of the Cannabis Act</a> prohibits selling any mixture of substances that contains cannabis and any substance listed in column 1 of Schedule 5, unless the sale is authorized under the Act. Schedule 5 lists exactly three substances: nicotine, caffeine and ethyl alcohol. Out of everything that can be combined with cannabis, these three were singled out in the statute itself.</p>
+ <p>The <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> then open two narrow doors for edibles, one for caffeine and one for alcohol.</p>
+ <ul>
+ <li><a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-5.1.html">Section 5.1</a> authorizes the sale of edible cannabis that contains caffeine only if the caffeine has been introduced through ingredients that naturally contain caffeine, and the total in each immediate container does not exceed 30 mg.</li>
+ <li>Section 5.2(2) authorizes the sale of edible cannabis that contains ethyl alcohol only if the concentration does not exceed 0.5% w/w of the edible.</li>
+ </ul>
+ <p>The same limits reappear as product requirements in <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-102.2.html">section 102.2</a> for caffeine and <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-102.3.html">section 102.3</a> for alcohol. A third provision closes the obvious route around them. Under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-102.html">section 102(5)(b)</a>, a food additive may be used in an edible only as the Lists of Permitted Food Additives allow, and caffeine and caffeine citrate are excluded by name. Caffeine cannot come in as an additive even where food law would allow it.</p>
+ <h2 id="why-caffeine-and-alcohol-were-barred">Why caffeine and alcohol were barred</h2>
+ <p>The reasoning is set out in the <a href="https://gazette.gc.ca/rp-pr/p2/2019/2019-06-26/html/sor-dors206-eng.html">Regulatory Impact Analysis Statement</a> published with the 2019 amendments that made edibles legal to sell. Two passages carry it.</p>
+ <p>The first records the advice of the federal Task Force on Cannabis Legalization and Regulation. Among its recommendations for edibles was that mixed products be prohibited, naming cannabis with alcohol, tobacco, nicotine or caffeine as examples. The second lists what the amendments were designed to reduce, and the risks associated with cannabis products that contain ethyl alcohol or caffeine are on that list by name.</p>
+ <p>The same statement explains why the prohibition is not absolute. A total ban would have ruled out chocolate, tea and coffee as ingredients, because each contains caffeine before anyone adds anything. So the Regulations allow ingredients that contain naturally occurring caffeine, under a container ceiling, while prohibiting caffeine as a food additive. Alcohol gets a parallel allowance for a parallel reason: the statement notes that ethyl alcohol is often present as a by-product in fermented ingredients, vinegars among them, and 0.5% w/w leaves room for that and nothing more.</p>
+ <p>Put plainly, the rule targets the deliberate combination. An ingredient that happens to carry caffeine or alcohol is tolerated within limits. Caffeine or alcohol added for its own sake is not.</p>
+ <h2 id="what-naturally-occurring-means-for-cocoa">What "naturally occurring" means for cocoa</h2>
+ <p>Section 102.2 turns on a phrase: the caffeine must have been introduced through the use of ingredients that naturally contain caffeine. The test is about the route, not the molecule. Caffeine is the same compound whether it came from cocoa solids or a purified powder. What the Regulations ask is how it got into the product.</p>
+ <p>Cocoa is the case that matters for chocolate, and the amounts are not trivial. Health Canada's <a href="https://www.canada.ca/en/health-canada/services/food-nutrition/food-safety/food-additives/caffeine-foods.html">table of average caffeine amounts in foods</a> lists about 7 mg in 28 g of milk chocolate and 25 to 58 mg in 28 g of unsweetened baking chocolate. Those are food figures, not cannabis figures, but they show how the 30 mg ceiling behaves. It is set per immediate container, not per piece and not per 100 g. A low-cocoa formulation in a small package sits far below it. A formulation rich in cocoa solids, in a heavier package, can approach it, and the ceiling applies regardless of how the caffeine arrived.</p>
+ <p>The variation in that baking chocolate range is the practical point. Caffeine content in cocoa is not a constant, so a formulation cannot be assumed compliant from a recipe card. Can cannabis edibles contain caffeine at a level close to the ceiling? Legally yes, if it comes from the ingredients and stays at or under 30 mg per container. In practice that makes cocoa content a quantity a formulator has to know, not estimate.</p>
+ <h2 id="how-a-processor-shows-the-limits-are-met">How a processor shows the limits are met</h2>
+ <p>The Regulations do not leave this to good intentions. Under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-88.94.html">section 88.94</a>, a processor making edibles must keep a written preventive control plan, and that plan must describe the measures for ensuring that the requirements of sections 102, 102.2 and 102.3 are met. The ingredient rules, the caffeine ceiling and the alcohol ceiling are written into the same document that covers hazards and critical control points. <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-88.html">Section 88</a> requires the quality assurance person to approve that plan before it is put into use.</p>
+ <p>So the answer to whether a given product complies is a document, not an assertion. The caffeine question sits beside the THC cap as a second, separate test a chocolate edible has to pass, and the wider set of ingredient and cannabinoid rules is laid out in <a href="/blog/health-canada-cannabinoids-rules/">the Health Canada cannabinoids rules for edible cannabis</a>. The fat chemistry that makes chocolate a format in the first place is in <a href="/blog/why-chocolate-is-a-delivery-system/">why chocolate is a delivery system, not just a confection</a>.</p>
+ <p>Can cannabis edibles contain caffeine, then? A little, from the ingredients, measured against the package. That is the whole of what the law allows.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/why-chocolate-is-a-delivery-system/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 27, 2026</span><span class="sga-rel-title">Why chocolate is a delivery system, not just a confection</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/thc-distillation-explained/"><span class="sga-rel-thumb"><img src="/static/img/blog/short-path-distillation.jpg" alt="Diagram of short-path distillation: a heated flask of crude oil, a condenser under vacuum, and a receiving flask of distillate" loading="lazy"></span><span class="sga-rel-meta">November 2, 2026</span><span class="sga-rel-title">Distillation THC: how crude oil becomes distillate</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Can caffeine be added to an edible as an ingredient?</summary>
+ <div class="sga-faq-a"><p>No. Caffeine may only arrive through ingredients that naturally contain it, such as cocoa, and caffeine and caffeine citrate are excluded as food additives. The total in each immediate container may not exceed 30 mg.</p></div>
+ </details>
+ <details>
+ <summary>Is alcohol allowed in cannabis edibles?</summary>
+ <div class="sga-faq-a"><p>Only up to 0.5% w/w of the edible. That allowance leaves room for ethyl alcohol present as a by-product of fermented ingredients, such as vinegars, and nothing more.</p></div>
+ </details>
+ <details>
+ <summary>Does the 30 mg limit apply per piece?</summary>
+ <div class="sga-faq-a"><p>No. It is set per immediate container, not per piece and not per 100 g. A formulation rich in cocoa solids in a heavier package can approach it, so cocoa content is something a formulator has to know rather than estimate.</p></div>
+ </details>
+ <details>
+ <summary>Why does the law single out caffeine?</summary>
+ <div class="sga-faq-a"><p>Schedule 5 of the Cannabis Act lists nicotine, caffeine and ethyl alcohol as substances that may not be mixed with cannabis unless authorized. A total ban would have ruled out chocolate as an ingredient, so the Regulations allow naturally occurring caffeine under a ceiling.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can caffeine be added to an edible as an ingredient?","acceptedAnswer":{"@type":"Answer","text":"No. Caffeine may only arrive through ingredients that naturally contain it, such as cocoa, and caffeine and caffeine citrate are excluded as food additives. The total in each immediate container may not exceed 30 mg."}},{"@type":"Question","name":"Is alcohol allowed in cannabis edibles?","acceptedAnswer":{"@type":"Answer","text":"Only up to 0.5% w/w of the edible. That allowance leaves room for ethyl alcohol present as a by-product of fermented ingredients, such as vinegars, and nothing more."}},{"@type":"Question","name":"Does the 30 mg limit apply per piece?","acceptedAnswer":{"@type":"Answer","text":"No. It is set per immediate container, not per piece and not per 100 g. A formulation rich in cocoa solids in a heavier package can approach it, so cocoa content is something a formulator has to know rather than estimate."}},{"@type":"Question","name":"Why does the law single out caffeine?","acceptedAnswer":{"@type":"Answer","text":"Schedule 5 of the Cannabis Act lists nicotine, caffeine and ethyl alcohol as substances that may not be mixed with cannabis unless authorized. A total ban would have ruled out chocolate as an ingredient, so the Regulations allow naturally occurring caffeine under a ceiling."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
