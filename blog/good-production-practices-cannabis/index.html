@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good production practices cannabis processors work under — Sophia’s Garden Artisan</title>
+<meta name="description" content="Part 5 of the Cannabis Regulations, section by section: procedures, premises, equipment, sanitation, preventive control plans and the quality assurance role.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/good-production-practices-cannabis/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Good production practices cannabis processors work under — Sophia’s Garden Artisan">
+<meta property="og:description" content="Part 5 of the Cannabis Regulations, section by section: procedures, premises, equipment, sanitation, preventive control plans and the quality assurance role.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/good-production-practices-cannabis/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Good production practices cannabis</h1>
+ <p class="sga-title">The good production practices cannabis processors are held to</p>
+ <p class="sga-standfirst">Part 5 of the Cannabis Regulations sets the conditions every licensed site has to meet before anything it makes can be sold. This is what the sections require, cited as they are written.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/good-production-practices-cannabis.jpg" alt="Diagram of Part 5 of the Cannabis Regulations: sections 80 to 88.94 feeding into section 79, sale only when all are met" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>Part 5 of the Cannabis Regulations opens with a condition, not a principle. Section 79 says a licence holder must not sell, distribute or export cannabis unless the applicable requirements in sections 80 to 88.94 have been met. Everything that follows in Part 5, the premises, the equipment, the cleaning, the paperwork, is therefore a condition of sale. The good production practices cannabis licence holders work under are not an aspiration a producer can fall short of and still ship.</p>
+ <p>Health Canada's <a href="https://www.canada.ca/en/health-canada/services/cannabis-regulations-licensed-producers/good-production-practices-guide/guidance-document/october-2019.html">good production practices guide</a> describes the purpose plainly: the requirements are designed to help ensure cannabis meets quality standards appropriate to its intended use, and they are backed by enforcement that includes unannounced inspections. What follows is the text of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Regulations</a> themselves, section by section.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#the-general-requirements-sections-80-to-87-1">The general requirements, sections 80 to 87.1</a></li>
+ <li><a href="#what-part-5-adds-for-a-processing-licence">What Part 5 adds for a processing licence</a></li>
+ <li><a href="#the-quality-assurance-person">The quality assurance person</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="the-general-requirements-sections-80-to-87-1">The general requirements, sections 80 to 87.1</h2>
+ <p>Section 78.1 sets the vocabulary. A sanitary condition is one that does not present a risk of contamination, allergen cross-contamination or the introduction of an extraneous substance. A control measure prevents or eliminates a hazard, or reduces it to an acceptable level. A critical control point is a step where applying a control measure is essential. Those three terms carry the rest of the Part.</p>
+ <h3>Procedures</h3>
+ <p>Section 80 requires cannabis, and anything that will be used as an ingredient, to be produced, packaged, labelled, distributed, stored, sampled and tested in accordance with standard operating procedures designed to meet Parts 5 and 6. Every activity in that list has a written procedure behind it. Section 81.1 adds that any sanitizer or non-food chemical agent on site must be clearly identified, suitable for its use, and handled according to the manufacturer's instructions. Sections 82 and 83 require storage and distribution to maintain quality.</p>
+ <h3>Premises</h3>
+ <p>Section 84 requires any building where cannabis is produced, packaged, labelled, stored or tested to be designed, built and maintained so that it can be kept clean and orderly, all its surfaces can be cleaned effectively, and contamination and extraneous substances are kept out. Section 85 requires an air system that filters odours before they reach the outdoors, ventilates enough to supply clean air and remove unclean air, can be taken apart for cleaning where necessary, and withstands repeated cleaning. Water supply (section 85.1) must suit the activity, and potable water may not be cross-connected with another system unless the risk is eliminated. Light fixtures (section 85.2) must survive repeated cleaning and must not contaminate anything if they break.</p>
+ <h3>Equipment and sanitation</h3>
+ <p>Section 86 holds equipment to the same standard as the building: surfaces that can be cleaned effectively, access and easy disassembly where cleaning or inspection needs it, and a design that prevents contamination, extraneous substances and allergen cross-contamination. Section 87 then requires a written sanitation program covering how the building is cleaned, how equipment and conveyances are cleaned, how substances used in production are handled, and the hygiene requirements for personnel. Where needed to prevent contamination, section 87.1 requires hand cleaning and sanitizing stations and lavatories, adequate in number, readily accessible, and located so they present no risk of contamination.</p>
+ <h2 id="what-part-5-adds-for-a-processing-licence">What Part 5 adds for a processing licence</h2>
+ <p>Sections 88 to 88.94 apply only to holders of a licence for processing, and they are where the good production practices cannabis processors follow start to resemble food manufacturing.</p>
+ <ul>
+ <li>Section 88.1: anyone working with edible cannabis, or with its ingredients, must have the competencies and qualifications needed for that work at the licensed site.</li>
+ <li>Section 88.2: temperature and humidity in production, packaging, storage and testing areas must be kept at levels appropriate to the activity, with instruments to control and indicate them where contamination could otherwise result.</li>
+ <li>Section 88.3: incompatible activities must be physically or otherwise effectively separated. A processor may not produce, package, label or store cannabis at a site where food for sale is produced, packaged or labelled, unless the food is in a different building on that site.</li>
+ <li>Section 88.6: any water that might touch an extract, a topical, edible cannabis or an ingredient must be potable, and so must the water used for steam or ice.</li>
+ <li>Sections 88.9 and 88.91: contaminated materials and waste must be removed often enough to prevent contamination, using equipment reserved and identified for that purpose.</li>
+ <li>Section 88.92: anyone who enters an area where cannabis is produced, packaged, labelled, stored, sampled or tested must wear clean clothing, footwear and protective coverings suitable for the activity, including gloves, a hairnet, a beard net and a smock.</li>
+ </ul>
+ <p>For a processor that makes a cannabis extract or edible cannabis, two further sections turn the list into a system. Section 88.93 requires the holder to identify and analyze the biological, chemical and physical hazards that could contaminate the product or its ingredients, and to prevent, eliminate or reduce them to an acceptable level using control measures shown by evidence to be effective. Section 88.94 requires that analysis to be written into a preventive control plan. The plan must describe the hazards, the control measures and the evidence for them, each critical control point and its critical limits, how those points are monitored, the corrective action for each, and how the plan itself is verified. The documents showing it was implemented must be kept for at least two years.</p>
+ <h2 id="the-quality-assurance-person">The quality assurance person</h2>
+ <p>Part 5 assigns its decisions to one role, defined in Part 2. Section 19 requires every processing licence holder to retain a quality assurance person with the training, experience and technical knowledge for the Part 5 and Part 6 requirements that apply to its class of cannabis. Where that individual is not qualified for edible cannabis, the holder must retain another individual who is. Alternates may be designated, and under section 20 the Minister's approval is needed before an alternate is designated or replaced.</p>
+ <p>Section 19(2) makes the role responsible for assuring quality before cannabis is made available for sale, for investigating every complaint about quality, and for investigating at once any reasonable suspicion of a risk of injury or of Part 5 or 6 not being met, then taking measures to mitigate the risk. Section 88(1) places those investigations under the quality assurance person's responsibility for a processor, and adds three approvals: methods and procedures before they are implemented, for an extract or edible cannabis, the preventive control plan before it is implemented, and every lot or batch before it is made available for sale. How that last approval works alongside laboratory testing is covered in <a href="/blog/how-legal-cannabis-testing-works/">how cannabis testing works</a>, and the wider obligations of a licence in <a href="/blog/what-a-licence-requires-of-a-processor/">what a Health Canada licence requires of a processor</a>.</p>
+ <p>That arrangement is the one our own site describes. Formulation, production and quality sit in the same building in Thunder Bay, Ontario, and product does not ship on commercial judgement alone. Under Part 5, the good production practices cannabis manufacturing depends on are not a separate department's concern. They are the conditions under which anything leaves the building at all.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/how-legal-cannabis-testing-works/"><span class="sga-rel-thumb"><img src="/static/img/blog/thc-structure.jpg" alt="Chemical structure of delta-9-tetrahydrocannabinol (THC), molecular formula C21H30O2" loading="lazy"></span><span class="sga-rel-meta">October 23, 2026</span><span class="sga-rel-title">Cannabis testing: how a legal product is checked</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/what-a-licence-requires-of-a-processor/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 22, 2026</span><span class="sga-rel-title">What a Health Canada licence requires of a processor</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>What happens if a licence holder does not meet the production practice rules?</summary>
+ <div class="sga-faq-a"><p>Section 79 says a licence holder must not sell, distribute or export cannabis unless the requirements in sections 80 to 88.94 have been met. They are a condition of sale, not an aspiration.</p></div>
+ </details>
+ <details>
+ <summary>What does a cannabis processing building have to be designed to do?</summary>
+ <div class="sga-faq-a"><p>Section 84 requires it to be designed, built and maintained so it can be kept clean and orderly, every surface can be cleaned effectively, and contamination is kept out. Section 85 adds an air system that filters odours and supplies clean air.</p></div>
+ </details>
+ <details>
+ <summary>Can cannabis be made in the same building as ordinary food?</summary>
+ <div class="sga-faq-a"><p>No. Section 88.3 prohibits producing, packaging, labelling or storing cannabis at a site where food for sale is produced, packaged or labelled, unless the food is in a different building on that site.</p></div>
+ </details>
+ <details>
+ <summary>Who approves a lot before it is sold?</summary>
+ <div class="sga-faq-a"><p>The quality assurance person. Section 88(1) makes that role responsible for approving methods and procedures, the preventive control plan for an extract or edible, and every lot or batch before it is made available for sale.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if a licence holder does not meet the production practice rules?","acceptedAnswer":{"@type":"Answer","text":"Section 79 says a licence holder must not sell, distribute or export cannabis unless the requirements in sections 80 to 88.94 have been met. They are a condition of sale, not an aspiration."}},{"@type":"Question","name":"What does a cannabis processing building have to be designed to do?","acceptedAnswer":{"@type":"Answer","text":"Section 84 requires it to be designed, built and maintained so it can be kept clean and orderly, every surface can be cleaned effectively, and contamination is kept out. Section 85 adds an air system that filters odours and supplies clean air."}},{"@type":"Question","name":"Can cannabis be made in the same building as ordinary food?","acceptedAnswer":{"@type":"Answer","text":"No. Section 88.3 prohibits producing, packaging, labelling or storing cannabis at a site where food for sale is produced, packaged or labelled, unless the food is in a different building on that site."}},{"@type":"Question","name":"Who approves a lot before it is sold?","acceptedAnswer":{"@type":"Answer","text":"The quality assurance person. Section 88(1) makes that role responsible for approving methods and procedures, the preventive control plan for an extract or edible, and every lot or batch before it is made available for sale."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
