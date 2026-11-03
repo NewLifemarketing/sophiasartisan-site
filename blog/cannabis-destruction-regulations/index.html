@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cannabis destruction regulations for licence holders — Sophia’s Garden Artisan</title>
+<meta name="description" content="How the Cannabis Regulations govern destruction of cannabis by a licence holder: the method, the witness, the record, the attestation and monthly reporting.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cannabis-destruction-regulations/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Cannabis destruction regulations for licence holders — Sophia’s Garden Artisan">
+<meta property="og:description" content="How the Cannabis Regulations govern destruction of cannabis by a licence holder: the method, the witness, the record, the attestation and monthly reporting.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cannabis-destruction-regulations/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Cannabis destruction regulations</h1>
+ <p class="sga-title">Cannabis destruction regulations: how a licence holder destroys and records cannabis</p>
+ <p class="sga-standfirst">Cannabis that will never be sold still has to be accounted for. The Cannabis Regulations set out how a licence holder may destroy it, who must be present, and what record has to exist afterwards.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cannabis-destruction-regulations.jpg" alt="Flow diagram of a destruction record: leaves inventory, method meets s.43, employee witness, s.229 record, monthly tracking report" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>A licence holder does not get to throw cannabis away. A lot that fails release, product returned from the market, a retained sample whose holding period has run out: each of these is still cannabis under the Act, and each has to leave the licence holder's possession by a route the law recognises. Destruction is one of those routes, and the Cannabis Regulations require it to be witnessed and recorded.</p>
+ <p>The cannabis destruction regulations are short. They sit mainly in two places, section 43, which says how destruction may be carried out, and section 229, which says what record has to exist afterwards. A monthly reporting duty under a separate order completes the picture.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#how-cannabis-may-be-destroyed-section-43">How cannabis may be destroyed: section 43</a></li>
+ <li><a href="#what-has-to-be-recorded-section-229">What has to be recorded: section 229</a></li>
+ <li><a href="#where-destruction-shows-up-elsewhere">Where destruction shows up elsewhere</a></li>
+ <li><a href="#why-the-cannabis-destruction-regulations-look-like-this">Why the cannabis destruction regulations look like this</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="how-cannabis-may-be-destroyed-section-43">How cannabis may be destroyed: section 43</h2>
+ <p>Section 43(1) of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> authorizes a licence holder to destroy cannabis only if three conditions are met.</p>
+ <ul>
+ <li>The method must comply with all federal, provincial and municipal environmental protection legislation that applies where the destruction takes place, and it must not result in any individual being exposed to cannabis smoke or cannabis vapour.</li>
+ <li>The destruction must take place in the presence of at least one employee of the licence holder.</li>
+ <li>If the cannabis is destroyed somewhere other than the licensed site, the licence holder must ensure that the cannabis at that location is in the presence of at least one employee at all times.</li>
+ </ul>
+ <p>Notice what the section does not do. It does not prescribe a method. There is no required technique, no list of approved processes, no specified ratio of cannabis to other waste. The regulation sets outcomes instead: the method must satisfy environmental law at the location, and nobody may be exposed to smoke or vapour from it. How a licence holder meets that is a matter for its own procedures and for the environmental rules where it operates.</p>
+ <p>The witness requirement is newer than it looks. The <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-43-20181017.html">version of section 43 in force from October 2018 to March 2025</a> required at least two individuals qualified to witness the destruction, one of whom had to hold a security clearance in most licence classes. The current text requires one employee of the licence holder. Anyone working from older guidance or an older procedure should check it against the current section.</p>
+ <p>Sections 43(2) and 229(4) exempt one category of plant waste from the witness and record requirements. It arises only where plants are produced, which is not part of processing.</p>
+ <h2 id="what-has-to-be-recorded-section-229">What has to be recorded: section 229</h2>
+ <p>The record is where the cannabis destruction regulations become verifiable. Section 229(1) requires a licence holder that destroys cannabis, or causes it to be destroyed, to retain a document containing:</p>
+ <ul>
+ <li>a description of the cannabis, including its brand name where there is one;</li>
+ <li>the date on which it was destroyed;</li>
+ <li>its net weight or volume before destruction on that date, or, for whole plants, the number destroyed; and</li>
+ <li>the name of the employee who witnessed the destruction.</li>
+ </ul>
+ <p>Section 229(2) adds a second document. For each instance of destruction, the licence holder must obtain an attestation, signed and dated by the witnessing employee, stating that they witnessed it and that the cannabis was destroyed by a method meeting the conditions in section 43(1)(a). The witness is therefore not a formality. They are the person who puts their name to the method.</p>
+ <p>Both documents must be kept for at least two years after the day the cannabis is destroyed, under section 229(3). The same destruction also appears, as inventory leaving the books, in the licence holder's monthly report.</p>
+ <h2 id="where-destruction-shows-up-elsewhere">Where destruction shows up elsewhere</h2>
+ <h3>The monthly tracking report</h3>
+ <p>A holder of a processing licence that authorizes possession of cannabis, like holders of several other licence classes, reports its inventory to the Minister each month under the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2019-202/FullText.html">Cannabis Tracking System Order</a>, no later than the 15th day of the month. Destruction is a line in that report. The holder states the number of packaged cannabis products that left inventory during the previous month because they were destroyed, and separately the quantity of unpackaged cannabis that left inventory by being destroyed.</p>
+ <p>The Order also draws a firm line between destruction and sale. Under section 1(2), selling or distributing cannabis for the purposes of destruction is not counted as a sale or distribution. Destroyed product does not disappear from the books. It moves into its own category, and the section 229 record is the document behind that line.</p>
+ <h3>Testing and samples</h3>
+ <p>Laboratories have their own rule. Under section 25, a holder of a licence for analytical testing must destroy the sample of a lot or batch it received, and anything obtained from it, within 90 days of completing the testing. If testing has not begun within 120 days of receipt, the laboratory must by then destroy the sample or send it on to another analytical testing licence holder.</p>
+ <p>On the producer's side, section 92 requires a portion of each tested sample to be kept for at least one year after the last sale of any part of the lot. When that portion is finally disposed of, it is cannabis like any other, and its destruction is recorded in the same way. How the testing and retention sequence works is set out in <a href="/blog/how-legal-cannabis-testing-works/">how cannabis testing works before a legal product reaches a shelf</a>.</p>
+ <h3>When activities stop</h3>
+ <p>Destruction also appears in the rules for closing down. Under section 36, a licence holder that intends to cease all licensed activities must notify the Minister at least 30 days beforehand, describing how any remaining cannabis will be disposed of. If any of it will be destroyed, the notice must give the day and the location.</p>
+ <h2 id="why-the-cannabis-destruction-regulations-look-like-this">Why the cannabis destruction regulations look like this</h2>
+ <p>Read together, the cannabis destruction regulations do one thing consistently. They make sure that cannabis leaving a licence holder's possession without being sold still leaves a trail: a weight, a date, a named witness, a signed attestation, and a line in a monthly report that can be compared with all of them. A licensed processor's obligations are built on that kind of traceability throughout, and destruction is simply the point at which a lot's record closes. The wider set of obligations is covered in <a href="/blog/what-a-licence-requires-of-a-processor/">what a Health Canada licence requires of a processor</a>.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/how-legal-cannabis-testing-works/"><span class="sga-rel-thumb"><img src="/static/img/blog/thc-structure.jpg" alt="Chemical structure of delta-9-tetrahydrocannabinol (THC), molecular formula C21H30O2" loading="lazy"></span><span class="sga-rel-meta">October 23, 2026</span><span class="sga-rel-title">Cannabis testing: how a legal product is checked</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/what-a-licence-requires-of-a-processor/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 22, 2026</span><span class="sga-rel-title">What a Health Canada licence requires of a processor</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Is there a required method for destroying cannabis?</summary>
+ <div class="sga-faq-a"><p>No. Section 43 sets outcomes instead of a technique. The method must comply with the environmental protection legislation that applies where destruction takes place, and it must not expose anyone to cannabis smoke or vapour.</p></div>
+ </details>
+ <details>
+ <summary>Who has to be present when cannabis is destroyed?</summary>
+ <div class="sga-faq-a"><p>At least one employee of the licence holder. Before March 2025 the section required at least two qualified individuals, one holding a security clearance in most licence classes, so older procedures should be checked against the current text.</p></div>
+ </details>
+ <details>
+ <summary>What records does destruction leave behind?</summary>
+ <div class="sga-faq-a"><p>A document describing the cannabis, the date, its net weight or volume and the witnessing employee's name, plus an attestation signed by that witness. Both are kept for at least two years, and the destruction also appears as a line in the monthly tracking report.</p></div>
+ </details>
+ <details>
+ <summary>What happens to laboratory samples after testing?</summary>
+ <div class="sga-faq-a"><p>A testing laboratory must destroy the sample, and anything obtained from it, within 90 days of completing the testing. On the producer's side, a portion of each tested sample is kept for at least one year after the last sale of any part of the lot.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is there a required method for destroying cannabis?","acceptedAnswer":{"@type":"Answer","text":"No. Section 43 sets outcomes instead of a technique. The method must comply with the environmental protection legislation that applies where destruction takes place, and it must not expose anyone to cannabis smoke or vapour."}},{"@type":"Question","name":"Who has to be present when cannabis is destroyed?","acceptedAnswer":{"@type":"Answer","text":"At least one employee of the licence holder. Before March 2025 the section required at least two qualified individuals, one holding a security clearance in most licence classes, so older procedures should be checked against the current text."}},{"@type":"Question","name":"What records does destruction leave behind?","acceptedAnswer":{"@type":"Answer","text":"A document describing the cannabis, the date, its net weight or volume and the witnessing employee's name, plus an attestation signed by that witness. Both are kept for at least two years, and the destruction also appears as a line in the monthly tracking report."}},{"@type":"Question","name":"What happens to laboratory samples after testing?","acceptedAnswer":{"@type":"Answer","text":"A testing laboratory must destroy the sample, and anything obtained from it, within 90 days of completing the testing. On the producer's side, a portion of each tested sample is kept for at least one year after the last sale of any part of the lot."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
