@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cannabis excise stamp: what it is and what it proves — Sophia’s Garden Artisan</title>
+<meta name="description" content="What the cannabis excise stamp on a legal Canadian package is, who issues and applies it, where it must sit on the package, and what it does and does not prove.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cannabis-excise-stamp/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Cannabis excise stamp: what it is and what it proves — Sophia’s Garden Artisan">
+<meta property="og:description" content="What the cannabis excise stamp on a legal Canadian package is, who issues and applies it, where it must sit on the package, and what it does and does not prove.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cannabis-excise-stamp/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=59395616">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Cannabis excise stamp</h1>
+ <p class="sga-title">The cannabis excise stamp: who applies it and what it proves</p>
+ <p class="sga-standfirst">Almost everything on a legal package is set by Health Canada. The stamp across its seam is not. It comes from the tax system, it is issued by the Canada Revenue Agency, and it proves one thing exactly.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cannabis-excise-stamp.jpg" alt="Line diagram of a generic 20 by 40 mm excise stamp across a carton seam, marking the jurisdiction band, duty-paid status and identifier" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>Almost everything printed on a legal cannabis package is there because Health Canada requires it. The cannabis excise stamp is the exception. It comes from the tax system, it is issued by the Canada Revenue Agency, and it does one job. Its presence says that duty has been paid on the product inside. It says nothing else, and the law is careful to keep it that way.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#what-the-stamp-is">What the stamp is</a></li>
+ <li><a href="#what-is-on-it">What is on it</a></li>
+ <li><a href="#who-applies-it-and-when">Who applies it, and when</a></li>
+ <li><a href="#what-it-proves-and-what-it-does-not">What it proves, and what it does not</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="what-the-stamp-is">What the stamp is</h2>
+ <p>The stamp is created under the <a href="https://laws-lois.justice.gc.ca/eng/acts/E-14.1/FullText.html">Excise Act, 2001</a>, not the Cannabis Act. Section 158.03 allows the Minister of National Revenue to issue stamps to a cannabis licensee, and states their purpose: to indicate that cannabis duty and, where it applies, additional cannabis duty have been paid. The Minister may limit how many are issued, and the design and construction of the stamp are subject to the Minister's approval. Producing or supplying anything intended to pass for one is a separate offence under section 158.04.</p>
+ <p>A cannabis licensee, in this Act, is the holder of a licence issued by the CRA under section 14. That is a second licence, separate from the one Health Canada issues. The CRA states that a business must obtain it, as well as its Health Canada licence, before it begins producing or packaging cannabis products (<a href="https://www.canada.ca/en/revenue-agency/campaigns/cannabis-taxation.html">CRA, cannabis excise duty framework</a>).</p>
+ <p>The CRA's memorandum on the stamping regime, <a href="https://www.canada.ca/en/revenue-agency/services/tax/technical-information/excise-duty/excise-duty-memoranda/edm6-1-general-information-possession-sale-distribution-cannabis-products-cannabis-stamping-regime.html">EDM6-1</a>, is direct about the limits of the cannabis excise stamp. Its sole purpose is to show consumers, retailers and others that duty has been paid, and it cannot be used to meet any other packaging or labelling requirement. It is not a substitute for any line on the label.</p>
+ <h2 id="what-is-on-it">What is on it</h2>
+ <p>According to EDM6-1, every cannabis excise stamp measures exactly 20 mm by 40 mm and carries three visible elements:</p>
+ <ul>
+ <li>a jurisdiction indicator, with the province or territory's abbreviation and colour band;</li>
+ <li>an identifier, nine positions long, unique to that individual stamp;</li>
+ <li>the federal duty-paid status, which covers both cannabis duty and any applicable additional cannabis duty.</li>
+ </ul>
+ <p>Each province and territory has its own colour, and the stamp on a package must match the jurisdiction where the product will be sold. The memorandum notes that additional cannabis duty applies in every province and territory except Manitoba, so for a product sold in Ontario the single stamp records both the federal and the provincial portion.</p>
+ <p>The CRA publishes four of the stamp's overt security features. An engraved intaglio image shows the letter C when the stamp is tilted slightly. A colour-shift ink moves from green to red as the viewing angle changes. Fine anti-copy line work does not survive photocopying. And an ultraviolet ink fluoresces under an ordinary black light. There are covert features too, which the CRA deliberately does not describe.</p>
+ <h2 id="who-applies-it-and-when">Who applies it, and when</h2>
+ <p>Only a cannabis licensee, or an entity prescribed by regulation, may package or stamp a cannabis product (section 158.08). A licensee may not enter a product into the duty-paid market unless it is packaged, carries the prescribed information, and is stamped with a stamp issued to that licensee, either by the licensee itself or by another licensee where prescribed conditions are met (section 158.13).</p>
+ <p>The timing is fixed by where the product is. Section 158.09 prohibits removing a product intended for the duty-paid market from a licensee's premises unless it is packaged and stamped. EDM6-1 states the practical consequence: the licensee decides the province or territory of sale and applies the matching stamp before the product leaves. By the time a package is on the way to a retailer, the stamp is already part of it.</p>
+ <p>Where it goes is prescribed as well. The <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2003-288/FullText.html">Stamping and Marking of Tobacco, Cannabis and Vaping Products Regulations</a> say the stamp goes on the smallest package in which the product is sold to the consumer, and section 4.2 sets how it is affixed:</p>
+ <ul>
+ <li>in a conspicuous place on the package;</li>
+ <li>in a manner that seals the package;</li>
+ <li>so that the stamp remains affixed after the package is opened;</li>
+ <li>without interfering with the stamp's security features;</li>
+ <li>without obstructing any information an Act of Parliament requires on the package.</li>
+ </ul>
+ <p>Sealing is the requirement that decides placement. The stamp has to sit where the package opens, and it has to survive that opening rather than come away with it.</p>
+ <h2 id="what-it-proves-and-what-it-does-not">What it proves, and what it does not</h2>
+ <p>The cannabis excise stamp proves that duty was accounted for on that package. The Excise Act makes the reverse true as well: under section 158.14, the absence of a stamp is notice to everyone that duty has not been paid. Under section 158.11, nobody other than a cannabis licensee may sell, offer for sale, purchase or possess a cannabis product that is not packaged and stamped, subject to listed exceptions. The CRA's <a href="https://www.canada.ca/en/revenue-agency/services/tax/technical-information/excise-duty/excise-stamps-information-consumers.html">page for consumers</a> describes an unstamped product as contraband.</p>
+ <p>One of those exceptions is a low-THC cannabis product. The Act defines it narrowly: a product made entirely of fresh cannabis, dried cannabis or a cannabis oil that is liquid at 22 ± 2 °C, no part of which can yield more than 0.3% THC by weight. An edible is none of those, so the exception cannot reach it: an edible entering the duty-paid market has to be stamped.</p>
+ <p>What the stamp does not prove is anything about the product itself. It does not certify the contents, the THC figure or the quality of the lot. Those belong to a different system: the label rules covered in <a href="/blog/why-legal-packaging-looks-like-that/">why legal cannabis packaging looks the way it does</a>, and the <a href="/blog/how-legal-cannabis-testing-works/">laboratory testing and lot release</a> a processor completes before a lot can be sold. Our products are packaged to the labelling rules, with the excise stamp, the standardized cannabis symbol, the health warning, the lot number and the licence holder all present. Each answers a different question. The stamp answers only one: whether the duty was paid.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/why-legal-packaging-looks-like-that/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 21, 2026</span><span class="sga-rel-title">Why legal cannabis packaging looks the way it does</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/how-legal-cannabis-testing-works/"><span class="sga-rel-thumb"><img src="/static/img/blog/thc-structure.jpg" alt="Chemical structure of delta-9-tetrahydrocannabinol (THC), molecular formula C21H30O2" loading="lazy"></span><span class="sga-rel-meta">October 23, 2026</span><span class="sga-rel-title">Cannabis testing: how a legal product is checked</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/how-product-reaches-an-ontario-shelf/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 19, 2026</span><span class="sga-rel-title">How our product reaches an Ontario shelf</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-prevnext">
+ <a class="sga-pn sga-pn-prev" href="/blog/why-legal-packaging-looks-like-that/"><span>&larr; Previous</span>Why legal cannabis packaging looks the way it does</a>
+ <a class="sga-pn sga-pn-next" href="/blog/how-product-reaches-an-ontario-shelf/"><span>Next &rarr;</span>How our product reaches an Ontario shelf</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>What does the excise stamp on a cannabis package mean?</summary>
+ <div class="sga-faq-a"><p>It shows that cannabis duty, and any additional cannabis duty, has been paid on the product inside. The Canada Revenue Agency issues it under the Excise Act, 2001, and it cannot be used to meet any other packaging or labelling requirement.</p></div>
+ </details>
+ <details>
+ <summary>Why is the stamp a different colour in each province?</summary>
+ <div class="sga-faq-a"><p>Each province and territory has its own colour, and the stamp must match the jurisdiction where the product will be sold. The licensee decides the province or territory of sale and applies the matching stamp before the product leaves its premises.</p></div>
+ </details>
+ <details>
+ <summary>How can you tell an excise stamp is genuine?</summary>
+ <div class="sga-faq-a"><p>The CRA publishes four overt security features. An engraved image shows the letter C when tilted, a colour-shift ink moves from green to red, fine line work does not survive photocopying, and an ultraviolet ink fluoresces under a black light. Covert features exist too, which the CRA does not describe.</p></div>
+ </details>
+ <details>
+ <summary>Does the stamp say anything about what is inside the package?</summary>
+ <div class="sga-faq-a"><p>No. It proves duty was accounted for on that package and nothing else. It does not certify the contents, the THC figure or the quality of the lot, which belong to the label rules and the laboratory testing a processor completes before a lot can be sold.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does the excise stamp on a cannabis package mean?","acceptedAnswer":{"@type":"Answer","text":"It shows that cannabis duty, and any additional cannabis duty, has been paid on the product inside. The Canada Revenue Agency issues it under the Excise Act, 2001, and it cannot be used to meet any other packaging or labelling requirement."}},{"@type":"Question","name":"Why is the stamp a different colour in each province?","acceptedAnswer":{"@type":"Answer","text":"Each province and territory has its own colour, and the stamp must match the jurisdiction where the product will be sold. The licensee decides the province or territory of sale and applies the matching stamp before the product leaves its premises."}},{"@type":"Question","name":"How can you tell an excise stamp is genuine?","acceptedAnswer":{"@type":"Answer","text":"The CRA publishes four overt security features. An engraved image shows the letter C when tilted, a colour-shift ink moves from green to red, fine line work does not survive photocopying, and an ultraviolet ink fluoresces under a black light. Covert features exist too, which the CRA does not describe."}},{"@type":"Question","name":"Does the stamp say anything about what is inside the package?","acceptedAnswer":{"@type":"Answer","text":"No. It proves duty was accounted for on that package and nothing else. It does not certify the contents, the THC figure or the quality of the lot, which belong to the label rules and the laboratory testing a processor completes before a lot can be sold."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
