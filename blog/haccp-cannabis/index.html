@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HACCP cannabis rules: hazard control for edibles — Sophia’s Garden Artisan</title>
+<meta name="description" content="How hazard analysis and critical control points apply to edible cannabis in Canada: the preventive control plan in the Cannabis Regulations, mapped to HACCP.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/haccp-cannabis/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="HACCP cannabis rules: hazard control for edibles — Sophia’s Garden Artisan">
+<meta property="og:description" content="How hazard analysis and critical control points apply to edible cannabis in Canada: the preventive control plan in the Cannabis Regulations, mapped to HACCP.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/haccp-cannabis/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Haccp cannabis</h1>
+ <p class="sga-title">HACCP cannabis requirements: the food-safety layer in edible manufacturing</p>
+ <p class="sga-standfirst">The Cannabis Regulations never use the word HACCP. They do not need to. This is the hazard-control system an edible processor must run, where it comes from, and how it sits beside the cannabinoid rules.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/haccp-cannabis.jpg" alt="Diagram of the seven HACCP principles, from hazard analysis to records, all leading into a section 88.94 preventive control plan" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>The Cannabis Regulations never use the word HACCP. Search the consolidated text and it does not appear once. Yet any processor making edible cannabis in Canada is required to run a hazard analysis and critical control point system in all but name, written down, approved internally and kept on file. What is often described as HACCP cannabis compliance is, in law, the preventive control plan in Part 5 of the Regulations.</p>
+ <p>It is the food-safety layer of edible manufacturing. The cannabinoid rules ask whether a piece carries what its label says. This layer asks whether anything is in the piece that should not be.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#what-haccp-is-and-where-it-comes-from">What HACCP is, and where it comes from</a></li>
+ <li><a href="#where-haccp-sits-in-the-cannabis-rules">Where HACCP sits in the cannabis rules</a></li>
+ <li><a href="#applying-it-to-a-chocolate-line">Applying it to a chocolate line</a></li>
+ <li><a href="#what-haccp-cannabis-planning-does-not-cover">What HACCP cannabis planning does not cover</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="what-haccp-is-and-where-it-comes-from">What HACCP is, and where it comes from</h2>
+ <p>Hazard Analysis and Critical Control Point is a method of food safety built on controlling hazards at identified steps of production. Its principles were developed by the Codex Alimentarius Commission. The Codex Committee on Food Hygiene describes its <a href="https://codex.fao.org/codex-committees/general-subject-committees/CCFH">core text</a>, the General Principles of Food Hygiene (CXC 1-1969), as including the guidance on HACCP.</p>
+ <p>In Canada, the Canadian Food Inspection Agency's description of its <a href="https://inspection.canada.ca/en/preventive-controls/preventive-control-plans/food-safety-enhancement-program">Food Safety Enhancement Program</a> sets out the seven principles in order:</p>
+ <ul>
+ <li>identify and analyze hazards</li>
+ <li>determine the critical control points</li>
+ <li>establish critical limits</li>
+ <li>establish monitoring procedures</li>
+ <li>establish corrective action procedures</li>
+ <li>establish verification procedures</li>
+ <li>keep records</li>
+ </ul>
+ <p>The CFIA describes critical limits as clear and measurable criteria that distinguish between what is acceptable and what is not. A critical control point is a step at which a control measure can be applied and is essential.</p>
+ <h2 id="where-haccp-sits-in-the-cannabis-rules">Where HACCP sits in the cannabis rules</h2>
+ <p>Part 5 of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> brings the same structure in under its own vocabulary. It defines a critical control point as a step at which applying a control measure is essential to prevent or eliminate a biological, chemical or physical hazard that presents a risk of contamination, or to reduce it to an acceptable level. Section 88.93 then requires a processor that produces a cannabis extract or edible cannabis to identify and analyze those hazards, for the cannabis and for everything used as an ingredient, and to prevent, eliminate or reduce them using control measures shown by evidence to be effective.</p>
+ <p>Section 88.94 requires a written preventive control plan. Set its contents beside the CFIA list and the two line up item for item: the hazards identified, the control measures and the evidence they work, the critical control points, the critical limits for each, the procedures for monitoring against those limits, the corrective action procedures, the procedures for verifying that the plan achieves compliance, and the documents showing it has been implemented. Those implementation documents must be kept for at least two years.</p>
+ <p>Two features of the HACCP cannabis version are worth knowing. The plan has an internal approver named in law: section 88(1)(d) requires the quality assurance person to approve it before it is implemented. And nobody outside the licence holder signs it off in advance. Health Canada's <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/industry-licensees-applicants/preventive-control-plan-extracts-edibles.html">guidance on preventive control plans</a> states that it does not approve them and does not provide templates. Its page on <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/industry-licensees-applicants/preventive-control-plan-extracts-edibles/create-plan.html">creating a plan</a> points processors to generic HACCP models and to guidance from bodies such as Codex Alimentarius.</p>
+ <h2 id="applying-it-to-a-chocolate-line">Applying it to a chocolate line</h2>
+ <p>Health Canada's planning guidance gives one example of each hazard class. Biological hazards are microorganisms such as bacteria, viruses, parasites, fungi and moulds; its example is Listeria surviving because a cooking time and temperature were inadequate. Chemical hazards can be naturally occurring or manufactured; its edible example is the over-addition of vitamins and minerals. Physical hazards are unwanted materials such as metal fragments, glass or wood splinters. Its examples of critical control points are a cooking step at a given time and temperature, and a metal detector at the end of the line. Those examples are the starting vocabulary of any HACCP cannabis plan for an edible, not its contents; the hazards a plan names have to come from analysis of the actual process.</p>
+ <p>A chocolate line adds one category every HACCP cannabis plan for this format has to take seriously: allergens. Milk is on Health Canada's <a href="https://www.canada.ca/en/health-canada/services/food-allergies-intolerances/food-allergies.html">list of priority food allergens</a>, and milk chocolate contains it. Section 86(1)(e) of the Regulations requires equipment to be designed, maintained and arranged so that it protects cannabis and ingredients against allergen cross-contamination, and the sanitation program required by section 87 has to set out how that equipment is effectively cleaned.</p>
+ <p>The layout of the building is part of the plan too. Section 88.3 prohibits producing cannabis in a building where food that is to be sold is produced, packaged or labelled. Every food-safety control an edible processor relies on has to be built inside the licensed facility itself. Chocolate manufacturing has its own standards for temperature, humidity, sanitation and handling, and cannabis regulation is layered on top of that rather than replacing it; both apply at every step. The full sequence from incoming material to released lot is on our <a href="/canadian-craft-manufacturing/">craft manufacturing</a> page.</p>
+ <h2 id="what-haccp-cannabis-planning-does-not-cover">What HACCP cannabis planning does not cover</h2>
+ <p>Health Canada's planning guidance does not frame cannabinoid content as a food-safety hazard. That question has its own rules. Section 90 requires cannabinoid testing on every lot, and section 97 sets how close each declared figure must be to the measured one. A processor runs both systems at once, and neither stands in for the other. A lot can be free of every listed contaminant and still fail on its declared figure, or sit exactly on its declared figure and fail on a hazard the plan missed.</p>
+ <p>That is why release is the last step, not a formality. Every lot is laboratory tested, and a quality assurance person, the same role that approved the preventive control plan, confirms the lot meets requirements before it leaves. How the testing half of that works is explained in <a href="/blog/how-legal-cannabis-testing-works/">how cannabis testing works before a legal product reaches a shelf</a>. A HACCP cannabis plan is the other half: the record of what could go wrong at each step, and the evidence that it was controlled.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/how-legal-cannabis-testing-works/"><span class="sga-rel-thumb"><img src="/static/img/blog/thc-structure.jpg" alt="Chemical structure of delta-9-tetrahydrocannabinol (THC), molecular formula C21H30O2" loading="lazy"></span><span class="sga-rel-meta">October 23, 2026</span><span class="sga-rel-title">Cannabis testing: how a legal product is checked</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/what-a-licence-requires-of-a-processor/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 22, 2026</span><span class="sga-rel-title">What a Health Canada licence requires of a processor</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Do the Cannabis Regulations require HACCP?</summary>
+ <div class="sga-faq-a"><p>The Regulations never use the word. A processor making edible cannabis is still required to run the same system in all but name, as the preventive control plan under sections 88.93 and 88.94.</p></div>
+ </details>
+ <details>
+ <summary>What are the seven principles of HACCP?</summary>
+ <div class="sga-faq-a"><p>As the CFIA sets them out, identify and analyze hazards, determine the critical control points, establish critical limits, establish monitoring procedures, establish corrective action procedures, establish verification procedures, and keep records.</p></div>
+ </details>
+ <details>
+ <summary>Does Health Canada approve a processor's preventive control plan?</summary>
+ <div class="sga-faq-a"><p>No. Health Canada's guidance states that it does not approve plans and does not provide templates. Section 88(1)(d) requires the quality assurance person to approve the plan before it is implemented.</p></div>
+ </details>
+ <details>
+ <summary>Does a preventive control plan cover cannabinoid content?</summary>
+ <div class="sga-faq-a"><p>No. Health Canada's planning guidance does not frame cannabinoid content as a food-safety hazard. Section 90 requires cannabinoid testing on every lot and section 97 sets how close each declared figure must be, so a processor runs both systems at once.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do the Cannabis Regulations require HACCP?","acceptedAnswer":{"@type":"Answer","text":"The Regulations never use the word. A processor making edible cannabis is still required to run the same system in all but name, as the preventive control plan under sections 88.93 and 88.94."}},{"@type":"Question","name":"What are the seven principles of HACCP?","acceptedAnswer":{"@type":"Answer","text":"As the CFIA sets them out, identify and analyze hazards, determine the critical control points, establish critical limits, establish monitoring procedures, establish corrective action procedures, establish verification procedures, and keep records."}},{"@type":"Question","name":"Does Health Canada approve a processor's preventive control plan?","acceptedAnswer":{"@type":"Answer","text":"No. Health Canada's guidance states that it does not approve plans and does not provide templates. Section 88(1)(d) requires the quality assurance person to approve the plan before it is implemented."}},{"@type":"Question","name":"Does a preventive control plan cover cannabinoid content?","acceptedAnswer":{"@type":"Answer","text":"No. Health Canada's planning guidance does not frame cannabinoid content as a food-safety hazard. Section 90 requires cannabinoid testing on every lot and section 97 sets how close each declared figure must be, so a processor runs both systems at once."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
