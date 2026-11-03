@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cannabis tracking system Canada: what is reported — Sophia’s Garden Artisan</title>
+<meta name="description" content="What Canada's national cannabis tracking system is for, what a federal licence holder reports each month through the CTLS, and why the figures are reconciled.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cannabis-tracking-system-canada/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Cannabis tracking system Canada: what is reported — Sophia’s Garden Artisan">
+<meta property="og:description" content="What Canada's national cannabis tracking system is for, what a federal licence holder reports each month through the CTLS, and why the figures are reconciled.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cannabis-tracking-system-canada/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Cannabis tracking system canada</h1>
+ <p class="sga-title">The cannabis tracking system Canada uses, and what licence holders report</p>
+ <p class="sga-standfirst">By the 15th of every month, each federally licensed site accounts to Health Canada for every unit and kilogram of cannabis it held. This is what the law requires, what the report contains, and why it exists.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cannabis-tracking-system-canada.jpg" alt="Ledger diagram of a monthly tracking report: opening inventory plus additions minus reductions equals closing inventory, for solid edible cannabis in kg" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>By the 15th of every month, each federally licensed processing site in the country tells Health Canada how much cannabis it started the previous month with, how much came in and why, how much left and why, and how much remained at the end. The cannabis tracking system Canada built under the Cannabis Act is, at its core, that reconciliation, repeated for every licensed site, every month, with no month skipped. A site with nothing to report still files.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#what-the-system-is-for">What the system is for</a></li>
+ <li><a href="#what-a-licence-holder-reports">What a licence holder reports</a></li>
+ <li><a href="#the-ctls-and-what-it-holds">The CTLS, and what it holds</a></li>
+ <li><a href="#why-the-numbers-have-to-reconcile">Why the numbers have to reconcile</a></li>
+ <li><a href="#what-may-change">What may change</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="what-the-system-is-for">What the system is for</h2>
+ <p>Part 6 of the <a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/FullText.html">Cannabis Act</a> gives the reasons in one section. Section 81 allows the Minister to establish and maintain a national cannabis tracking system to enable the tracking of cannabis, to prevent cannabis from being diverted to an illicit market or activity, and to prevent illicit cannabis from being a source of supply in the legal market. Section 82 lets the Minister order classes of licensed persons to provide information about their activities with cannabis, and the order has to specify what information, by when, and in what form.</p>
+ <p>The section also draws a line. An order under it may not require personal information about a consumer who purchases cannabis at the retail level. The data that feeds the cannabis tracking system Canada operates is about inventory and movement between licensed and authorized businesses, not about the person at the counter. Section 83 then sets out who the Minister may share it with, including provincial governments and bodies for the purpose of verifying compliance with provincial law.</p>
+ <h2 id="what-a-licence-holder-reports">What a licence holder reports</h2>
+ <p>The order made under section 82 is the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2019-202/FullText.html">Cannabis Tracking System Order</a>. Section 2 applies to holders of several federal licence classes, processing among them, and requires the following for each licensed site, for the previous month:</p>
+ <ul>
+ <li>opening inventory on the first day of the month, counted as a number of cannabis products and, separately, as a quantity of unpackaged cannabis</li>
+ <li>additions during the month, broken down by reason: received from another licence holder, packaged and labelled for retail sale on site, returned, or any other reason</li>
+ <li>reductions during the month, again by reason: sold or distributed, destroyed, lost or stolen in circumstances that require notice to the Minister, returned, or any other reason</li>
+ <li>sales to provincially authorized sellers, by the province where the buyer is located</li>
+ <li>closing inventory on the last day of the month, as a number of products, a quantity of cannabis and a book value</li>
+ </ul>
+ <p>Every figure is reported by class. The Order's schedule separates edible cannabis that is in solid form at a temperature of 22 ± 2 °C from edible cannabis that is not, and both are measured in kilograms. A moulded chocolate is a solid edible. The distinction between a cannabis product and unpackaged cannabis matters as well: the Order adopts the Regulations' definition of a cannabis product, which is cannabis after it has been packaged and labelled for sale to a consumer at the retail level, so a batch of chocolate before packaging and the finished packages it becomes are counted in different parts of the same report.</p>
+ <p>Health Canada's <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/tracking-system/monthly-reporting-guide.html">monthly reporting guide</a> is direct about the deadline and the exceptions there are not: reports are due no later than the 15th, and a licence holder must submit one even in a month with no sales or no inventory.</p>
+ <h2 id="the-ctls-and-what-it-holds">The CTLS, and what it holds</h2>
+ <p>The Order requires the information to go through a dedicated website established by the Minister. That is the Cannabis Tracking and Licensing System, or CTLS. Health Canada's <a href="https://www.canada.ca/en/health-canada/services/cannabis-regulations-licensed-producers/cannabis-tracking-licensing-system-user-guide.html">user guide</a> describes it as a secure web portal in which a licence holder can submit new licence applications, manage current licences and report on licensed activities. Monthly reports can be entered by hand for one site at a time, or uploaded as a file, and the licence holder may choose either method each month.</p>
+ <p>The submission is not the whole obligation. Section 7 of the Order requires the records behind the information to be kept for at least two years from the day it is provided, because a monthly figure means something only if it can be traced back to what produced it.</p>
+ <h2 id="why-the-numbers-have-to-reconcile">Why the numbers have to reconcile</h2>
+ <p>A tracking report is a balance sheet in units and kilograms. Opening inventory plus additions, minus reductions, has to equal closing inventory, and each line has to agree with something else the licence holder is already required to record. A reduction for loss or theft points to a separate obligation: under section 246 of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a>, a theft or a loss that cannot be explained by normally accepted business activities must be reported to a police force within 24 hours and to the Minister in writing within 10 days. Production figures point back to the lot records that section 225 requires for every lot of edible cannabis.</p>
+ <p>That is the practical reason inventory discipline starts at the receiving door. Our cannabinoid inputs and food ingredients are received under the record-keeping the licence requires, and every lot moves from formulation to a quality assurance person's release through the documented sequence set out on our <a href="/canadian-craft-manufacturing/">craft manufacturing</a> page. The monthly report summarises those records. It does not replace them.</p>
+ <h2 id="what-may-change">What may change</h2>
+ <p>On 26 September 2026, the <a href="https://gazette.gc.ca/rp-pr/p1/2026/2026-09-26/html/reg1-eng.html">Canada Gazette, Part I</a> published a proposed Order Amending the Cannabis Tracking System Order (Streamlining of Requirements). It would remove book value reporting and some site information, consolidate the 14 classes of cannabis to seven, and end reporting under the Order by provincial bodies and by provincially authorized distributors and retailers. The proposal records 846 federal licence holders subject to reporting as of 31 December 2025, and it opened a 45-day period for comment. It is a proposal, not law in force. Until a final order is made, the cannabis tracking system Canada's licence holders report into is the one described above. Where product goes once it leaves a processor is covered in <a href="/blog/how-product-reaches-an-ontario-shelf/">how our product reaches an Ontario shelf</a>.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/how-product-reaches-an-ontario-shelf/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 19, 2026</span><span class="sga-rel-title">How our product reaches an Ontario shelf</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/why-legal-packaging-looks-like-that/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 21, 2026</span><span class="sga-rel-title">Why legal cannabis packaging looks the way it does</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Why does Canada track licensed cannabis?</summary>
+ <div class="sga-faq-a"><p>Section 81 of the Cannabis Act lets the Minister maintain a national tracking system to enable the tracking of cannabis, to prevent it being diverted to an illicit market, and to prevent illicit cannabis from supplying the legal market.</p></div>
+ </details>
+ <details>
+ <summary>Does the tracking system record anything about retail customers?</summary>
+ <div class="sga-faq-a"><p>No. An order under section 82 may not require personal information about a consumer who purchases cannabis at the retail level. The data is about inventory and movement between licensed and authorized businesses.</p></div>
+ </details>
+ <details>
+ <summary>What does a licensed processor report each month?</summary>
+ <div class="sga-faq-a"><p>For each licensed site, opening inventory, additions and reductions by reason, sales to provincially authorized sellers by province, and closing inventory. Reports are due by the 15th, and one is required even in a month with no sales or no inventory.</p></div>
+ </details>
+ <details>
+ <summary>What is the CTLS?</summary>
+ <div class="sga-faq-a"><p>The Cannabis Tracking and Licensing System, the secure web portal Health Canada set up for licence holders. It is used to submit licence applications, manage current licences and report on licensed activities, by hand or by file upload.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why does Canada track licensed cannabis?","acceptedAnswer":{"@type":"Answer","text":"Section 81 of the Cannabis Act lets the Minister maintain a national tracking system to enable the tracking of cannabis, to prevent it being diverted to an illicit market, and to prevent illicit cannabis from supplying the legal market."}},{"@type":"Question","name":"Does the tracking system record anything about retail customers?","acceptedAnswer":{"@type":"Answer","text":"No. An order under section 82 may not require personal information about a consumer who purchases cannabis at the retail level. The data is about inventory and movement between licensed and authorized businesses."}},{"@type":"Question","name":"What does a licensed processor report each month?","acceptedAnswer":{"@type":"Answer","text":"For each licensed site, opening inventory, additions and reductions by reason, sales to provincially authorized sellers by province, and closing inventory. Reports are due by the 15th, and one is required even in a month with no sales or no inventory."}},{"@type":"Question","name":"What is the CTLS?","acceptedAnswer":{"@type":"Answer","text":"The Cannabis Tracking and Licensing System, the secure web portal Health Canada set up for licence holders. It is used to submit licence applications, manage current licences and report on licensed activities, by hand or by file upload."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
