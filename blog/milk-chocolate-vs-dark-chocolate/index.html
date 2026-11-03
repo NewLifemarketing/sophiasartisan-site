@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Milk chocolate vs dark chocolate: how the formulas differ — Sophia’s Garden Artisan</title>
+<meta name="description" content="How milk and dark chocolate differ as formulations under Canada's compositional standards: cocoa solids, cocoa butter, milk solids, milk fat and milk powder.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/milk-chocolate-vs-dark-chocolate/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Milk chocolate vs dark chocolate: how the formulas differ — Sophia’s Garden Artisan">
+<meta property="og:description" content="How milk and dark chocolate differ as formulations under Canada's compositional standards: cocoa solids, cocoa butter, milk solids, milk fat and milk powder.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/milk-chocolate-vs-dark-chocolate/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog<time data-publish-date="kicker"></time></p>
+ <h1>Milk chocolate vs dark chocolate, compared as formulations</h1>
+ <p class="hero-sub">Two materials built from the same cocoa butter and cocoa solids, with one extra phase in the milk version. What the Canadian standards require of each, and what milk solids change in production.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/milk-chocolate-vs-dark-chocolate.jpg" alt="Bar diagram of the Canadian standard minimums for cocoa butter, fat-free cocoa solids and milk solids in dark and milk chocolate" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>A bar of dark chocolate and a bar of milk chocolate look like two versions of one thing. To a formulator they are two different materials. Dark chocolate is cocoa butter carrying fine particles of cocoa solids and sugar. Milk chocolate is that same system with a second fat dissolved into the first and a third family of particles, the milk solids, packed in among the others. Most of what separates milk chocolate vs dark chocolate in production follows from those two additions.</p>
+ <h2>What Canadian standards say each one is</h2>
+ <p>In Canada the names are not descriptions a manufacturer chooses. They are compositional standards. Until December 2024 they sat in Division 4 of the Food and Drug Regulations; they now sit in Volume 4 of the <a href="https://inspection.canada.ca/en/about-cfia/acts-and-regulations/list-acts-and-regulations/documents-incorporated-reference/canadian-food-compositional-standards-0">Canadian Food Compositional Standards</a>, which the Canadian Food Inspection Agency publishes and which the regulations incorporate by reference. The CFIA's <a href="https://inspection.canada.ca/en/food-labels/labelling/summary-changes-compositional-standards/regulatory-references">table of moved references</a> maps the old sections to the new ones.</p>
+ <p>Both standards start in the same place: cocoa liquor, or cocoa liquor and cocoa butter, or cocoa butter and cocoa powder, combined with a sweetening ingredient. They diverge on the minimums.</p>
+ <ul>
+ <li>Dark chocolate (section 4.1.6, which also covers the names chocolate, bittersweet and semi-sweet): at least 35% total cocoa solids, of which at least 18% is cocoa butter and at least 14% is fat-free cocoa solids. It may contain less than 5% total milk solids.</li>
+ <li>Milk chocolate (section 4.1.8): at least 25% total cocoa solids, of which at least 15% is cocoa butter and at least 2.5% is fat-free cocoa solids; at least 12% total milk solids from milk ingredients; and at least 3.39% milk fat. It may contain less than 5% whey or whey products.</li>
+ </ul>
+ <p>Between the two sits sweet chocolate (section 4.1.7), with at least 30% total cocoa solids and less than 12% milk solids. That gap matters. A formula carrying 10% milk solids is not a weak milk chocolate. It is a different standardized product.</p>
+ <p>The standard also defines what counts as a milk ingredient. The list runs from whole milk and skim milk through milk powder, skim milk powder, cream, butter and butter oil. So the 12% milk solids can arrive as a dry powder, as a fat, or as a combination, and the choice changes how the chocolate behaves long before it sets.</p>
+ <h2>Milk chocolate vs dark chocolate, phase by phase</h2>
+ <h3>The fat phase</h3>
+ <p>Chocolate is a suspension. The continuous phase is fat, and everything else is a solid particle coated by it. In dark chocolate that fat is essentially cocoa butter. In milk chocolate it is cocoa butter plus milk fat, and the two do not crystallise alike. Milk fat softens the cocoa butter it mixes with and lowers the temperatures needed to temper it. That second point is worked through in detail in <a href="/blog/tempering-milk-chocolate/">tempering milk chocolate</a>, and it is not repeated here.</p>
+ <p>How much milk fat is involved is smaller than it sounds. In the standard milk chocolate formula used in a 2004 study in the <a href="https://doi.org/10.3168/jds.S0022-0302(04)73137-9">Journal of Dairy Science</a>, the finished chocolate was 34.2% total fat, of which 3.9 percentage points were milk fat. The rest was cocoa butter. The formula itself was 47% sucrose, 15.6% milk powder, 15% cocoa liquor, 22% cocoa butter and 0.4% lecithin. Note how much cocoa butter is added on top of what the cocoa liquor already carries. That added fat is doing a job, and the job is viscosity.</p>
+ <h3>The particle phase</h3>
+ <p>The solids in dark chocolate are cocoa particles and sugar crystals. Milk chocolate adds milk proteins and lactose, and here the form of the milk ingredient becomes the main variable. The same study sets out why. Milk powders of similar composition can behave very differently in chocolate, depending on particle size, shape, density, the air trapped inside each particle, and how much of their fat is free.</p>
+ <p>Free fat is milk fat that is easily extracted and can mix directly with the cocoa butter. Roller-dried whole milk powder carries a characteristically large share of it, 60 to 90%, because the film is sheared and scraped off a thin drying surface. Spray-dried whole milk powder carries only 2 to 3%. The difference shows up in the melt. More free fat means lower viscosity, which makes the chocolate easier to process and reduces the cocoa butter that has to be added to bring viscosity down. Manufacturers using spray-dried powder typically add slightly more cocoa butter to compensate. The paper also notes that crystalline lactose, as opposed to amorphous lactose, pushes fat out of the powder particle, so the state of the sugar in the powder affects the fat available to the chocolate.</p>
+ <p>Particle size works against the formulator in the other direction. Refining grinds every solid down, and very small particles have a large combined surface that fat has to coat. A powder that shatters into many fine fragments during refining raises viscosity and needs more fat to compensate. Powders with a large internal air volume tend to do exactly that.</p>
+ <h3>The set solid</h3>
+ <p>Once the chocolate has set, its hardness comes from both phases together: the crystallised fat and the packed solids dispersed through it. In the 2004 work, chocolates made with more free milk fat were generally softer and had a lower melt viscosity. Dark chocolate has no second fat diluting its cocoa butter, which is why its fat phase is the simpler one to crystallise.</p>
+ <h2>What changes in production</h2>
+ <p>Put the two standards side by side and the practical differences line up.</p>
+ <ul>
+ <li>Dark chocolate carries more fat-free cocoa solids, at least 14% against 2.5%, so its particle phase is dominated by cocoa and sugar.</li>
+ <li>Milk chocolate must reach 12% milk solids, so a large share of its particle phase comes from an ingredient whose drying history matters as much as its composition.</li>
+ <li>Milk chocolate's fat phase is a blend, so its tempering temperatures sit lower than those of the dark version.</li>
+ <li>Viscosity in milk chocolate depends on the milk ingredient as well as on added cocoa butter and refining, which gives the formulator one more input to hold steady from lot to lot.</li>
+ </ul>
+ <p>For a cannabinoid product this is not background. A cannabinoid extract is itself an oil, and it joins the fat phase. In dark chocolate that phase is essentially one fat; in milk chocolate it is already two. The extract has to be dispersed evenly through whichever phase it joins before the chocolate is moulded, because once the chocolate sets, the distribution is fixed. That is the reason formulation and tempering are developed together rather than in sequence, as our <a href="/cannabinoid-formulation-science/">formulation science</a> page explains.</p>
+ <p>The comparison of milk chocolate vs dark chocolate, read this way, is a comparison of two fat systems and two particle systems. The standards fix the floor for each component. What happens between those floors is formulation work, and the outcome that can be checked is the one measured in the finished unit: cannabinoid content is verified by laboratory analysis on every lot.</p>
+ <p class="post-next">Next: <a href="/blog/tempering-milk-chocolate/">Tempering milk chocolate: why milk fat changes the process</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
