@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cannabis recall Canada: how a recall is run — Sophia’s Garden Artisan</title>
+<meta name="description" content="How a cannabis recall works in Canada: who can start one, what Health Canada must be told and when, the three recall types, and how notice reaches stores.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cannabis-recall-canada/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Cannabis recall Canada: how a recall is run — Sophia’s Garden Artisan">
+<meta property="og:description" content="How a cannabis recall works in Canada: who can start one, what Health Canada must be told and when, the three recall types, and how notice reaches stores.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cannabis-recall-canada/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-media.css?v=c535f41e">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<section class="page-hero">
+ <div class="wrap post-masthead">
+ <div>
+ <p class="kicker">Blog<time data-publish-date="kicker"></time></p>
+ <h1>Cannabis recall Canada: who decides, how it is classed, how notice travels</h1>
+ <p class="hero-sub">A recall starts as a document sent to Health Canada before any store is told. This is the sequence the Cannabis Act and Regulations set, the three recall types, and the route a notice takes to an Ontario shelf.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cannabis-recall-canada.jpg" alt="Flow diagram of a recall: licence holder to Health Canada and its Recalls and Safety Alerts website, and to provincial distributor and retailers" width="1800" height="1200">
+ </figure>
+ </div>
+</section>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<section class="section-tight" data-progress-target>
+ <div class="wrap narrow prose">
+ <p>A recall is not a news story first. In the voluntary cannabis recall Canada's Cannabis Regulations describe, the first step is a document sent to Health Canada before a single store is told, and the last is a written report filed within 30 days of the recall being completed. Between those two points sits a sequence fixed in federal law and, in Ontario, in the provincial distributor's own procedure.</p>
+ <h2>Who decides</h2>
+ <p>There are two routes, and they start in different places.</p>
+ <p>The first is voluntary. A licence holder that identifies a problem with a product it has sold or distributed decides to recall it. Health Canada's <a href="https://www.canada.ca/en/health-canada/services/publications/drugs-health-products/cannabis-voluntary-recall/guide.html">cannabis voluntary recall guide</a> encourages the most readily identifiable licence holder in the supply chain to take that responsibility, which is typically the one that owns the brand or whose information appears on the label. The guide is explicit that the obligations apply to every licence holder in the chain, and that a recall is a collaborative process among them.</p>
+ <p>The second is ordered. Section 76 of the <a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/FullText.html">Cannabis Act</a> allows the Minister, on reasonable grounds that a recall is necessary to protect public health or public safety, to order a person that sells or distributes the cannabis to recall it. The order must give its reasons and specify the time and manner of the recall. If it is not complied with, section 77 allows the Minister to carry out the recall at that person's expense, and section 35 prohibits selling or distributing cannabis that is the subject of a recall order.</p>
+ <p>Either way, the machinery has to exist before it is needed. Section 46 of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> requires a licence holder, other than an analytical testing laboratory, to maintain a system of control that permits the rapid and complete recall of every lot or batch it has sold or distributed. It must also run a recall simulation at least once every 12 months, write up how it was conducted and what it found, and keep that document for two years.</p>
+ <h2>What Health Canada is told, and when</h2>
+ <p>Under section 247, a licence holder must give the Minister a document before it commences a voluntary recall of a product sold or distributed in Canada. The contents are specific:</p>
+ <ul>
+ <li>a description of the product, including the brand name, and the number of each lot or batch to be recalled</li>
+ <li>the reasons for the recall</li>
+ <li>the quantity sold or distributed in Canada, the number of persons it went to, and the period over which it was sold</li>
+ <li>how and when the recall will be carried out, how the Minister will be kept informed, and when it is expected to be complete</li>
+ <li>contact information for a representative responsible for the recall</li>
+ </ul>
+ <p>Within 72 hours of that document, the holder must add an evaluation of the risk. Within 30 days of the recall being completed, it must file a written report setting out the results and the measures taken to prevent a recurrence.</p>
+ <h2>The three recall types</h2>
+ <p>Health Canada assigns each recall a type, based on what the licence holder reports, and the type sets the pace. The guide defines them this way:</p>
+ <ul>
+ <li>Type I: there is a reasonable probability that use of or exposure to the product will cause serious adverse health consequences or death. The guide's illustration is a lot of edible cannabis with E. coli.</li>
+ <li>Type II: use or exposure may cause temporary adverse health consequences, or the probability of serious adverse health consequences is remote. The illustration is an extract labelled with a lower THC concentration than the product contained.</li>
+ <li>Type III: use or exposure is not likely to cause any adverse health consequences. The illustration is a run of labels printed without the mandatory health warning.</li>
+ </ul>
+ <p>The type then sets the timetable. The guide suggests first contact with supply chain customers within one business day of commencing a Type I recall, within four for Type II and within seven for Type III. Follow-up scales the same way. For a Type I recall, the guide says, there should be no non-responders at all.</p>
+ <h2>How notice reaches stores and the public</h2>
+ <p>Every cannabis recall Canada runs then moves along the same chain the product did, in reverse. The recalling licence holder notifies its supply chain customers, and in Ontario the customer is the provincial distributor. The <a href="https://learn.ocswholesale.ca/wp-content/uploads/2026/02/OCS-Wholesale-Authorized-Cannabis-Retailers-Handbook-February2026.pdf">OCS Wholesale handbook for authorized retailers</a> sets out what happens next. The OCS issues a product recall notice to each authorized retailer by email and posts it on OCSwholesale.ca and OCS.ca. The retailer must then:</p>
+ <ul>
+ <li>segregate the recalled product in secure storage away from customers, clearly marked as not for sale, in line with the AGCO Registrar's Standards</li>
+ <li>post the recall notice where customers can see it, and keep it posted for 30 days</li>
+ <li>report, within 24 hours, how many recalled units are on hand, how many were sold before the recall, and how many had been returned by customers</li>
+ </ul>
+ <p>A retailer's obligation does not wait for that email to be read. Section 5.3 of the Regulations prohibits a provincially authorized seller from selling a product it knows is the subject of a voluntary recall commenced for reasons of quality, or because the good production practice or product requirements are not being met. How product reaches an Ontario store in the first place is covered in <a href="/blog/how-product-reaches-an-ontario-shelf/">how our product reaches an Ontario shelf</a>.</p>
+ <p>The public notice is Health Canada's. Based on the licence holder's report, Health Canada publishes a notice on its <a href="https://recalls-rappels.canada.ca/en">Recalls and Safety Alerts</a> website identifying the issue, the risk type and any action consumers should take. Cannabis recalls are listed there as consumer product recalls and can be found by searching for cannabis; recent notices have covered labelling errors and undeclared allergens. That database, not a press release or a social post, is where a cannabis recall Canada has announced is officially recorded.</p>
+ <h2>What a recall depends on</h2>
+ <p>A recall can only be as precise as the records behind it. It is scoped by lot, not by product name, which is why a lot number is required on every legal package. The rapid and complete cannabis recall Canada's Regulations require is possible only if a lot can be traced back to what went into it and forward to where it went. For edible cannabis, section 225 requires the processor to record, for each lot, the lot number of the cannabis used to produce it.</p>
+ <p>That is the reason the paperwork starts at the receiving door. Cannabinoid inputs and food ingredients arrive under the record-keeping the licence requires, every lot is laboratory tested, and a quality assurance person releases it before it ships. The sequence is set out on our <a href="/canadian-craft-manufacturing/">craft manufacturing</a> page. A recall system is tested once a year by simulation so that, if it is ever used, the lot it names can be found everywhere it went.</p>
+ <p class="post-next">Next: <a href="/blog/what-a-licence-requires-of-a-processor/">What a Health Canada licence requires of a processor</a></p>
+ <p class="post-back"><a href="/blog/">&larr; All posts</a></p>
+ </div>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ 
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
