@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cannabis storage facility rules under the Regulations — Sophia’s Garden Artisan</title>
+<meta name="description" content="What the Cannabis Regulations require of a licensed site where cannabis is stored: restricted access, barriers, monitoring, intrusion detection and records.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/cannabis-storage-facility/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Cannabis storage facility rules under the Regulations — Sophia’s Garden Artisan">
+<meta property="og:description" content="What the Cannabis Regulations require of a licensed site where cannabis is stored: restricted access, barriers, monitoring, intrusion detection and records.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/cannabis-storage-facility/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Cannabis storage facility</h1>
+ <p class="sga-title">How a licensed cannabis storage facility is secured under the Cannabis Regulations</p>
+ <p class="sga-standfirst">In the Regulations a storage area is a defined thing, and a fixed set of security and record-keeping duties attaches to it. This is what they are, who answers for them, and how long the evidence is kept.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/cannabis-storage-facility.jpg" alt="Schematic plan of a generic licensed site: perimeter, operations area and storage area, each labelled with its section numbers" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>The Cannabis Regulations do not use the phrase cannabis storage facility. They use something narrower. A storage area is defined as an area of a licensed site where cannabis is stored, and an operations area as any other part of the site where cannabis is present because of a licensed activity. Those two definitions carry most of the weight, because the security duties attach to them, area by area, rather than to the building as a whole.</p>
+ <p>This post covers how those duties work at a licensed site. Storage at home is a different subject with different rules, covered in <a href="/blog/safe-storage-for-cannabis-edibles/">safe storage for cannabis at home</a>.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#which-sites-carry-the-full-measures">Which sites carry the full measures</a></li>
+ <li><a href="#five-layers-around-a-storage-area">Five layers around a storage area</a></li>
+ <li><a href="#who-answers-for-it">Who answers for it</a></li>
+ <li><a href="#the-records-a-storage-area-produces">The records a storage area produces</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="which-sites-carry-the-full-measures">Which sites carry the full measures</h2>
+ <p>Section 62(1) of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> applies the full set of physical security measures, sections 63 to 72, to the sites of the standard licence classes, standard processing among them, and of a licence for sale that authorizes possession of cannabis. The holder of the licence must ensure the measures are complied with.</p>
+ <p>Smaller licence classes carry a shorter list. A micro-processing site, like the other smaller classes, must be designed to prevent unauthorized access and surrounded by a physical barrier, and its storage areas must have their own barrier and restricted access (section 74). An analytical testing laboratory must meet the storage-area barrier and access requirements only (section 75). The storage area is the one element every class shares.</p>
+ <h2 id="five-layers-around-a-storage-area">Five layers around a storage area</h2>
+ <p>For a site under section 62, the requirements build outward from the cannabis itself. Read together, they describe what any licensed cannabis storage facility has to be able to demonstrate:</p>
+ <ul>
+ <li>Access by duty: Access to each operations area and storage area is restricted to individuals whose presence in the area is required by their duties (section 68). Holding a job at the site is not enough; the duty has to require being in that room.</li>
+ <li>A physical barrier: Each operations area and storage area must be surrounded by a physical barrier that prevents unauthorized access (section 69).</li>
+ <li>Continuous recording: Each operations area and storage area must be monitored at all times by visual recording devices able to make a visible recording of any illicit conduct (section 70).</li>
+ <li>Intrusion detection: Each operations area and storage area must be secured by an intrusion detection system that operates at all times and detects attempted or actual unauthorized access, unauthorized movement inside the area, and tampering with the system itself (section 71). That system must itself be monitored at all times (section 72(1)).</li>
+ <li>The site around it: The site must be designed to prevent unauthorized access (section 63), and its perimeter monitored at all times by visual recording devices (section 64).</li>
+ </ul>
+ <p>The Regulations set outcomes rather than hardware. They do not specify a camera, a lock or an alarm model. Section 72(2) leaves the response to the licence holder, who must determine the appropriate measures to take when something is detected. Sections 65 to 67, which sat in the same part, were repealed by amendments that came into force on <a href="https://www.canada.ca/en/health-canada/services/publications/drugs-health-products/summary-changes-following-streamlining-regulations.html">March 12, 2025</a>; the requirements above are the ones in the current consolidation.</p>
+ <h2 id="who-answers-for-it">Who answers for it</h2>
+ <p>A requirement needs an owner. Section 38 requires a licence holder to retain one individual as head of security, responsible for compliance with the physical security measures and for the holder's organizational security plan. An alternate may be designated.</p>
+ <p>That role is not filled on trust. Section 50 lists the individuals who must hold a security clearance, and the head of security is on it, alongside the directors and officers of a corporate licence holder and, for a processor, the quality assurance person. So the individual responsible for a cannabis storage facility's security, and the individual who releases what leaves it, have both been cleared before they act. The wider obligations of a processing licence are set out in <a href="/blog/what-a-licence-requires-of-a-processor/">what a Health Canada licence requires of a processor</a>.</p>
+ <h2 id="the-records-a-storage-area-produces">The records a storage area produces</h2>
+ <p>Physical security is half of it. The other half is evidence, and the Regulations fix how long it is kept:</p>
+ <ul>
+ <li>When an attempted intrusion or illicit conduct is detected, the holder must keep a document with the date and time it occurred and the measures taken in response, with their date and time (section 72(3)). That document is kept for at least two years (section 73(b)).</li>
+ <li>The visual recordings from the perimeter and from each storage and operations area are kept for at least one year. Where a device is motion-activated, the recordings that depict movement are the ones retained (section 73(a)).</li>
+ <li>For every lot of edible cannabis produced, the holder keeps a record of its production date, net weight, number of units and the cannabis used to make it, including that input's lot number (section 225).</li>
+ <li>A theft, or a loss that normal business activity cannot explain, must be reported to a police force within 24 hours and to the Minister in writing within 10 days, and a copy of the notice kept for two years (section 246).</li>
+ </ul>
+ <p>Those records feed a wider purpose. Section 81 of the <a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/FullText.html">Cannabis Act</a> lets the Minister maintain a national cannabis tracking system, one of whose stated aims is to prevent cannabis from being diverted to an illicit market. A cannabis storage facility that can account for every lot, and for everything that crossed the barrier around it, is the local end of that system.</p>
+ <p>Security is not the only storage duty. Under the good production practices in section 82, cannabis and anything that will be used as an ingredient must be stored under conditions that maintain their quality. A room that is secure but does not hold the conditions a product needs meets one requirement and fails the other.</p>
+ <p>We manufacture in a federally licensed facility in Thunder Bay, Ontario, and our cannabinoid inputs and food ingredients are received under the record-keeping the licence requires. We do not describe the security arrangements at our own site, and no licence holder should. The requirements are public. How a particular site meets them is not.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/safe-storage-for-cannabis-edibles/"><span class="sga-rel-thumb"><img src="/static/img/blog/child-resistant-container.jpg" alt="A closed black child-resistant container with a plain label reading Child-Resistant Container" loading="lazy"></span><span class="sga-rel-meta">October 29, 2026</span><span class="sga-rel-title">Storage for cannabis at home: Health Canada's guidance</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/what-a-licence-requires-of-a-processor/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 22, 2026</span><span class="sga-rel-title">What a Health Canada licence requires of a processor</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Do the regulations define a storage facility for cannabis?</summary>
+ <div class="sga-faq-a"><p>Not under that name. The Cannabis Regulations define a storage area as an area of a licensed site where cannabis is stored, and the security duties attach to those areas rather than to the building as a whole.</p></div>
+ </details>
+ <details>
+ <summary>What security does a licensed storage area need?</summary>
+ <div class="sga-faq-a"><p>Each operations area and storage area must be surrounded by a physical barrier, restricted to individuals whose duties require them there, monitored at all times by visual recording devices, and secured by an intrusion detection system that is itself monitored at all times. The site around it must be designed to prevent unauthorized access.</p></div>
+ </details>
+ <details>
+ <summary>How long must security camera recordings be kept?</summary>
+ <div class="sga-faq-a"><p>Under section 73(a), visual recordings from the perimeter and from each storage and operations area are kept for at least one year. Where a device is motion-activated, the recordings that depict movement are the ones retained.</p></div>
+ </details>
+ <details>
+ <summary>What must a licence holder do after a theft?</summary>
+ <div class="sga-faq-a"><p>A theft, or a loss that normal business activity cannot explain, must be reported to a police force within 24 hours and to the Minister in writing within 10 days. A copy of the notice is kept for two years, under section 246.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do the regulations define a storage facility for cannabis?","acceptedAnswer":{"@type":"Answer","text":"Not under that name. The Cannabis Regulations define a storage area as an area of a licensed site where cannabis is stored, and the security duties attach to those areas rather than to the building as a whole."}},{"@type":"Question","name":"What security does a licensed storage area need?","acceptedAnswer":{"@type":"Answer","text":"Each operations area and storage area must be surrounded by a physical barrier, restricted to individuals whose duties require them there, monitored at all times by visual recording devices, and secured by an intrusion detection system that is itself monitored at all times. The site around it must be designed to prevent unauthorized access."}},{"@type":"Question","name":"How long must security camera recordings be kept?","acceptedAnswer":{"@type":"Answer","text":"Under section 73(a), visual recordings from the perimeter and from each storage and operations area are kept for at least one year. Where a device is motion-activated, the recordings that depict movement are the ones retained."}},{"@type":"Question","name":"What must a licence holder do after a theft?","acceptedAnswer":{"@type":"Answer","text":"A theft, or a loss that normal business activity cannot explain, must be reported to a police force within 24 hours and to the Minister in writing within 10 days. A copy of the notice is kept for two years, under section 246."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
