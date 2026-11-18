@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Low dose edibles: what the term means on a label — Sophia’s Garden Artisan</title>
+<meta name="description" content="Canada's Cannabis Regulations never define low dose. What a legal edible label states instead, and the rules that apply when the 10 mg cap is divided finely.">
+
+<link rel="canonical" href="https://www.sophiasartisan.ca/blog/low-dose-edibles/">
+<link rel="icon" href="/static/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
+<meta property="og:title" content="Low dose edibles: what the term means on a label — Sophia’s Garden Artisan">
+<meta property="og:description" content="Canada's Cannabis Regulations never define low dose. What a legal edible label states instead, and the rules that apply when the 10 mg cap is divided finely.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.sophiasartisan.ca/blog/low-dose-edibles/">
+<meta name="rating" content="adult">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css?v=e399057e">
+<link rel="stylesheet" href="/static/blog-post-v2.css?v=d9ef37f2">
+<script src="/static/interactions.js?v=e399057e" defer></script>
+</head>
+<body>
+<div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="agTitle" hidden>
+ <div class="ag-card">
+ <div class="ag-mark"><img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan"></div>
+ <!-- h2, not h1: the gate is a modal and its heading must not compete
+ with the page's own h1. Every page previously shipped two h1s. -->
+ <h2 id="agTitle">Confirm your age to enter</h2>
+ <p class="ag-sub">This website contains information about cannabis products and is intended for adults of legal age in Canada.</p>
+ <form class="ag-form" id="agForm" novalidate>
+ <div class="ag-field">
+ <label for="agProv">Province or territory</label>
+ <select id="agProv" name="province" required>
+ <option value="" selected disabled>Select…</option>
+ <option value="AB">Alberta</option><option value="BC">British Columbia</option><option value="MB">Manitoba</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="NS">Nova Scotia</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option><option value="ON">Ontario</option><option value="PE">Prince Edward Island</option><option value="QC">Quebec</option><option value="SK">Saskatchewan</option><option value="YT">Yukon</option>
+ </select>
+ </div>
+ <div class="ag-field">
+ <label for="agDob">Date of birth</label>
+ <div class="ag-dob">
+ <input type="text" id="agDay" inputmode="numeric" maxlength="2" placeholder="DD" aria-label="Day" required>
+ <input type="text" id="agMonth" inputmode="numeric" maxlength="2" placeholder="MM" aria-label="Month" required>
+ <input type="text" id="agYear" inputmode="numeric" maxlength="4" placeholder="YYYY" aria-label="Year" required>
+ </div>
+ </div>
+ <p class="ag-error" id="agError" role="alert" hidden></p>
+ <button class="btn btn-solid" type="submit" id="agSubmit">Enter site</button>
+ </form>
+ <p class="ag-fine">We ask only to confirm you are of legal age. Your date of birth is checked in your browser and is not stored or sent to us.</p>
+ </div>
+</div>
+<script>
+(function () {
+ var MIN = {"AB": 18, "BC": 19, "MB": 19, "NB": 19, "NL": 19, "NS": 19, "NT": 19, "NU": 19, "ON": 19, "PE": 19, "QC": 21, "SK": 19, "YT": 19};
+ var gate = document.getElementById('ageGate');
+ var form = document.getElementById('agForm');
+ var err = document.getElementById('agError');
+ // Session-only pass: the visitor is NOT remembered between visits, which
+ // is what lets SGA measure repeat access (Legend s.3).
+ function passed() {
+ try { return sessionStorage.getItem('sga_age_ok') === '1'; }
+ catch (e) { return false; }
+ }
+ if (passed()) return;
+ gate.hidden = false;
+ document.documentElement.classList.add('ag-lock');
+
+ function fail(msg) { err.textContent = msg; err.hidden = false; }
+
+ form.addEventListener('submit', function (ev) {
+ ev.preventDefault();
+ err.hidden = true;
+ var prov = document.getElementById('agProv').value;
+ var d = parseInt(document.getElementById('agDay').value, 10);
+ var m = parseInt(document.getElementById('agMonth').value, 10);
+ var y = parseInt(document.getElementById('agYear').value, 10);
+ if (!prov) { return fail('Please select your province or territory.'); }
+ if (!d || !m || !y || y < 1900) { return fail('Please enter your full date of birth.'); }
+ var dob = new Date(y, m - 1, d);
+ if (dob.getDate() !== d || dob.getMonth() !== m - 1 || dob.getFullYear() !== y) {
+ return fail('That date does not look right. Please check and try again.');
+ }
+ var now = new Date();
+ var age = now.getFullYear() - y;
+ var before = (now.getMonth() < m - 1) || (now.getMonth() === m - 1 && now.getDate() < d);
+ if (before) { age--; }
+ var need = MIN[prov] || 19;
+ if (age < need) {
+ // A visitor who does not meet the age requirement goes nowhere.
+ return fail('You must be ' + need + ' or older to enter this site in that province.');
+ }
+ try { sessionStorage.setItem('sga_age_ok', '1'); } catch (e) {}
+ gate.hidden = true;
+ document.documentElement.classList.remove('ag-lock');
+ });
+})();
+</script>
+<div class="topbar">
+ <div class="wrap topbar-inner">
+ <a href="/contact/">Contact Us</a>
+ <a href="/careers/">Careers</a>
+ <a href="/blog/">Blog</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ </div>
+</div>
+<header class="site-header">
+ <div class="wrap header-inner">
+ <a class="logo" href="/" aria-label="Sophia’s Garden Artisan — home">
+ <img class="brand-logo" src="/static/img/logo.png" alt="Sophia’s Garden Artisan">
+ </a>
+ <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false"></button>
+ <nav class="site-nav" id="siteNav" aria-label="Main">
+ <a href="/">Home</a>
+ <div class="nav-drop">
+ <a href="/products/">Products</a>
+ <ul class="drop-menu drop-wide"><li class="drop-head">Euphoreal</li><li><a href="/brands/euphoreal/#zero">Zero <em>0 mg THC</em></a></li><li><a href="/brands/euphoreal/#micro">Micro <em>1 mg THC per piece</em></a></li><li><a href="/brands/euphoreal/#byte">Byte <em>5 mg THC per piece</em></a></li><li class="drop-sku"><a href="/products/zero-zest/">Zero Zest</a></li><li class="drop-sku"><a href="/products/micro-zen-milk/">Micro Zen Milk</a></li><li class="drop-sku"><a href="/products/micro-zest-yuzu/">Micro Zest Yuzu</a></li><li class="drop-sku"><a href="/products/micro-zen-dark/">Micro Zen Dark</a></li><li class="drop-sku"><a href="/products/micro-zest-raspberry/">Micro Zest Raspberry</a></li><li class="drop-sku"><a href="/products/byte-salted-caramel/">Byte Salted Caramel</a></li><li class="drop-head">Infyn Extracts</li><li class="drop-sku"><a href="/products/xtract/">Xtract</a></li></ul>
+ </div>
+ <div class="nav-drop">
+ <a href="/product-innovation/">Capabilities</a>
+ <ul class="drop-menu"><li><a href="/product-innovation/">Product Innovation</a></li><li><a href="/cannabinoid-formulation-science/">Formulation Science</a></li><li><a href="/canadian-craft-manufacturing/">Craft Manufacturing</a></li><li><a href="/co-manufacturing/">Co-Manufacturing</a></li><li><a href="/responsible-consumption/">Responsible Consumption</a></li></ul>
+ </div>
+ <a href="/our-story/">Company</a>
+ <a href="/education/">Education</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/for-retailers/">Retailers</a>
+ <a class="nav-login" href="/login/">Login</a>
+ </nav>
+ </div>
+</header>
+
+<div class="progress" data-progress aria-hidden="true"></div>
+
+<main class="sga-post" data-progress-target>
+ <div class="wrap">
+ <div class="sga-masthead">
+ <div class="sga-masthead-copy">
+ <a class="sga-backlink" href="/blog/">&larr; All posts</a>
+ <p class="sga-date-line">Posted <time data-publish-date="line">00/00/2026</time></p>
+ <h1 class="sga-kicker">Low dose edibles</h1>
+ <p class="sga-title">What low dose edibles means on a legal Canadian label</p>
+ <p class="sga-standfirst">The Cannabis Regulations never use the words &quot;low dose&quot;. They set a package cap, a per-unit figure and a tolerance, and those three numbers are what the phrase has to be checked against.</p>
+ </div>
+ <figure class="post-masthead-media">
+ <img src="/static/img/blog/low-dose-edibles.jpg" alt="Diagram of one 10 mg package as one 10 mg unit, two 5 mg units or ten 1 mg units, with the tolerance band for each figure" width="1800" height="1200">
+ </figure>
+ </div>
+ <div class="sga-introrow">
+ <div class="sga-intro prose">
+ <p>"Low dose" does not appear anywhere in the Cannabis Regulations. There is no threshold in Canadian law below which an edible becomes low dose, no prescribed wording that goes with it, and no test that a product must pass to use the phrase. When a retailer, a menu or a package describes low dose edibles, the description is a summary of the numbers on the label, and the label is where it has to be checked.</p>
+ <p>That makes the question narrower than it looks. What the law does fix is a package cap, a per-unit figure and a tolerance around that figure. Low dose edibles are products where those numbers are small, and the interesting part is what the Regulations require once a manufacturer decides to make them small.</p>
+ <p class="sga-toc-label">In this article:</p>
+ <ul class="sga-toc">
+ <li><a href="#what-the-label-states-instead">What the label states instead</a></li>
+ <li><a href="#why-some-products-divide-the-cap-finely">Why some products divide the cap finely</a></li>
+ <li><a href="#what-a-low-dose-label-does-not-say">What a low-dose label does not say</a></li>
+ </ul>
+ </div>
+ <aside class="sga-sidebar">
+ <h4>Related</h4>
+ <ul>
+ <li><a href="/education/">Education<span class="sb-meta">Guides for adults and retail staff</span></a></li>
+ <li><a href="/cannabinoid-formulation-science/">Formulation science<span class="sb-meta">How we work</span></a></li>
+ <li><a href="/responsible-consumption/">Responsible consumption<span class="sb-meta">Our approach</span></a></li>
+ </ul>
+ </aside>
+ </div>
+ <div class="sga-body prose">
+ <h2 id="what-the-label-states-instead">What the label states instead</h2>
+ <p>Section 102.7 of the <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/FullText.html">Cannabis Regulations</a> caps edible cannabis at 10 mg of THC per immediate container. For a product in discrete units, section 132.18 requires two THC figures on the label: the quantity each unit could yield, preceded by "Total THC per unit", and the quantity the whole package could yield, preceded by "Total THC". The second may not exceed 10 mg. How those two figures are read together is covered in <a href="/blog/what-10mg-of-thc-means/">what 10mg THC means on a legal Canadian edible</a>.</p>
+ <p>The closest thing to a published reference point comes from Health Canada rather than the Regulations. In its guidance <a href="https://www.canada.ca/en/health-canada/services/drugs-medication/cannabis/resources/lower-your-risks.html">Cannabis: lower your risks</a>, Health Canada advises: "Look for products that contain 2.5 mg of THC or less." The same page reminds readers that the total THC in a package of edible cannabis can be up to 10 mg. That is advice about what to look for on a label. It is not a legal definition, and it does not turn any product into a low-dose product by regulation.</p>
+ <p>The Act puts one firm limit on the description itself. Section 26(e) of the <a href="https://laws-lois.justice.gc.ca/eng/acts/C-24.5/FullText.html">Cannabis Act</a> prohibits a package or label carrying information that is likely to create an erroneous impression about the quantity, strength, concentration or potency of the cannabis. Whatever a product is called, the figures have to bear the description out.</p>
+ <h2 id="why-some-products-divide-the-cap-finely">Why some products divide the cap finely</h2>
+ <p>The Regulations fix the total. The manufacturer decides the increment. A 10 mg package can be one unit, two units of 5 mg or ten units of 1 mg, and all three sit at the same legal ceiling. As our <a href="/responsible-consumption/">responsible consumption</a> page puts it, regulation decides what a package may hold and the format decides how finely that is divided.</p>
+ <p>Dividing finely does not loosen any rule. It brings three into sharper play.</p>
+ <h3>The tolerance band is widest, and hardest to hold</h3>
+ <p>Section 97(2) sets how far the real content of an edible may sit from its declared figure. Above 5 mg the band is 85% to 115%. Above 2 mg and up to 5 mg it is 80% to 120%. At 2 mg or less it is 75% to 125%, so a unit declared at 1 mg must contain between 0.75 mg and 1.25 mg. The wider band is not leniency. Manufacturing tolerance is proportional, so an error that disappears on a 10 mg unit is ten times as significant on a 1 mg one, a problem we have written about in <a href="/blog/the-engineering-of-a-one-milligram-dose/">the engineering behind a one-milligram dose</a>.</p>
+ <h3>Every unit has to match the others</h3>
+ <p>Section 98.1 prohibits selling a container of multiple units unless the properties of each unit, including size, are consistent. A package of ten small units is ten chances for one to differ, and the rule applies to every one of them. The per-unit figure on the label only describes the package if each unit in it carries what the label says.</p>
+ <h3>A unit meant to be divided has its own rule</h3>
+ <p>Some products reach a small increment by presenting a larger unit as something to be broken into parts. The Regulations address that directly. Under <a href="https://laws-lois.justice.gc.ca/eng/regulations/SOR-2018-144/section-97.1.html">section 97.1(2)</a>, if discrete units are represented as able to be divided into sub-units, each sub-unit must contain between 75% and 125% of the THC, and of the CBD, in each of the other sub-units. A piece presented as divisible is held to the same kind of consistency as separately moulded units, which is one reason a manufacturer may prefer to mould the small increment directly.</p>
+ <h2 id="what-a-low-dose-label-does-not-say">What a low-dose label does not say</h2>
+ <p>A small figure on a label describes content. It does not describe an experience, and nothing in the Regulations or in Health Canada's guidance presents it as one. We make no claim about what any quantity of THC does, and a manufacturer is not in a position to characterise individual responses in any case.</p>
+ <p>What a manufacturer can stand behind for low dose edibles is narrow and exact: the package total, the increment, and the evidence that each unit carries it. Our Micro format divides the 10 mg cap into ten units of 1 mg, and cannabinoid content is verified by laboratory analysis on every lot before it is released. Those are the figures the phrase rests on.</p>
+ </div>
+ <div class="sga-related">
+ <h2>Related posts</h2>
+ <div class="sga-related-grid">
+ <a class="sga-rel-card" href="/blog/what-10mg-of-thc-means/"><span class="sga-rel-thumb"><img src="/static/img/products/micro-zen-milk-hero.jpg" alt="The ten milk chocolate pieces in a pack of MICRO ZEN MILK" loading="lazy"></span><span class="sga-rel-meta">October 20, 2026</span><span class="sga-rel-title">10mg THC on a Canadian edible label, explained</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/the-engineering-of-a-one-milligram-dose/"><span class="sga-rel-thumb sga-rel-ph"><img src="/static/img/logo-vertical-negative.png" alt="" loading="lazy"></span><span class="sga-rel-meta">August 26, 2026</span><span class="sga-rel-title">The engineering behind a one-milligram dose</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ <a class="sga-rel-card" href="/blog/health-canada-cannabinoids-rules/"><span class="sga-rel-thumb"><img src="/static/img/blog/micro-zest-raspberry-centred.jpg" alt="The ten raspberry chocolate pieces in a pack of MICRO ZEST RASPBERRY" loading="lazy"></span><span class="sga-rel-meta">November 3, 2026</span><span class="sga-rel-title">Health Canada cannabinoids rules for edible cannabis</span><span class="sga-rel-go">Read the post &rarr;</span></a>
+ </div>
+ </div>
+ <div class="sga-allposts">
+ <a class="sga-allposts-btn" href="/blog/">&larr; All posts</a>
+ </div>
+ </div>
+</main>
+<section class="sga-faq" id="faq">
+ <div class="wrap">
+ <h2>FAQ</h2>
+ <div class="sga-faq-list">
+ <details>
+ <summary>Is there a legal definition of a low-dose edible in Canada?</summary>
+ <div class="sga-faq-a"><p>No. The phrase appears nowhere in the Cannabis Regulations. There is no threshold, no prescribed wording and no test a product must pass to use it, so the description is a summary of the numbers on the label.</p></div>
+ </details>
+ <details>
+ <summary>How can a 10 mg package be split into smaller units?</summary>
+ <div class="sga-faq-a"><p>The Regulations fix the total and the manufacturer decides the increment. A 10 mg package can be one unit, two units of 5 mg or ten units of 1 mg, and all three sit at the same legal ceiling.</p></div>
+ </details>
+ <details>
+ <summary>How close to its label does a 1 mg unit have to be?</summary>
+ <div class="sga-faq-a"><p>Section 97(2) sets the band at 75% to 125% for a declared figure of 2 mg or less, so a unit declared at 1 mg must contain between 0.75 mg and 1.25 mg. The wider band reflects proportional tolerance, not leniency.</p></div>
+ </details>
+ <details>
+ <summary>What rule applies to a piece meant to be broken into parts?</summary>
+ <div class="sga-faq-a"><p>Under section 97.1(2), if discrete units are represented as able to be divided into sub-units, each sub-unit must contain between 75% and 125% of the THC, and of the CBD, in each of the other sub-units.</p></div>
+ </details>
+ </div>
+ </div>
+ <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is there a legal definition of a low-dose edible in Canada?","acceptedAnswer":{"@type":"Answer","text":"No. The phrase appears nowhere in the Cannabis Regulations. There is no threshold, no prescribed wording and no test a product must pass to use it, so the description is a summary of the numbers on the label."}},{"@type":"Question","name":"How can a 10 mg package be split into smaller units?","acceptedAnswer":{"@type":"Answer","text":"The Regulations fix the total and the manufacturer decides the increment. A 10 mg package can be one unit, two units of 5 mg or ten units of 1 mg, and all three sit at the same legal ceiling."}},{"@type":"Question","name":"How close to its label does a 1 mg unit have to be?","acceptedAnswer":{"@type":"Answer","text":"Section 97(2) sets the band at 75% to 125% for a declared figure of 2 mg or less, so a unit declared at 1 mg must contain between 0.75 mg and 1.25 mg. The wider band reflects proportional tolerance, not leniency."}},{"@type":"Question","name":"What rule applies to a piece meant to be broken into parts?","acceptedAnswer":{"@type":"Answer","text":"Under section 97.1(2), if discrete units are represented as able to be divided into sub-units, each sub-unit must contain between 75% and 125% of the THC, and of the CBD, in each of the other sub-units."}}]}</script>
+</section>
+<footer class="site-footer">
+ <div class="wrap">
+ <div class="foot-warning">
+ <strong>Health warning</strong>
+ <p lang="en">WARNING: Using cannabis before age 25 increases your risk of mental disorders like psychosis and schizophrenia. The more often you use, the greater the risk.</p>
+ <p lang="fr">MISE EN GARDE : La consommation de cannabis avant l'âge de 25 ans augmente votre risque de troubles mentaux comme la psychose et la schizophrénie. Plus vous consommez souvent, plus le risque est grand.</p>
+ <p class="foot-warning-source">Health Canada / Santé Canada</p>
+ </div>
+ <div class="foot-grid">
+ <div class="foot-brand">
+ <img class="brand-mark" src="/static/img/logo-vertical-negative.png" alt="Sophia’s Garden Artisan">
+ <p class="foot-name">Sophia's Garden (Artisan) Inc.</p>
+ <p>600 Montreal St., Thunder Bay, ON P7E 6P8, Canada</p>
+ <p><a href="tel:+18558885877">+1 (855) 888-5877</a><br>
+ <a href="mailto:contact@sophiasartisan.com">contact@sophiasartisan.com</a></p>
+ <p>Licensed by Health Canada &middot; Federally licensed producer</p>
+ </div>
+ <div class="foot-col">
+ <h4>Explore</h4>
+ <a href="/products/">Our Brands</a>
+ <a href="/brands/euphoreal/">Euphoreal</a>
+ <a href="/brands/infyn-extracts/">Infyn Extracts</a>
+ <a href="/our-story/">The Company</a>
+ <a href="/product-innovation/">Product Innovation</a>
+ <a href="/cannabinoid-formulation-science/">Formulation Science</a>
+ <a href="/canadian-craft-manufacturing/">Craft Manufacturing</a>
+ <a href="/co-manufacturing/">Co-Manufacturing</a>
+ <a href="/responsible-consumption/">Responsible Consumption</a>
+ <a href="/education/">Education</a>
+ <a href="/blog/">Blog</a>
+ <a href="/where-to-buy/">Where to Buy</a>
+ <a href="/servicing-areas/">Servicing Areas</a>
+ <a href="/careers/">Careers</a>
+ <a href="/for-retailers/">For Retailers</a>
+ <a href="/login/">Login</a>
+ <a href="/contact/">Contact</a>
+ </div>
+ <div class="foot-col">
+ <h4>Legal</h4>
+ <a href="/privacy/">Privacy Policy</a>
+ <a href="/terms/">Terms of Use</a>
+ <a href="/accessibility/">Accessibility</a>
+ 
+ </div>
+ </div>
+ <div class="foot-bottom">
+ <p>19+ &mdash; This site is intended for adults of legal age in Canada. Cannabis products are sold only through authorized retailers.</p>
+ <p>&copy; 2026 Sophia's Garden (Artisan) Inc. All rights reserved. Site by <a href="https://newlifemarketing.ca">Newlife Marketing</a>.</p>
+ </div>
+ </div>
+</footer>
+<script>
+(function () {
+ var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+ t.addEventListener('click', function () {
+ var open = n.classList.toggle('open');
+ t.setAttribute('aria-expanded', open ? 'true' : 'false');
+ });
+})();
+</script>
+</body>
+</html>
