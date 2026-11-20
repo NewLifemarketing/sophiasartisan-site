@@ -51,6 +51,14 @@ h1, h2, h3, .ag-brand { font-family: var(--display); font-weight: 600; line-heig
 h1 { font-size: clamp(2.4rem, 5.5vw, 4rem); letter-spacing: -.01em; }
 h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); margin-bottom: .5em; letter-spacing: -.01em; }
 h3 { font-size: 1.25rem; margin-bottom: .35em; }
+
+/* Headings carry margin-bottom only, so the page's vertical rhythm comes from
+   the wrapper each block sits in. A heading placed straight after running text
+   therefore has nothing above it and collides with the paragraph it follows.
+   Scoped to the adjacent sibling on purpose: a heading that OPENS a card or a
+   grid item is a first child, never matches this, and keeps its tight spacing. */
+p + h2, ul + h2, ol + h2, blockquote + h2, table + h2 { margin-top: 1.9em; }
+p + h3, ul + h3, ol + h3, blockquote + h3, table + h3 { margin-top: 1.5em; }
 p + p { margin-top: 1em; }
 
 a { color: var(--navy); }
